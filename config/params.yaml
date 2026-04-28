@@ -1,0 +1,6 @@
+# Lista parametrów do przeliczenia (kolejność zachowana w raporcie)
+params: [Rp, Rv, Rz, Ra, Rt, Rz1max, Rq, Rsk, Rku, Rsm]
+# Indeksy kolumn w plikach optics (dopasowane kolejnością 1:1 do params)
+optics_cols: [130, 134, 138, 150, 146, 174, 154, 158, 162, 182]
+# (Opcjonalnie) alternatywne etykiety parametrów w plikach tactile jeśli różnią się od powyższych
+# tactile_params: [Rp, Rv, Rz, Ra, Rt, Rz1max, Rq, Rsk, Rku, Rsm]

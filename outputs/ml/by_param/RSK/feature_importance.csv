@@ -1,0 +1,15 @@
+feature,importance,model
+system,225.4508679883078,random_forest
+color,-203.6727487363376,random_forest
+systemfusion,0,lasso
+systemFV,0,lasso
+systemint,0,lasso
+colorgreen,0,lasso
+colorred,0,lasso
+colorwhite,0,lasso
+systemfusion,0.46254448497175527,ridge
+systemFV,0.1772501987283384,ridge
+systemint,0.15691156710839288,ridge
+colorgreen,0.06561982681235141,ridge
+colorred,0.19992115953952036,ridge
+colorwhite,0.08877773770490456,ridge

@@ -1,0 +1,22 @@
+
+Call:
+stats::lm(formula = metric ~ system + wavelength, data = dfm2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-28.7576 -10.2083  -0.0484   9.4609  26.7837 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   98.24168   44.42817   2.211  0.06268 .  
+systemconf   -89.39004   17.11689  -5.222  0.00122 ** 
+systemFV    -168.60544   17.11689  -9.850 2.36e-05 ***
+systemint   -168.44907   17.11689  -9.841 2.38e-05 ***
+wavelength     0.16000    0.07965   2.009  0.08453 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 20.96 on 7 degrees of freedom
+Multiple R-squared:  0.951,	Adjusted R-squared:  0.9231 
+F-statistic:    34 on 4 and 7 DF,  p-value: 0.0001124
+

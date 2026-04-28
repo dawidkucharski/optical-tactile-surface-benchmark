@@ -1,0 +1,2 @@
+Pearson r (|diff|% vs wavelength): 0.1019
+Spearman rho (|diff|% vs wavelength): 0.0591

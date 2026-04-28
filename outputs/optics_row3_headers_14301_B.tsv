@@ -1,0 +1,914 @@
+"index"	"row3"
+1	"#"
+2	"Area_NM (Amp_full-Amp_NM)"
+3	"Area NM_005 (Aev_005-Amp_005)"
+4	"Area NM_05 (Aev_05-Amp_05)"
+5	"Procent_NM (((Area_NM/Aev)*100))"
+6	"Procent NM_005 (((Area_NM_005/Aev)*100))"
+7	"Procent NM_05 (((Area_NM_05/Aev)*100))"
+8	"Kąt obrotu osi X"
+9	"Kąt obrotu osi Y"
+10	"Amp"
+11	"Aev"
+12	"Amp"
+13	"Aev"
+14	"Amp"
+15	"Aev"
+16	"Amp"
+17	"Aev"
+18	"Pp[Średnia]"
+19	"Pp[Std odch]"
+20	"Pp[Min]"
+21	"Pp[Max]"
+22	"Pv[Średnia]"
+23	"Pv[Std odch]"
+24	"Pv[Min]"
+25	"Pv[Max]"
+26	"Pz[Średnia]"
+27	"Pz[Std odch]"
+28	"Pz[Min]"
+29	"Pz[Max]"
+30	"Pc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+31	"Pc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+32	"Pc (Brak uśredniania (pojedyncza wartość))[Min]"
+33	"Pc (Brak uśredniania (pojedyncza wartość))[Max]"
+34	"Pt[Średnia]"
+35	"Pt[Std odch]"
+36	"Pt[Min]"
+37	"Pt[Max]"
+38	"Pa[Średnia]"
+39	"Pa[Std odch]"
+40	"Pa[Min]"
+41	"Pa[Max]"
+42	"Pq[Średnia]"
+43	"Pq[Std odch]"
+44	"Pq[Min]"
+45	"Pq[Max]"
+46	"Psk[Średnia]"
+47	"Psk[Std odch]"
+48	"Psk[Min]"
+49	"Psk[Max]"
+50	"Pku[Średnia]"
+51	"Pku[Std odch]"
+52	"Pku[Min]"
+53	"Pku[Max]"
+54	"PSm (Brak uśredniania (pojedyncza wartość))[Średnia]"
+55	"PSm (Brak uśredniania (pojedyncza wartość))[Std odch]"
+56	"PSm (Brak uśredniania (pojedyncza wartość))[Min]"
+57	"PSm (Brak uśredniania (pojedyncza wartość))[Max]"
+58	"Pdq[Średnia]"
+59	"Pdq[Std odch]"
+60	"Pdq[Min]"
+61	"Pdq[Max]"
+62	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Średnia]"
+63	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Std odch]"
+64	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Min]"
+65	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Max]"
+66	"Pdc (p = 20%, q = 80%)[Średnia]"
+67	"Pdc (p = 20%, q = 80%)[Std odch]"
+68	"Pdc (p = 20%, q = 80%)[Min]"
+69	"Pdc (p = 20%, q = 80%)[Max]"
+70	"PPc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+71	"PPc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+72	"PPc (Brak uśredniania (pojedyncza wartość))[Min]"
+73	"PPc (Brak uśredniania (pojedyncza wartość))[Max]"
+74	"Pp[Średnia]"
+75	"Pp[Std odch]"
+76	"Pp[Min]"
+77	"Pp[Max]"
+78	"Pv[Średnia]"
+79	"Pv[Std odch]"
+80	"Pv[Min]"
+81	"Pv[Max]"
+82	"Pz[Średnia]"
+83	"Pz[Std odch]"
+84	"Pz[Min]"
+85	"Pz[Max]"
+86	"Pc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+87	"Pc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+88	"Pc (Brak uśredniania (pojedyncza wartość))[Min]"
+89	"Pc (Brak uśredniania (pojedyncza wartość))[Max]"
+90	"Pt[Średnia]"
+91	"Pt[Std odch]"
+92	"Pt[Min]"
+93	"Pt[Max]"
+94	"Pa[Średnia]"
+95	"Pa[Std odch]"
+96	"Pa[Min]"
+97	"Pa[Max]"
+98	"Pq[Średnia]"
+99	"Pq[Std odch]"
+100	"Pq[Min]"
+101	"Pq[Max]"
+102	"Psk[Średnia]"
+103	"Psk[Std odch]"
+104	"Psk[Min]"
+105	"Psk[Max]"
+106	"Pku[Średnia]"
+107	"Pku[Std odch]"
+108	"Pku[Min]"
+109	"Pku[Max]"
+110	"PSm (Brak uśredniania (pojedyncza wartość))[Średnia]"
+111	"PSm (Brak uśredniania (pojedyncza wartość))[Std odch]"
+112	"PSm (Brak uśredniania (pojedyncza wartość))[Min]"
+113	"PSm (Brak uśredniania (pojedyncza wartość))[Max]"
+114	"Pdq[Średnia]"
+115	"Pdq[Std odch]"
+116	"Pdq[Min]"
+117	"Pdq[Max]"
+118	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Średnia]"
+119	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Std odch]"
+120	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Min]"
+121	"Pmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Max]"
+122	"Pdc (p = 20%, q = 80%)[Średnia]"
+123	"Pdc (p = 20%, q = 80%)[Std odch]"
+124	"Pdc (p = 20%, q = 80%)[Min]"
+125	"Pdc (p = 20%, q = 80%)[Max]"
+126	"PPc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+127	"PPc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+128	"PPc (Brak uśredniania (pojedyncza wartość))[Min]"
+129	"PPc (Brak uśredniania (pojedyncza wartość))[Max]"
+130	"Rp[Średnia]"
+131	"Rp[Std odch]"
+132	"Rp[Min]"
+133	"Rp[Max]"
+134	"Rv[Średnia]"
+135	"Rv[Std odch]"
+136	"Rv[Min]"
+137	"Rv[Max]"
+138	"Rz[Średnia]"
+139	"Rz[Std odch]"
+140	"Rz[Min]"
+141	"Rz[Max]"
+142	"Rc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+143	"Rc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+144	"Rc (Brak uśredniania (pojedyncza wartość))[Min]"
+145	"Rc (Brak uśredniania (pojedyncza wartość))[Max]"
+146	"Rt[Średnia]"
+147	"Rt[Std odch]"
+148	"Rt[Min]"
+149	"Rt[Max]"
+150	"Ra[Średnia]"
+151	"Ra[Std odch]"
+152	"Ra[Min]"
+153	"Ra[Max]"
+154	"Rq[Średnia]"
+155	"Rq[Std odch]"
+156	"Rq[Min]"
+157	"Rq[Max]"
+158	"Rsk[Średnia]"
+159	"Rsk[Std odch]"
+160	"Rsk[Min]"
+161	"Rsk[Max]"
+162	"Rku[Średnia]"
+163	"Rku[Std odch]"
+164	"Rku[Min]"
+165	"Rku[Max]"
+166	"Rp1max[Średnia]"
+167	"Rp1max[Std odch]"
+168	"Rp1max[Min]"
+169	"Rp1max[Max]"
+170	"Rv1max[Średnia]"
+171	"Rv1max[Std odch]"
+172	"Rv1max[Min]"
+173	"Rv1max[Max]"
+174	"Rz1max[Średnia]"
+175	"Rz1max[Std odch]"
+176	"Rz1max[Min]"
+177	"Rz1max[Max]"
+178	"Rz(n) (Wskaźnik λc = 1)[Średnia]"
+179	"Rz(n) (Wskaźnik λc = 1)[Std odch]"
+180	"Rz(n) (Wskaźnik λc = 1)[Min]"
+181	"Rz(n) (Wskaźnik λc = 1)[Max]"
+182	"RSm (Brak uśredniania (pojedyncza wartość))[Średnia]"
+183	"RSm (Brak uśredniania (pojedyncza wartość))[Std odch]"
+184	"RSm (Brak uśredniania (pojedyncza wartość))[Min]"
+185	"RSm (Brak uśredniania (pojedyncza wartość))[Max]"
+186	"Rdq[Średnia]"
+187	"Rdq[Std odch]"
+188	"Rdq[Min]"
+189	"Rdq[Max]"
+190	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Średnia]"
+191	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Std odch]"
+192	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Min]"
+193	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Max]"
+194	"Rdc (p = 20%, q = 80%)[Średnia]"
+195	"Rdc (p = 20%, q = 80%)[Std odch]"
+196	"Rdc (p = 20%, q = 80%)[Min]"
+197	"Rdc (p = 20%, q = 80%)[Max]"
+198	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Średnia]"
+199	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Std odch]"
+200	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Min]"
+201	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Max]"
+202	"RPc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+203	"RPc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+204	"RPc (Brak uśredniania (pojedyncza wartość))[Min]"
+205	"RPc (Brak uśredniania (pojedyncza wartość))[Max]"
+206	"Rp[Średnia]"
+207	"Rp[Std odch]"
+208	"Rp[Min]"
+209	"Rp[Max]"
+210	"Rv[Średnia]"
+211	"Rv[Std odch]"
+212	"Rv[Min]"
+213	"Rv[Max]"
+214	"Rz[Średnia]"
+215	"Rz[Std odch]"
+216	"Rz[Min]"
+217	"Rz[Max]"
+218	"Rc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+219	"Rc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+220	"Rc (Brak uśredniania (pojedyncza wartość))[Min]"
+221	"Rc (Brak uśredniania (pojedyncza wartość))[Max]"
+222	"Rt[Średnia]"
+223	"Rt[Std odch]"
+224	"Rt[Min]"
+225	"Rt[Max]"
+226	"Ra[Średnia]"
+227	"Ra[Std odch]"
+228	"Ra[Min]"
+229	"Ra[Max]"
+230	"Rq[Średnia]"
+231	"Rq[Std odch]"
+232	"Rq[Min]"
+233	"Rq[Max]"
+234	"Rsk[Średnia]"
+235	"Rsk[Std odch]"
+236	"Rsk[Min]"
+237	"Rsk[Max]"
+238	"Rku[Średnia]"
+239	"Rku[Std odch]"
+240	"Rku[Min]"
+241	"Rku[Max]"
+242	"Rp1max[Średnia]"
+243	"Rp1max[Std odch]"
+244	"Rp1max[Min]"
+245	"Rp1max[Max]"
+246	"Rv1max[Średnia]"
+247	"Rv1max[Std odch]"
+248	"Rv1max[Min]"
+249	"Rv1max[Max]"
+250	"Rz1max[Średnia]"
+251	"Rz1max[Std odch]"
+252	"Rz1max[Min]"
+253	"Rz1max[Max]"
+254	"Rz(n) (Wskaźnik λc = 1)[Średnia]"
+255	"Rz(n) (Wskaźnik λc = 1)[Std odch]"
+256	"Rz(n) (Wskaźnik λc = 1)[Min]"
+257	"Rz(n) (Wskaźnik λc = 1)[Max]"
+258	"RSm (Brak uśredniania (pojedyncza wartość))[Średnia]"
+259	"RSm (Brak uśredniania (pojedyncza wartość))[Std odch]"
+260	"RSm (Brak uśredniania (pojedyncza wartość))[Min]"
+261	"RSm (Brak uśredniania (pojedyncza wartość))[Max]"
+262	"Rdq[Średnia]"
+263	"Rdq[Std odch]"
+264	"Rdq[Min]"
+265	"Rdq[Max]"
+266	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Średnia]"
+267	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Std odch]"
+268	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Min]"
+269	"Rmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Max]"
+270	"Rdc (p = 20%, q = 80%)[Średnia]"
+271	"Rdc (p = 20%, q = 80%)[Std odch]"
+272	"Rdc (p = 20%, q = 80%)[Min]"
+273	"Rdc (p = 20%, q = 80%)[Max]"
+274	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Średnia]"
+275	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Std odch]"
+276	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Min]"
+277	"Rmr (Rz/4) (c = Rz/4 µm powyżej płaszczyzny średniej)[Max]"
+278	"RPc (Brak uśredniania (pojedyncza wartość))[Średnia]"
+279	"RPc (Brak uśredniania (pojedyncza wartość))[Std odch]"
+280	"RPc (Brak uśredniania (pojedyncza wartość))[Min]"
+281	"RPc (Brak uśredniania (pojedyncza wartość))[Max]"
+282	"Wp[Średnia]"
+283	"Wp[Std odch]"
+284	"Wp[Min]"
+285	"Wp[Max]"
+286	"Wv[Średnia]"
+287	"Wv[Std odch]"
+288	"Wv[Min]"
+289	"Wv[Max]"
+290	"Wz[Średnia]"
+291	"Wz[Std odch]"
+292	"Wz[Min]"
+293	"Wz[Max]"
+294	"Wc[Średnia]"
+295	"Wc[Std odch]"
+296	"Wc[Min]"
+297	"Wc[Max]"
+298	"Wt[Średnia]"
+299	"Wt[Std odch]"
+300	"Wt[Min]"
+301	"Wt[Max]"
+302	"Wa[Średnia]"
+303	"Wa[Std odch]"
+304	"Wa[Min]"
+305	"Wa[Max]"
+306	"Wq[Średnia]"
+307	"Wq[Std odch]"
+308	"Wq[Min]"
+309	"Wq[Max]"
+310	"Wsk[Średnia]"
+311	"Wsk[Std odch]"
+312	"Wsk[Min]"
+313	"Wsk[Max]"
+314	"Wku[Średnia]"
+315	"Wku[Std odch]"
+316	"Wku[Min]"
+317	"Wku[Max]"
+318	"WSm[Średnia]"
+319	"WSm[Std odch]"
+320	"WSm[Min]"
+321	"WSm[Max]"
+322	"Wdq[Średnia]"
+323	"Wdq[Std odch]"
+324	"Wdq[Min]"
+325	"Wdq[Max]"
+326	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Średnia]"
+327	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Std odch]"
+328	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Min]"
+329	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Max]"
+330	"Wdc (p = 20%, q = 80%)[Średnia]"
+331	"Wdc (p = 20%, q = 80%)[Std odch]"
+332	"Wdc (p = 20%, q = 80%)[Min]"
+333	"Wdc (p = 20%, q = 80%)[Max]"
+334	"Wmr (Wz/4)[Średnia]"
+335	"Wmr (Wz/4)[Std odch]"
+336	"Wmr (Wz/4)[Min]"
+337	"Wmr (Wz/4)[Max]"
+338	"WPc[Średnia]"
+339	"WPc[Std odch]"
+340	"WPc[Min]"
+341	"WPc[Max]"
+342	"Wp[Średnia]"
+343	"Wp[Std odch]"
+344	"Wp[Min]"
+345	"Wp[Max]"
+346	"Wv[Średnia]"
+347	"Wv[Std odch]"
+348	"Wv[Min]"
+349	"Wv[Max]"
+350	"Wz[Średnia]"
+351	"Wz[Std odch]"
+352	"Wz[Min]"
+353	"Wz[Max]"
+354	"Wc[Średnia]"
+355	"Wc[Std odch]"
+356	"Wc[Min]"
+357	"Wc[Max]"
+358	"Wt[Średnia]"
+359	"Wt[Std odch]"
+360	"Wt[Min]"
+361	"Wt[Max]"
+362	"Wa[Średnia]"
+363	"Wa[Std odch]"
+364	"Wa[Min]"
+365	"Wa[Max]"
+366	"Wq[Średnia]"
+367	"Wq[Std odch]"
+368	"Wq[Min]"
+369	"Wq[Max]"
+370	"Wsk[Średnia]"
+371	"Wsk[Std odch]"
+372	"Wsk[Min]"
+373	"Wsk[Max]"
+374	"Wku[Średnia]"
+375	"Wku[Std odch]"
+376	"Wku[Min]"
+377	"Wku[Max]"
+378	"WSm[Średnia]"
+379	"WSm[Std odch]"
+380	"WSm[Min]"
+381	"WSm[Max]"
+382	"Wdq[Średnia]"
+383	"Wdq[Std odch]"
+384	"Wdq[Min]"
+385	"Wdq[Max]"
+386	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Średnia]"
+387	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Std odch]"
+388	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Min]"
+389	"Wmr (c = 1 µm poniżej najwyższego wypiętrzenia)[Max]"
+390	"Wdc (p = 20%, q = 80%)[Średnia]"
+391	"Wdc (p = 20%, q = 80%)[Std odch]"
+392	"Wdc (p = 20%, q = 80%)[Min]"
+393	"Wdc (p = 20%, q = 80%)[Max]"
+394	"Wmr (Wz/4)[Średnia]"
+395	"Wmr (Wz/4)[Std odch]"
+396	"Wmr (Wz/4)[Min]"
+397	"Wmr (Wz/4)[Max]"
+398	"WPc[Średnia]"
+399	"WPc[Std odch]"
+400	"WPc[Min]"
+401	"WPc[Max]"
+402	"Sq"
+403	"Ssk"
+404	"Sku"
+405	"Sp"
+406	"Sv"
+407	"Sz"
+408	"Sa"
+409	"Vm (p = 10%)"
+410	"Vv (p = 10%)"
+411	"Vmp (p = 10%)"
+412	"Vmc (p = 10%, q = 80%)"
+413	"Vvc (p = 10%, q = 80%)"
+414	"Vvv (p = 80%)"
+415	"Sk"
+416	"Spk"
+417	"Svk"
+418	"Smrk1"
+419	"Smrk2"
+420	"Sq"
+421	"Ssk"
+422	"Sku"
+423	"Sp"
+424	"Sv"
+425	"Sz"
+426	"Sa"
+427	"Vm (p = 10%)"
+428	"Vv (p = 10%)"
+429	"Vmp (p = 10%)"
+430	"Vmc (p = 10%, q = 80%)"
+431	"Vvc (p = 10%, q = 80%)"
+432	"Vvv (p = 80%)"
+433	"Sk"
+434	"Spk"
+435	"Svk"
+436	"Smrk1"
+437	"Smrk2"
+438	"Sk"
+439	"Spk"
+440	"Svk"
+441	"Smrk1"
+442	"Smrk2"
+443	"Sk"
+444	"Spk"
+445	"Svk"
+446	"Smrk1"
+447	"Smrk2"
+448	"Vmp"
+449	"Vmc"
+450	"Vvc"
+451	"Vvv"
+452	"Vmp"
+453	"Vmc"
+454	"Vvc"
+455	"Vvv"
+456	"Izotropię"
+457	"Pierwszy kierunek"
+458	"Drugi kierunek"
+459	"Trzeci kierunek"
+460	"Izotropię"
+461	"Pierwszy kierunek"
+462	"Drugi kierunek"
+463	"Trzeci kierunek"
+464	NA
+465	NA
+466	NA
+467	NA
+468	NA
+469	NA
+470	NA
+471	NA
+472	NA
+473	NA
+474	NA
+475	NA
+476	NA
+477	NA
+478	NA
+479	NA
+480	NA
+481	NA
+482	NA
+483	NA
+484	NA
+485	NA
+486	NA
+487	NA
+488	NA
+489	NA
+490	NA
+491	NA
+492	NA
+493	NA
+494	NA
+495	NA
+496	NA
+497	NA
+498	NA
+499	NA
+500	NA
+501	NA
+502	NA
+503	NA
+504	NA
+505	NA
+506	NA
+507	NA
+508	NA
+509	NA
+510	NA
+511	NA
+512	NA
+513	NA
+514	NA
+515	NA
+516	NA
+517	NA
+518	NA
+519	NA
+520	NA
+521	NA
+522	NA
+523	NA
+524	NA
+525	NA
+526	NA
+527	NA
+528	NA
+529	NA
+530	NA
+531	NA
+532	NA
+533	NA
+534	NA
+535	NA
+536	NA
+537	NA
+538	NA
+539	NA
+540	NA
+541	NA
+542	NA
+543	NA
+544	NA
+545	NA
+546	NA
+547	NA
+548	NA
+549	NA
+550	NA
+551	NA
+552	NA
+553	NA
+554	NA
+555	NA
+556	NA
+557	NA
+558	NA
+559	NA
+560	NA
+561	NA
+562	NA
+563	NA
+564	NA
+565	NA
+566	NA
+567	NA
+568	NA
+569	NA
+570	NA
+571	NA
+572	NA
+573	NA
+574	NA
+575	NA
+576	NA
+577	NA
+578	NA
+579	NA
+580	NA
+581	NA
+582	NA
+583	NA
+584	NA
+585	NA
+586	NA
+587	NA
+588	NA
+589	NA
+590	NA
+591	NA
+592	NA
+593	NA
+594	NA
+595	NA
+596	NA
+597	NA
+598	NA
+599	NA
+600	NA
+601	NA
+602	NA
+603	NA
+604	NA
+605	NA
+606	NA
+607	NA
+608	NA
+609	NA
+610	NA
+611	NA
+612	NA
+613	NA
+614	NA
+615	NA
+616	NA
+617	NA
+618	NA
+619	NA
+620	NA
+621	NA
+622	NA
+623	NA
+624	NA
+625	NA
+626	NA
+627	NA
+628	NA
+629	NA
+630	NA
+631	NA
+632	NA
+633	NA
+634	NA
+635	NA
+636	NA
+637	NA
+638	NA
+639	NA
+640	NA
+641	NA
+642	NA
+643	NA
+644	NA
+645	NA
+646	NA
+647	NA
+648	NA
+649	NA
+650	NA
+651	NA
+652	NA
+653	NA
+654	NA
+655	NA
+656	NA
+657	NA
+658	NA
+659	NA
+660	NA
+661	NA
+662	NA
+663	NA
+664	NA
+665	NA
+666	NA
+667	NA
+668	NA
+669	NA
+670	NA
+671	NA
+672	NA
+673	NA
+674	NA
+675	NA
+676	NA
+677	NA
+678	NA
+679	NA
+680	NA
+681	NA
+682	NA
+683	NA
+684	NA
+685	NA
+686	NA
+687	NA
+688	NA
+689	NA
+690	NA
+691	NA
+692	NA
+693	NA
+694	NA
+695	NA
+696	NA
+697	NA
+698	NA
+699	NA
+700	NA
+701	NA
+702	NA
+703	NA
+704	NA
+705	NA
+706	NA
+707	NA
+708	NA
+709	NA
+710	NA
+711	NA
+712	NA
+713	NA
+714	NA
+715	NA
+716	NA
+717	NA
+718	NA
+719	NA
+720	NA
+721	NA
+722	NA
+723	NA
+724	NA
+725	NA
+726	NA
+727	NA
+728	NA
+729	NA
+730	NA
+731	NA
+732	NA
+733	NA
+734	NA
+735	NA
+736	NA
+737	NA
+738	NA
+739	NA
+740	NA
+741	NA
+742	NA
+743	NA
+744	NA
+745	NA
+746	NA
+747	NA
+748	NA
+749	NA
+750	NA
+751	NA
+752	NA
+753	NA
+754	NA
+755	NA
+756	NA
+757	NA
+758	NA
+759	NA
+760	NA
+761	NA
+762	NA
+763	NA
+764	NA
+765	NA
+766	NA
+767	NA
+768	NA
+769	NA
+770	NA
+771	NA
+772	NA
+773	NA
+774	NA
+775	NA
+776	NA
+777	NA
+778	NA
+779	NA
+780	NA
+781	NA
+782	NA
+783	NA
+784	NA
+785	NA
+786	NA
+787	NA
+788	NA
+789	NA
+790	NA
+791	NA
+792	NA
+793	NA
+794	NA
+795	NA
+796	NA
+797	NA
+798	NA
+799	NA
+800	NA
+801	NA
+802	NA
+803	NA
+804	NA
+805	NA
+806	NA
+807	NA
+808	NA
+809	NA
+810	NA
+811	NA
+812	NA
+813	NA
+814	NA
+815	NA
+816	NA
+817	NA
+818	NA
+819	NA
+820	NA
+821	NA
+822	NA
+823	NA
+824	NA
+825	NA
+826	NA
+827	NA
+828	NA
+829	NA
+830	NA
+831	NA
+832	NA
+833	NA
+834	NA
+835	NA
+836	NA
+837	NA
+838	NA
+839	NA
+840	NA
+841	NA
+842	NA
+843	NA
+844	NA
+845	NA
+846	NA
+847	NA
+848	NA
+849	NA
+850	NA
+851	NA
+852	NA
+853	NA
+854	NA
+855	NA
+856	NA
+857	NA
+858	NA
+859	NA
+860	NA
+861	NA
+862	NA
+863	NA
+864	NA
+865	NA
+866	NA
+867	NA
+868	NA
+869	NA
+870	NA
+871	NA
+872	NA
+873	NA
+874	NA
+875	NA
+876	NA
+877	NA
+878	NA
+879	NA
+880	NA
+881	NA
+882	NA
+883	NA
+884	NA
+885	NA
+886	NA
+887	NA
+888	NA
+889	NA
+890	NA
+891	NA
+892	NA
+893	NA
+894	NA
+895	NA
+896	NA
+897	NA
+898	NA
+899	NA
+900	NA
+901	NA
+902	NA
+903	NA
+904	NA
+905	NA
+906	NA
+907	NA
+908	NA
+909	NA
+910	NA
+911	NA
+912	NA
+913	NA

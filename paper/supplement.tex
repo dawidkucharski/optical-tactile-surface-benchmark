@@ -1,0 +1,105 @@
+\documentclass[10pt]{article}
+
+\usepackage[a4paper,margin=18mm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+\title{Supplementary Materials}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\noindent
+Supplement to the manuscript \emph{Retrospective Benchmark of Optical Surface Roughness Workflows Against an Internal Tactile Baseline Across Multiple Materials and Processes}.
+
+% Use standard supplementary numbering (Table S1, Figure S1, ...)
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+
+\noindent
+This document provides supplementary tables and representative figures for the multi-material retrospective benchmark reported in the main manuscript.
+
+\medskip
+\noindent
+Its purpose is to provide compact numerical summaries across the archived conditions and a small set of additional figures illustrating the principal output types beyond those shown in the main text.
+
+\medskip
+\noindent
+The supplement follows the same interpretive limits as the main manuscript. It reports archive-level discrepancy summaries between optical workflows and an internal tactile baseline; it does not establish a common measurand, formal traceability, or optical--tactile equivalence. Wavelength fits are low-degree-of-freedom screening summaries, and the tactile repeatability terms reported here are internal precision descriptors rather than a full uncertainty budget.
+
+\tableofcontents
+\clearpage
+
+\section{How to read this supplement}
+\noindent
+\textbf{Tables.} Throughout this supplement, a \emph{material--process group} denotes a specific material together with a specific surface-generation process. Combined with one roughness parameter, this corresponds to the \emph{parameter--surface group} unit of analysis used in the main manuscript. In the manuscript subset, each of the eight parameters contributes 59 material--process groups, yielding 472 parameter--surface groups in total.
+
+\medskip
+\noindent
+Table~S1 reports exploratory two-way ANOVA screens for the factors \emph{system} and \emph{colour}. For each parameter and each material--process group, the table lists numerator and denominator degrees of freedom, the $F$ statistic, the nominal $p$-value, and the effect size $\eta^2$. Larger $\eta^2$ values indicate a larger fraction of variance associated with the given factor within that archive-defined group.
+
+\medskip
+\noindent
+Table~S2 reports system-wise linear screening fits of $|\mathrm{diff}|(\%)$ versus illumination wavelength. The slope is given per nm together with a 95\% confidence interval and a nominal $p$-value; positive slopes indicate increasing discrepancy with increasing wavelength, whereas negative slopes indicate decreasing discrepancy.
+
+\medskip
+\noindent
+Because a large number of ANOVA models and regressions are reported across many groups, individual $p$-values should be interpreted as screening statistics only; emphasis should be placed on replicated patterns and aggregated rates rather than isolated significant results. In addition, most wavelength regressions are based on only three or four illumination levels within a given parameter--surface group, so Table~S2 should be read as a low-degree-of-freedom descriptive summary rather than as a calibration or physics model.
+
+\medskip
+\noindent
+Table~S3 provides descriptive statistics of $|\mathrm{diff}|(\%)$ by system (sample size $n$, mean, standard deviation, and standard error) for each parameter and material--process group. These summaries are descriptive only and, in many groups, are based on only a few available optical conditions per system. Where percentage-based summaries for $R_{sk}$ appear in archive-derived tables, they are retained for completeness only and should not be interpreted on the same footing as the strictly positive parameters.
+
+\medskip
+\noindent
+Table~S4 summarises the internal repeatability of the tactile baseline used in the manuscript subset. For strictly positive parameters it reports the distribution of the relative standard error of the tactile mean, $100\,u_S/|S|$, across parameter--surface groups; for $R_{sk}$ it reports $u_S$ in native units because the tactile reference can approach zero.
+
+\medskip
+\noindent
+\textbf{Figures.} The supplementary figures are representative examples of (i) distributions of $|\mathrm{diff}|(\%)$ across systems, (ii) optical--tactile discrepancy summaries, (iii) illumination-band trend plots with fitted screening lines, and (iv) technical-distance heatmaps between systems. They illustrate archive-level workflow behaviour and should not be read as validation figures for metrological equivalence.
+
+\input{supplement_tables.tex}
+
+\clearpage
+\section{Representative supplementary figures}
+
+\subsection{Case A: Ti6Al4V after finish milling (\texorpdfstring{$R_q$}{Rq})}
+\begin{figure}[p]\centering
+\includegraphics[width=0.95\linewidth]{../plots/rq_abs_ti6al4v_mf_effects_by_system.pdf}
+\caption[Rq: main effects of system on |diff|(\%) for Ti6Al4V after finish milling]{$R_q$: main effects of system on $|\mathrm{diff}|(\%)$ for Ti6Al4V after finish milling}
+\end{figure}
+\clearpage
+
+\begin{figure}[p]\centering
+\includegraphics[width=0.95\linewidth]{../plots/rq_abs_ti6al4v_mf_diff_vs_wavelength.pdf}
+\caption[Rq: |diff|(\%) versus wavelength for Ti6Al4V after finish milling]{$R_q$: $|\mathrm{diff}|(\%)$ versus illumination wavelength for Ti6Al4V after finish milling with fitted screening lines}
+\end{figure}
+\clearpage
+
+\begin{figure}[p]\centering
+\includegraphics[width=0.95\linewidth]{../plots/rq_abs_ti6al4v_mf_tech_distance_heatmap.pdf}
+\caption[Rq: technical-distance heatmap between systems for Ti6Al4V after finish milling]{$R_q$: technical-distance heatmap between systems for Ti6Al4V after finish milling, based on mean $|\mathrm{diff}|(\%)$}
+\end{figure}
+\clearpage
+
+\subsection{Case B: C45 after wire EDM rough cutting (single-pass) (\texorpdfstring{$R_a$}{Ra})}
+\begin{figure}[p]\centering
+\includegraphics[width=0.95\linewidth]{../plots/ra_abs_c45_wedm_r_optics_vs_tactile.pdf}
+\caption[Ra: optical--tactile comparison for C45 after wire EDM rough cutting (single-pass)]{$R_a$: optical--tactile comparison for C45 after wire EDM rough cutting (single-pass), summarising relative disagreement across systems}
+\end{figure}
+\clearpage
+
+\begin{figure}[p]\centering
+\includegraphics[width=0.95\linewidth]{../plots/ra_abs_c45_wedm_r_diff_vs_wavelength.pdf}
+\caption[Ra: |diff|(\%) versus wavelength for C45 after wire EDM rough cutting (single-pass)]{$R_a$: $|\mathrm{diff}|(\%)$ versus illumination wavelength for C45 after wire EDM rough cutting (single-pass) with fitted screening lines}
+\end{figure}
+\clearpage
+
+\end{document}

@@ -1,0 +1,26 @@
+ETA2_system: n=590 median=0.651 q25=0.357 q75=0.831 ge0.5=380 ge0.3=474
+ETA2_color: n=590 median=0.106 q25=0.048 q75=0.210 ge0.5=10 ge0.3=73
+ETA2_WINNERS: system=497 color=93 tie=0 pairs=590
+ETA2_BY_PARAM ra: system_median=0.558 color_median=0.091 system_q25=0.280 system_q75=0.781 color_q25=0.055 color_q75=0.205 pairs system_win=46 color_win=13
+ETA2_BY_PARAM rku: system_median=0.611 color_median=0.124 system_q25=0.417 system_q75=0.755 color_q25=0.045 color_q75=0.229 pairs system_win=50 color_win=9
+ETA2_BY_PARAM rp: system_median=0.812 color_median=0.087 system_q25=0.451 system_q75=0.907 color_q25=0.034 color_q75=0.224 pairs system_win=51 color_win=8
+ETA2_BY_PARAM rq: system_median=0.624 color_median=0.105 system_q25=0.303 system_q75=0.787 color_q25=0.049 color_q75=0.194 pairs system_win=48 color_win=11
+ETA2_BY_PARAM rsk: system_median=0.468 color_median=0.164 system_q25=0.211 system_q75=0.705 color_q25=0.092 color_q75=0.265 pairs system_win=46 color_win=13
+ETA2_BY_PARAM rsm: system_median=0.831 color_median=0.060 system_q25=0.579 system_q75=0.939 color_q25=0.027 color_q75=0.210 pairs system_win=53 color_win=6
+ETA2_BY_PARAM rt: system_median=0.647 color_median=0.106 system_q25=0.338 system_q75=0.833 color_q25=0.053 color_q75=0.191 pairs system_win=51 color_win=8
+ETA2_BY_PARAM rv: system_median=0.638 color_median=0.095 system_q25=0.358 system_q75=0.778 color_q25=0.058 color_q75=0.175 pairs system_win=51 color_win=8
+ETA2_BY_PARAM rz: system_median=0.704 color_median=0.089 system_q25=0.429 system_q75=0.852 color_q25=0.046 color_q75=0.188 pairs system_win=51 color_win=8
+ETA2_BY_PARAM rz1max: system_median=0.659 color_median=0.112 system_q25=0.346 system_q75=0.833 color_q25=0.053 color_q75=0.198 pairs system_win=50 color_win=9
+SLOPES: n=2290 sig_p_lt_0.05=203 pct=8.9
+SLOPES_BY_PARAM ra: n=229 sig_p_lt_0.05=15 pct=6.6
+SLOPES_BY_PARAM rku: n=229 sig_p_lt_0.05=19 pct=8.3
+SLOPES_BY_PARAM rp: n=229 sig_p_lt_0.05=19 pct=8.3
+SLOPES_BY_PARAM rq: n=229 sig_p_lt_0.05=20 pct=8.7
+SLOPES_BY_PARAM rsk: n=229 sig_p_lt_0.05=12 pct=5.2
+SLOPES_BY_PARAM rsm: n=229 sig_p_lt_0.05=19 pct=8.3
+SLOPES_BY_PARAM rt: n=229 sig_p_lt_0.05=28 pct=12.2
+SLOPES_BY_PARAM rv: n=229 sig_p_lt_0.05=20 pct=8.7
+SLOPES_BY_PARAM rz: n=229 sig_p_lt_0.05=26 pct=11.4
+SLOPES_BY_PARAM rz1max: n=229 sig_p_lt_0.05=25 pct=10.9
+TOP_feature_importance.csv: param=3.51e+03; system=853; color=238; paramRSM=94.9; paramRSK=77.9; paramRSM=53.6; paramRSK=45.1; paramRV=22.4; paramRP=20.3; paramRZ=18.9
+TOP_shap_importance.csv: param=22.1; system=13.4; color=4.78

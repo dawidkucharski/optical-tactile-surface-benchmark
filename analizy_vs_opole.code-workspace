@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"chat.tools.terminal.autoApprove": {
+			"/^cd \"/Users/dawid/Library/Mobile Documents/com~apple~CloudDocs/Dokumenty/Projekty/NSMT/AI_GUM/2024/Opole/analizy_vs_opole/paper\" && bibtex manuscript && pdflatex -interaction=nonstopmode -halt-on-error manuscript\\.tex && pdflatex -interaction=nonstopmode -halt-on-error manuscript\\.tex$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"/Users/dawid/Library/Mobile Documents/com~apple~CloudDocs/Dokumenty/Projekty/NSMT/AI_GUM/2024/Opole/analizy_vs_opole/paper\" && pdflatex -interaction=nonstopmode -halt-on-error manuscript\\.tex && bibtex manuscript && pdflatex -interaction=nonstopmode -halt-on-error manuscript\\.tex && pdflatex -interaction=nonstopmode -halt-on-error manuscript\\.tex$/": {
+				"approve": true,
+				"matchCommandLine": true
+			}
+		}
+	}
+}

@@ -1,0 +1,731 @@
+---
+title: "Raport: porównanie optyki do pomiaru stykowego (|diff| %)"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    number_sections: true
+    keep_tex: true
+  html_document: default
+geometry: "margin=18mm,includehead,includefoot"
+fontsize: 10pt
+header-includes:
+  - \setlength{\emergencystretch}{2em}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{polyglossia}
+  - \setmainlanguage{polish}
+  - \usepackage{fancyhdr}
+  - |
+    % --- Projekt PM-II: nagłówki/stopka + strona tytułowa (trwałe w Rmd) ---
+    \newcommand{\PMIITitleLine}{Raport projektu \textbf{„Wpływ techniki i barwy pomiaru na jakość odwzorowania powierzchni elektromagnetycznych”}}
+    \newcommand{\PMIIFundingLineA}{finansowany przez Ministerstwo Nauki i Szkolnictwa Wyższego w ramach programu Polska Metrologia 2}
+    \newcommand{\PMIIFundingLineB}{Nr PM-II/SP/0090/2024/02 z dnia 05.02.2024,}
+
+    \newcommand{\PMIIFooterText}{%
+      \PMIITitleLine\\
+      \PMIIFundingLineA\\
+      \PMIIFundingLineB%
+    }
+
+    \newcommand{\PMIISetupFancy}{%
+      \fancyhf{}%
+      % Loga w nagłówku (w granicach szerokości tekstu)
+      \fancyhead[L]{\includegraphics[height=10mm]{logo1.pdf}}%
+      \fancyhead[R]{\includegraphics[height=10mm]{logo2.pdf}}%
+      % Stopka: tekst na środku (węższy niż tekst) + numer strony po prawej
+      \fancyfoot[C]{\raisebox{2.0ex}{\parbox{0.60\textwidth}{\centering\fontsize{6}{7}\selectfont \PMIIFooterText}}}%
+      \fancyfoot[R]{\thepage}%
+      \renewcommand{\headrulewidth}{0pt}%
+      \renewcommand{\footrulewidth}{0pt}%
+      % Zapewnij miejsce na loga/stopkę
+      \setlength{\headheight}{14mm}%
+      % Utrzymaj stopkę w obrębie marginesu dolnego
+      \setlength{\footskip}{12mm}%
+    }
+
+    \fancypagestyle{plain}{\PMIISetupFancy}
+    \AtBeginDocument{\pagestyle{fancy}\PMIISetupFancy}
+
+    % Wyłącz domyślny \maketitle (tytuł przygotowywany poniżej w titlepage)
+    \renewcommand{\maketitle}{}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+library(stringr)
+library(dplyr)
+library(readr)
+outputs <- "outputs"
+slopes_files <- list.files(outputs, pattern = "_abs_.*_(slopes_by_system|slope_by_system_vs_nm)\\.csv$", full.names = TRUE)
+slug <- NA_character_
+if (length(slopes_files) > 0) {
+  m <- str_match(basename(slopes_files)[1], "^([a-z0-9]+)_abs_(.+)_(slopes_by_system|slope_by_system_vs_nm)\\.csv$")
+  slug <- m[1,3]
+}
+slug <- ifelse(is.na(slug), "material", slug)
+overview_path <- file.path(outputs, "summary_overview.csv")
+trends_path <- file.path(outputs, "summary_trends_by_system.csv")
+overview <- if (file.exists(overview_path)) readr::read_csv(overview_path, show_col_types = FALSE) else tibble()
+trends  <- if (file.exists(trends_path)) readr::read_csv(trends_path, show_col_types = FALSE) else tibble()
+reco_path <- file.path(outputs, "recommendations_overall.csv")
+reco  <- if (file.exists(reco_path)) readr::read_csv(reco_path, show_col_types = FALSE) else tibble()
+
+# Detect all materials (slugs) present in outputs by scanning comparison CSVs
+comp_files <- list.files(outputs, pattern = "^([a-z0-9]+)_abs_([a-z0-9_-]+)_optics_vs_tactile\\.csv$", full.names = TRUE)
+all_slugs <- unique(sub("^([a-z0-9]+)_abs_([a-z0-9_-]+)_optics_vs_tactile\\.csv$", "\\2", basename(comp_files)))
+all_slugs <- sort(all_slugs)
+
+# Discover parameters from outputs (filenames like rp_abs_<mat>_optics_vs_tactile.csv)
+param_files <- list.files(outputs, pattern = '^[a-z0-9]+(_abs)?_([a-z0-9_-]+)_optics_vs_tactile[.]csv$', full.names = FALSE)
+params <- unique(tolower(sub('^([a-z0-9]+).*$', '\\1', param_files)))
+if (length(params) == 0) {
+  params <- c("rp","rv","rz","ra","rt","rz1max")
+}
+
+# Helper: escape LaTeX specials minimally for titles
+latex_escape <- function(x) {
+  x <- gsub("\\\\", "\\\\textbackslash{}", x)
+  x <- gsub("_", "\\\\_", x)
+  x <- gsub("%", "\\\\%", x)
+  x <- gsub("&", "\\\\&", x)
+  x <- gsub("#", "\\\\#", x)
+  x
+}
+
+# Helper: print a single LaTeX figure with caption (adds to List of Figures)
+latex_fig <- function(path, caption, width = "0.95\\linewidth") {
+  if (!file.exists(path)) return(invisible(NULL))
+  cat("\\begin{figure}[H]\\centering\n")
+  cat(sprintf("\\includegraphics[width=%s]{%s}\n", width, path))
+  cat(sprintf("\\caption{%s}\n", latex_escape(caption)))
+  cat("\\end{figure}\n\n")
+}
+
+# Helper: print three images side by side in one figure using minipage
+latex_fig_row3 <- function(paths, caption) {
+  if (length(paths) != 3) return(invisible(NULL))
+  if (!any(file.exists(paths))) return(invisible(NULL))
+  cat("\\begin{figure}[H]\\centering\n")
+  for (p in paths) {
+    if (file.exists(p)) {
+      cat("\\begin{minipage}[t]{0.32\\textwidth}\\centering\n")
+  cat(sprintf("\\includegraphics[width=\\linewidth]{%s}\n", p))
+      cat("\\end{minipage}\n")
+    }
+  }
+  cat(sprintf("\\caption{%s}\n", latex_escape(caption)))
+  cat("\\end{figure}\n\n")
+}
+
+# Helper: print two images side by side in one figure using minipage
+latex_fig_row2 <- function(paths, caption) {
+  if (length(paths) != 2) return(invisible(NULL))
+  if (!any(file.exists(paths))) return(invisible(NULL))
+  cat("\\begin{figure}[H]\\centering\n")
+  for (p in paths) {
+    if (file.exists(p)) {
+      cat("\\begin{minipage}[t]{0.48\\textwidth}\\centering\n")
+  cat(sprintf("\\includegraphics[width=\\linewidth]{%s}\n", p))
+      cat("\\end{minipage}\n")
+    }
+  }
+  cat(sprintf("\\caption{%s}\n", latex_escape(caption)))
+  cat("\\end{figure}\n\n")
+}
+
+```
+
+```{=latex}
+\begin{titlepage}
+\centering
+{\Large \PMIITitleLine\par}
+\vspace{6mm}
+{\normalsize \PMIIFundingLineA\par}
+\vspace{2mm}
+{\normalsize \PMIIFundingLineB\par}
+\vspace{2mm}
+{\normalsize za rok 2025.\par}
+\vspace{10mm}
+{\normalsize Koordynator projektu po stronie PP: dr inż. Dawid Kucharski.\par}
+\end{titlepage}
+
+	hispagestyle{plain}
+\noindent\textbf{Informacja o realizacji prac w roku 2025}\par
+\vspace{4mm}
+\noindent\fontsize{10}{12}\selectfont
+Raport dotyczy prac zespołu Politechniki Poznańskiej w roku 2025 nad analizą statystyczną wszystkich danych zebranych w ramach projektu.\par
+W roku sprawozdawczym 2025 realizowano prace dotyczące trzech zadań:\par
+\vspace{2mm}
+\begin{itemize}
+  \item \textbf{Zadanie 1:} przygotowanie próbek, selekcja próbek, przegląd literatury oraz pomiary stykowe; w roku 2025 zbiór danych był głównie poszerzany.
+  \item \textbf{Zadanie 2:} pomiary odwzorowania powierzchni elektromagnetycznej różnymi technikami i metodami pomiarowymi bazującymi na systemach optycznych; w roku 2025 zbiór danych był poszerzany m.in. o pomiary na systemie Alicona FV na Politechnice Poznańskiej.
+  \item \textbf{Zadanie 3:} weryfikacja wyników (ocena ilościowa i jakościowa); główna część raportowana w niniejszym dokumencie, obejmująca zadanie jakie postawił przed sobą zespół Politechniki Poznańskiej: analizy statystyczne oraz analizę z zakresu uczenia maszynowego.
+\end{itemize}
+
+\noindent\textbf{Zakres analizowanych danych (materiały, procesy, systemy, barwy, próbki)}\par
+\vspace{2mm}
+\noindent Raport obejmuje porównanie wyników pomiarów optycznych z referencją stykową w układzie \emph{materiał \texttimes{} proces \texttimes{} system \texttimes{} barwa/pasmo oświetlenia}. W dalszych sekcjach wyniki są agregowane w grupach typu \emph{parametr \texttimes{} materiał--proces}.\par
+\vspace{1mm}
+\begin{itemize}
+  \item \textbf{Materiały:} C45; stal nierdzewna AISI 304 (EN 1.4301; 14301); Ti6Al4V; Al7075; mosiądz MO58A; grafit (ELLOR).
+  \item \textbf{Procesy / kody próbek:} MR (frezowanie zgrubne), MF (frezowanie wykańczające), TR/TF (toczenie czołowe: zgrubne/wykańczające), B (nagniatanie po MF), WEDM\_R/WEDM\_F (WEDM: obróbka zgrubna/wykańczająca), GRI (szlifowanie), GLA (śrutowanie kulkami szklanymi), HON (honowanie).
+  \item \textbf{Systemy pomiarowe:} stykowy (tactile) jako referencja oraz systemy optyczne (w raportach skrótowo m.in.: \textit{conf}, \textit{FV}, \textit{fusion}, \textit{int}/CSI).
+  \item \textbf{Barwy / wavelength (z ang. długość fali):} dla części systemów pomiary powtarzano dla kilku barw (pasm) oświetlenia; gdy dostępna jest wartość numeryczna \emph{wavelength}, wykorzystywana jest w analizach trendów.
+  \item \textbf{Próbki:} konwencja etykiet odpowiada schematowi \texttt{<material>\_<process>} (np. \texttt{Ti6Al4V\_MF}, \texttt{14301\_WEDM\_F}).
+\end{itemize}
+\clearpage
+
+\pagenumbering{roman}
+\setcounter{tocdepth}{2}
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\pagenumbering{arabic}
+```
+
+## Najważniejsze wnioski (streszczenie)
+
+Poniżej przedstawiono kluczowe wnioski wynikające z analiz zaprezentowanych w raporcie (tabele decyzyjne, ANOVA, regresje względem wavelength, mapy podobieństwa oraz ML).
+
+- **Różnice optyka–stykowe nie są uniwersalnie małe.** Optyka i stykowe nie zawsze „mierzą to samo” w praktyce, więc zgodność należy traktować jako zależną od przypadku; w raporcie miarą tej niezgodności jest |diff| [%] (im mniejsze, tym lepiej).
+- **System pomiarowy jest zwykle czynnikiem dominującym.** W wielu grupach typu *parametr × materiał–proces* rozrzut |diff| [%] pomiędzy systemami jest duży; wybór rodziny/konfiguracji systemu ma bezpośredni wpływ na możliwą do uzyskania zgodność.
+- **Proces wytworzenia powierzchni ma istotne znaczenie.** Powierzchnie gładsze i bardziej regularne (np. wykończeniowe) bywają korzystniejsze dla optyki, natomiast tekstury bardzo nieregularne/„trudne optycznie” częściej prowadzą do większego |diff| [%] i wymagają ostrożniejszej walidacji.
+- **Barwa / wavelength to czynnik wtórny, ale bywa użyteczny.** Dla części układów i powierzchni wybór pasma oświetlenia może zmniejszać lub zwiększać |diff| [%]; w praktyce jest to parametr strojenia specyficzny dla systemu, a nie uniwersalna poprawka.
+- **Trendy z wavelength nie występują zawsze.** W wielu kombinacjach nachylenia |diff| [%] względem wavelength są słabe lub nieistotne; jeżeli trend występuje, zwykle dotyczy konkretnych systemów i konkretnych grup powierzchni.
+- **Parametr chropowatości ma znaczenie.** Wnioski wyciągnięte dla jednego parametru nie powinny być automatycznie przenoszone na inne; w raporcie pokazano, że zgodność optyka–stykowe może zależeć od analizowanego parametru.
+- **Systemy mogą tworzyć „rodziny” zachowania.** Mapy podobieństwa/odległości technicznej pomagają wskazać zestawy konfiguracji o podobnym profilu błędu oraz odstające przypadki wymagające osobnej weryfikacji.
+- **ML potwierdza obraz z klasycznych analiz.** Modele uczone na cechach (system, color, parametr) wskazują zwykle na dominującą rolę systemu i parametru; w tym ujęciu „niezgodność” oznacza większe różnice optyka–stykowe, tj. wyższe |diff| [%].
+
+W dalszej części raportu przedstawiono szczegółowe wykresy i tabele dla poszczególnych materiałów i procesów, umożliwiające przejście od wniosków ogólnych do oceny konkretnych konfiguracji (system + color) w obrębie danej grupy.
+
+## Wprowadzenie i metodologia
+
+- Cel: porównać optykę do pomiaru stykowego dla parametrów chropowatości i ocenić czynniki wpływające na błąd (|diff| [%]).
+- Metryka: |diff| [%] = 100 · |optyka − stykowe| / stykowe (wartość bezwzględna; mniejsze = lepiej). Stosowane są wartości bezwzględne, aby oceniać wielkość błędu niezależnie od znaku.
+- Jednostka analizy (grupowanie): wyniki są streszczane w grupach typu *parametr × materiał–proces*. W obrębie takiej grupy porównywane są konfiguracje optyczne (system + color/wavelength).
+- Czynniki: system (układ) i color (kolor; reprezentuje długość fali). Numeryczna długość fali nie jest w tej części raportu stosowana bezpośrednio; traktowana jest jako zmienna zakodowana przez kolor. W analizach trendów wykorzystywana jest wavelength tam, gdzie jest dostępna.
+- Analizy statystyczne: ANOVA (eta²), korelacje z wavelength, regresje per system (nachylenia |diff| vs wavelength), mapy podobieństwa systemów.
+- Interpretacja istotności: ponieważ dopasowujemy wiele modeli/testów w wielu grupach, pojedyncze wartości p traktujemy jako statystyki przesiewowe (screening), a większy nacisk kładziemy na wzorce powtarzalne i zbiorcze miary (np. częstość istotnych nachyleń).
+- Wskaźnik TAK/NIE dla zależności od wavelength (przesiewowo): etykieta „Wniosek: TAK/NIE” pojawiająca się w wynikach dla każdej grupy *parametr × materiał–proces* oznacza, czy w tej grupie wykryto zależność |diff| od wavelength w analizach per system. **TAK** = w co najmniej jednym systemie regresja |diff| ~ wavelength daje istotne nachylenie (p<0.05). **NIE** = nie ma żadnego systemu z istotnym nachyleniem (p<0.05) — nawet jeśli miejscami widoczne są słabe „Trendy (p<0.1)”. Jest to wskaźnik przesiewowy (screening): „NIE” nie dowodzi braku wpływu wavelength, tylko brak wykrytego trendu w danych; wskaźnik nie niesie też informacji o kierunku trendu (czy większa wavelength poprawia/pogarsza zgodność).
+- Uczenie maszynowe (ML) — dodatkowa diagnostyka: stosowane są modele Lasso i Ridge (regresje liniowe z regularyzacją odpowiednio L1 i L2; implementacja: GLMNET) oraz Random Forest (las losowy, zespół drzew decyzyjnych). Modele uczone są na cechach kategorycznych (etykietach): system (rodzina/konfiguracja), color (barwa/pasmo oświetlenia; proxy dla wavelength) i param (parametr chropowatości) — bez podawania numerycznej wartości wavelength. Raportowane są miary „ważności” cech: dla Random Forest ważność permutacyjna (spadek jakości predykcji po losowym przetasowaniu danej cechy), a dla GLMNET wartość |beta| (moduł współczynnika w modelu Lasso/Ridge). Dodatkowo przedstawiono SHAP (Shapley Additive exPlanations) dla Random Forest jako ujęcie wkładu cech w predykcje. Wykresy ML pozostają podpisane po angielsku; opis słowny jest po polsku.
+
+### Analiza danych — etapy postępowania
+
+1. **Zebranie i ujednolicenie danych wejściowych**
+  - Dane stykowe (tactile) pełnią rolę *referencji* dla oceny błędu optyki.
+  - Dane optyczne zawierają wyniki wielu konfiguracji (system + color/wavelength).
+  - Na etapie importu wykonywane są automatyczne procedury wykrywania i oczyszczania danych liczbowych oraz parsowania etykiet systemu i koloru.
+
+2. **Definicja miary błędu (wspólna dla wszystkich metod)**
+  - Dla każdej obserwacji obliczany jest błąd w procentach:
+    |diff| [%] = 100 · |optyka − stykowe| / stykowe.
+  - W raporcie analizowana jest wartość bezwzględna, bo celem jest ocena *wielkości niezgodności* (mniejsze = lepiej), niezależnie od znaku różnicy.
+
+3. **Ustalenie jednostki analizy (grupowanie wyników)**
+  - Wyniki streszczane są w grupach typu *parametr × materiał–proces*.
+  - To grupowanie odpowiada logicznej „jednostce decyzji”: w obrębie jednej grupy porównywane są konfiguracje optyczne (system + color).
+
+4. **Streszczenie „decyzyjne” (porządkowanie i porównywanie konfiguracji)**
+  - Dla każdej grupy konfiguracje optyczne są porównywane z wykorzystaniem mediany (oraz kwartylów) |diff| [%].
+  - Dodatkowo raportowane są liczniki obserwacji w trzech przedziałach jakości (≤10%, 10–30%, >30%) jako pomocnicza kategoryzacja.
+  - To streszczenie jest niezależnym podsumowaniem opartym bezpośrednio na |diff|[%] (nie jest „liczone z ANOVA/regresji/ML”), ale powinno być z nimi spójne interpretacyjnie.
+
+5. **ANOVA: wpływ systemu i koloru (screening)**
+  - W każdej grupie dopasowywany jest model typu: |diff| [%] ~ system + color.
+  - Raportowane są m.in. miary efektu (eta²) i wartości p.
+  - Ze względu na dużą liczbę testów, p-value traktowane są przesiewowo: ważniejsze są wzorce powtarzalne w wielu grupach niż pojedyncze istotności.
+
+6. **Trendy względem wavelength: korelacje i regresje per system (screening)**
+  - Tam, gdzie dostępna jest numeryczna wavelength, wykonywane są korelacje oraz regresje |diff| [%] ~ wavelength osobno dla każdego systemu.
+  - Raportowane są nachylenia i ich istotność; syntetyczny wskaźnik „TAK/NIE” służy do identyfikacji grup wymagających uwagi.
+
+7. **Mapy podobieństwa (distance): porównanie systemów jako technik**
+  - Dla wybranych ujęć obliczane są miary podobieństwa/różnic między systemami (np. jako „odległość techniczna”), aby ocenić, które systemy zachowują się podobnie z punktu widzenia |diff|[%].
+
+8. **Uczenie maszynowe (ML) jako dodatkowa diagnostyka**
+  - Modele (Lasso, Ridge, Random Forest) są uczone na cechach kategorycznych: system, color, parametr (bez numerycznej wavelength), w celu oceny, które czynniki w największym stopniu wyjaśniają zmienność |diff|[%].
+  - W kontekście wykresów ML „niezgodność” oznacza większe różnice optyka–stykowe, tj. wyższe wartości |diff|[%].
+
+9. **Zestawienia i prezentacja wyników**
+  - W dalszej części raportu wyniki prezentowane są w postaci tabel i wykresów pogrupowanych według parametrów oraz materiałów/procesów.
+
+### Dane wejściowe i przetwarzanie
+
+- Pomiary stykowe (tactile): stosowana jest automatyczna detekcja nagłówków (do 50 wierszy), lokalizacja bloku parametru oraz czyszczenie liczb. Referencję stanowi średnia wartość stykowa dla parametru.
+- Pomiary optyczne: parametry zdefiniowane przez indeksy kolumn (domyślnie: Rp=132, Rv=136, Rz=140, Ra=152, Rt=148, Rz1max=176). System i color parsowane z etykiet wierszy; wavelength przypisany do koloru/układu zgodnie z danymi.
+- Obliczenia: |diff| [%] dla każdej obserwacji; agregacje i wykresy per param/system/color; regresje |diff| [%] ~ wavelength per system; ANOVA: |diff| [%] ~ system + color.
+
+### Interpretacja wykresów
+
+ - optics_vs_tactile — porównanie |diff| [%] względem pomiaru stykowego (referencji), po systemach i kolorach.
+ - effects_by_system — średnie |diff| [%] i 95% CI dla systemów.
+ - effects_by_color — średnie |diff| [%] i 95% CI dla kolorów.
+ - diff_vs_wavelength — rozrzut |diff| [%] vs długość fali z linią trendu.
+ - slopes_by_system — nachylenia (|diff| [%] na jednostkę wavelength) z 95% CI i p.
+ - tech_distance_heatmap — podobieństwo systemów (średni |diff|% między technikami).
+
+```{r helpers, include=FALSE}
+# Helpers to read per-material metrics
+read_mat_corr <- function(mat, p) {
+  f <- file.path(outputs, sprintf("%s_abs_%s_corr_wavelength.txt", p, mat))
+  if (!file.exists(f)) return(list(r=NA_real_, rho=NA_real_))
+  txt <- readLines(f, warn = FALSE)
+  get_num <- function(pattern) {
+    line <- txt[grepl(pattern, txt)]
+    if (length(line) == 0) return(NA_real_)
+    m <- stringr::str_match(line[1], "([-+]?[0-9]*\\.?[0-9]+)")
+    suppressWarnings(as.numeric(m[1,2]))
+  }
+  list(r = get_num("Pearson r"), rho = get_num("Spearman"))
+}
+read_mat_eta <- function(mat, p) {
+  f <- file.path(outputs, sprintf("%s_abs_%s_anova_effect_sizes.csv", p, mat))
+  if (!file.exists(f)) return(list(sys=NA_real_, col=NA_real_))
+  df <- suppressMessages(readr::read_csv(f, show_col_types = FALSE))
+  list(sys = df$eta2[df$term=="system"] %>% { if(length(.)>0) .[1] else NA_real_ },
+       col = df$eta2[df$term=="color"] %>% { if(length(.)>0) .[1] else NA_real_ })
+}
+read_mat_slopes <- function(mat, p) {
+  f1 <- file.path(outputs, sprintf("%s_abs_%s_slope_by_system_vs_nm.csv", p, mat))
+  f2 <- file.path(outputs, sprintf("%s_abs_%s_slopes_by_system.csv", p, mat))
+  f <- if (file.exists(f1)) f1 else if (file.exists(f2)) f2 else NULL
+  if (is.null(f)) return(tibble())
+  df <- suppressMessages(readr::read_csv(f, show_col_types = FALSE))
+  # normalize names
+  nm <- names(df)
+  tibble(system = df[[which(nm=="system")]],
+         slope = if ("slope" %in% nm) df[["slope"]] else if ("slope_per_nm" %in% nm) df[["slope_per_nm"]] else NA_real_,
+         p = if ("p" %in% nm) df[["p"]] else if ("p_value" %in% nm) df[["p_value"]] else NA_real_)
+}
+
+# Effects helpers for preferences per material
+read_mat_sys_effects <- function(mat, p) {
+  f <- file.path(outputs, sprintf("%s_abs_%s_effects_by_system.csv", p, mat))
+  if (!file.exists(f)) return(tibble())
+  df <- suppressMessages(readr::read_csv(f, show_col_types = FALSE))
+  if (!all(c("system","mean") %in% names(df))) return(tibble())
+  arrange(df, mean) %>% slice_head(n=1) %>% transmute(best_system = as.character(system), best_system_mean = as.numeric(mean))
+}
+read_mat_col_effects <- function(mat, p) {
+  f <- file.path(outputs, sprintf("%s_abs_%s_effects_by_color.csv", p, mat))
+  if (!file.exists(f)) return(tibble())
+  df <- suppressMessages(readr::read_csv(f, show_col_types = FALSE))
+  if (!all(c("color","mean") %in% names(df))) return(tibble())
+  arrange(df, mean) %>% slice_head(n=1) %>% transmute(best_color = as.character(color), best_color_mean = as.numeric(mean))
+}
+
+# Try to read system+color pair effects if available; fallback to separate best system and color
+read_mat_syscol_effects <- function(mat, p, sysb, colb) {
+  f <- file.path(outputs, sprintf("%s_abs_%s_effects_by_system_color.csv", p, mat))
+  if (file.exists(f)) {
+    df <- suppressMessages(readr::read_csv(f, show_col_types = FALSE))
+    # expect columns: system,color,mean
+    if (all(c("system","color","mean") %in% names(df))) {
+      row <- df %>% arrange(mean) %>% slice_head(n=1)
+      return(list(pair = sprintf("%s / %s", as.character(row$system[1]), as.character(row$color[1])), pair_mean = as.numeric(row$mean[1]), from_pair = TRUE))
+    }
+  }
+  # Fallback: combine best system and best color independently
+  pair <- sprintf("%s / %s", if (nrow(sysb)) as.character(sysb$best_system[1]) else NA_character_, if (nrow(colb)) as.character(colb$best_color[1]) else NA_character_)
+  pair_mean <- NA_real_
+  list(pair = pair, pair_mean = pair_mean, from_pair = FALSE)
+}
+```
+## Sekcje per materiał/proces
+
+```{r per-material, results='asis'}
+if (knitr::is_latex_output() && length(all_slugs) > 0) {
+  for (mat in all_slugs) {
+    cat(sprintf("\\subsubsection{Materiał/proces: %s}\n", latex_escape(mat)))
+
+    # Wykresy — rzędy po trzy (minipage). Każdy rząd to jedna figura (z caption).
+    for (p in params) {
+      # Row: optics_vs_tactile, effects_by_system, effects_by_color
+      row1 <- c(
+        file.path("plots", sprintf("%s_abs_%s_optics_vs_tactile.pdf", p, mat)),
+        file.path("plots", sprintf("%s_abs_%s_effects_by_system.pdf", p, mat)),
+        file.path("plots", sprintf("%s_abs_%s_effects_by_color.pdf", p, mat))
+      )
+      latex_fig_row3(row1, sprintf("%s — %s — porównanie i efekty (|diff| %%)", toupper(p), mat))
+
+      # Row: diff_vs_wavelength, slopes_by_system, heatmap
+      f_new <- file.path("plots", sprintf("%s_abs_%s_slope_by_system_vs_nm.pdf", p, mat))
+      f_old <- file.path("plots", sprintf("%s_abs_%s_slopes_by_system.pdf", p, mat))
+      slopes <- if (file.exists(f_new)) f_new else f_old
+      row2 <- c(
+        file.path("plots", sprintf("%s_abs_%s_diff_vs_wavelength.pdf", p, mat)),
+        slopes,
+        file.path("plots", sprintf("%s_abs_%s_tech_distance_heatmap.pdf", p, mat))
+      )
+      latex_fig_row3(row2, sprintf("%s — %s — wavelength, nachylenia, odległości technik", toupper(p), mat))
+    }
+
+   # Wyniki i wnioski dla materiał/proces
+   cat(sprintf("\\subsection{Wyniki i wnioski dla materiał/proces: %s}\n", latex_escape(mat)))
+    for (p in params) {
+      cvals <- read_mat_corr(mat, p)
+      et <- read_mat_eta(mat, p)
+      sl <- read_mat_slopes(mat, p)
+      sig <- sl %>% filter(is.finite(p) & p < 0.05)
+      trn <- sl %>% filter(is.finite(p) & p < 0.1 & p >= 0.05)
+      cat(sprintf("\\textbf{%s}. r=%.3f, rho=%.3f; eta2: system=%.3f, color=%.3f.", toupper(p), cvals$r, cvals$rho, et$sys, et$col), "\n")
+      if (nrow(sig) > 0) {
+        cat(" Istotne nachylenia:")
+        cat(paste(sprintf(" %s(slope=%.3f, p=%.3f)", sig$system, sig$slope, sig$p), collapse = ";"))
+        cat(".\n")
+      }
+      if (nrow(trn) > 0) {
+        cat(" Trendy (p<0.1):")
+        cat(paste(sprintf(" %s(slope=%.3f, p=%.3f)", trn$system, trn$slope, trn$p), collapse = ";"))
+        cat(".\n")
+      }
+  # Wniosek dla tego parametru: wskaźnik TAK/NIE (po długości fali)
+  concl <- if (nrow(sig) > 0) "TAK" else "NIE"
+  cat(sprintf(" Wniosek: %s.\n", concl))
+    }
+
+   # Preferencje systemu i koloru (tabela)
+  rows <- NULL
+    for (p in params) {
+      sysb <- read_mat_sys_effects(mat, p)
+      colb <- read_mat_col_effects(mat, p)
+      sl <- read_mat_slopes(mat, p)
+      best_slope <- if (nrow(sl)>0) sl %>% arrange(slope) %>% slice_head(n=1) else tibble(system=NA, slope=NA_real_, p=NA_real_)
+      pair_info <- read_mat_syscol_effects(mat, p, sysb, colb)
+      rows <- rbind(rows, data.frame(
+        Param = toupper(p),
+        `System (min |diff|)` = if (nrow(sysb)) sysb$best_system[1] else NA,
+        `Kolor (min |diff|)` = if (nrow(colb)) colb$best_color[1] else NA,
+        `System/kolor (rekom.)` = pair_info$pair,
+        check.names = FALSE,
+        stringsAsFactors = FALSE
+      ))
+    }
+    if (!is.null(rows)) {
+    knitr::kable(rows, align = c('l','l','l','l'), escape = TRUE, format = if (knitr::is_latex_output()) "latex" else "simple")
+    }
+
+     # Meta-podsumowanie (opisowe) dla materiału/procesu
+     cat("\\paragraph{Podsumowanie (opisowe) dla tego materiału/procesu}\n")
+     dominant_counts <- c(system = 0L, color = 0L, similar = 0L, unknown = 0L)
+     best_systems <- character()
+     best_colors <- character()
+     sig_params <- character()
+     trend_params <- character()
+     sig_systems <- character()
+     trend_systems <- character()
+
+     mode1 <- function(x) {
+       x <- x[!is.na(x) & nzchar(x)]
+       if (length(x) == 0) return(NA_character_)
+       tab <- sort(table(x), decreasing = TRUE)
+       if (length(tab) >= 2 && tab[1] == tab[2]) return(NA_character_)
+       names(tab)[1]
+     }
+
+     for (p in params) {
+       sysb <- read_mat_sys_effects(mat, p)
+       colb <- read_mat_col_effects(mat, p)
+       et <- read_mat_eta(mat, p)
+       sl <- read_mat_slopes(mat, p)
+
+       if (nrow(sysb)) best_systems <- c(best_systems, as.character(sysb$best_system[1]))
+       if (nrow(colb)) best_colors <- c(best_colors, as.character(colb$best_color[1]))
+
+       if (is.finite(et$sys) && is.finite(et$col)) {
+         if (et$sys > 1.2 * et$col) dominant_counts["system"] <- dominant_counts["system"] + 1L
+         else if (et$col > 1.2 * et$sys) dominant_counts["color"] <- dominant_counts["color"] + 1L
+         else dominant_counts["similar"] <- dominant_counts["similar"] + 1L
+       } else {
+         dominant_counts["unknown"] <- dominant_counts["unknown"] + 1L
+       }
+
+       sl2 <- sl %>% filter(is.finite(slope) & is.finite(p))
+       sig <- sl2 %>% filter(p < 0.05)
+       trn <- sl2 %>% filter(p >= 0.05 & p < 0.1)
+       if (nrow(sig) > 0) {
+         sig_params <- c(sig_params, toupper(p))
+         sig_systems <- c(sig_systems, as.character(sig$system))
+       } else if (nrow(trn) > 0) {
+         trend_params <- c(trend_params, toupper(p))
+         trend_systems <- c(trend_systems, as.character(trn$system))
+       }
+     }
+
+     dominant_txt <- "brak danych"
+     if (sum(dominant_counts[c("system","color","similar")]) > 0) {
+       top <- names(which.max(dominant_counts[c("system","color","similar")]))
+       dominant_txt <- switch(top,
+                              system = "częściej dominuje system (eta²)",
+                              color = "częściej dominuje barwa (color; eta²)",
+                              similar = "system i barwa (color) są często porównywalne (eta²)")
+     }
+
+     best_sys <- mode1(best_systems)
+     best_col <- mode1(best_colors)
+     best_sys_txt <- if (!is.na(best_sys)) latex_escape(best_sys) else "brak jednego dominującego (zależy od parametru)"
+     best_col_txt <- if (!is.na(best_col)) latex_escape(best_col) else "brak jednego dominującego (zależy od parametru)"
+
+     wav_txt <- "Brak wykrytych zależności od wavelength (p<0.05); ewentualnie pojedyncze słabe trendy."
+     if (length(sig_params) > 0) {
+       wav_txt <- sprintf("Zależność od wavelength wykryta (p<0.05) dla parametrów: %s; dotyczy systemów: %s.",
+                          paste(unique(sig_params), collapse = ", "),
+                          paste(unique(sig_systems), collapse = ", "))
+     } else if (length(trend_params) > 0) {
+       wav_txt <- sprintf("Brak istotnych zależności od wavelength (p<0.05); trendy (p<0.1) dla parametrów: %s; dotyczy systemów: %s.",
+                          paste(unique(trend_params), collapse = ", "),
+                          paste(unique(trend_systems), collapse = ", "))
+     }
+
+    cat("\\begin{itemize}\n")
+    cat(sprintf("\\item W ujęciu ANOVA: %s.\n", latex_escape(dominant_txt)))
+    cat(sprintf("\\item Najczęściej preferowany system (min średni |diff|): %s.\n", best_sys_txt))
+    cat(sprintf("\\item Najczęściej preferowana barwa (min średni |diff|): %s.\n", best_col_txt))
+    cat(sprintf("\\item %s\n", latex_escape(wav_txt)))
+    cat("\\end{itemize}\n")
+
+   # Rekomendacje opisowe dla materiału
+   cat("\\paragraph{Rekomendacje dla tego materiału}\n")
+    cat("\\begin{itemize}\n")
+    for (p in params) {
+      sysb <- read_mat_sys_effects(mat, p)
+      colb <- read_mat_col_effects(mat, p)
+      et <- read_mat_eta(mat, p)
+      sl <- read_mat_slopes(mat, p)
+      fmt_dir <- function(x) {
+        if (!is.finite(x)) return("brak")
+        if (x < 0) return("maleje")
+        if (x > 0) return("rośnie")
+        "nie zmienia się"
+      }
+
+      sys_txt <- if (nrow(sysb)) latex_escape(sysb$best_system[1]) else "brak danych"
+      col_txt <- if (nrow(colb)) latex_escape(colb$best_color[1]) else "brak danych"
+
+      dominant_txt <- "brak danych"
+      if (is.finite(et$sys) && is.finite(et$col)) {
+        if (et$sys > 1.2 * et$col) dominant_txt <- "dominuje system"
+        else if (et$col > 1.2 * et$sys) dominant_txt <- "dominuje barwa (color)"
+        else dominant_txt <- "system i barwa (color) mają podobny wpływ"
+      } else if (is.finite(et$sys) && !is.finite(et$col)) {
+        dominant_txt <- "dominuje system"
+      } else if (!is.finite(et$sys) && is.finite(et$col)) {
+        dominant_txt <- "dominuje barwa (color)"
+      }
+
+      sl2 <- sl %>% filter(is.finite(slope) & is.finite(p))
+      sig <- sl2 %>% filter(p < 0.05)
+      trn <- sl2 %>% filter(p >= 0.05 & p < 0.1)
+
+      wav_txt <- "NIE (brak wykrytego trendu per system)"
+      if (nrow(sig) > 0) {
+        sig_txt <- sig %>% mutate(dir = vapply(slope, fmt_dir, character(1))) %>%
+          transmute(lbl = sprintf("%s: %s", system, dir)) %>% pull(lbl)
+        wav_txt <- paste0("TAK (p<0.05) — ", paste(sig_txt, collapse = "; "))
+      } else if (nrow(trn) > 0) {
+        trn_txt <- trn %>% mutate(dir = vapply(slope, fmt_dir, character(1))) %>%
+          transmute(lbl = sprintf("%s: %s", system, dir)) %>% pull(lbl)
+        wav_txt <- paste0("trend (p<0.1) — ", paste(trn_txt, collapse = "; "))
+      }
+
+      cat(sprintf("\\item %s: preferowany system (min średni |diff|): %s; preferowana barwa (min średni |diff|): %s; %s; zależność od wavelength: %s.\n",
+                  toupper(p), sys_txt, col_txt, latex_escape(dominant_txt), latex_escape(wav_txt)))
+    }
+   cat("\\end{itemize}\n")
+  }
+} else {
+  cat("(W wersji HTML podgląd figur został pominięty.)")
+}
+```
+## Podsumowanie globalne (tabele)
+
+```{r global-tables, results='asis'}
+# Zbiorcze tabele: przegląd materiałów/procesów oraz trendy po systemach
+if (nrow(overview) > 0) {
+  cat("\\subsection{Przegląd wyników (zbiorczo)}\n")
+  knitr::kable(overview, format = if (knitr::is_latex_output()) "latex" else "simple")
+}
+if (nrow(trends) > 0) {
+  cat("\\subsection{Trendy per system (zbiorczo)}\n")
+  knitr::kable(trends, format = if (knitr::is_latex_output()) "latex" else "simple")
+}
+if (nrow(reco) > 0) {
+  cat("\\subsection{Rekomendacje syntetyczne (neutralne)}\n")
+  knitr::kable(reco, format = if (knitr::is_latex_output()) "latex" else "simple")
+}
+
+# NOWA SEKCJA: agregaty parametrow (liczba istotnych nachyleń, trendy, max eta2)
+cat("\\subsection{Agregaty po parametrach (nowe)}\n")
+param_summary_rows <- list()
+for (p in params) {
+  mats <- all_slugs
+  sig_count <- 0
+  trend_count <- 0
+  max_eta_sys <- NA_real_
+  max_eta_col <- NA_real_
+  any_eta_sys <- c()
+  any_eta_col <- c()
+  for (mat in mats) {
+    sl <- read_mat_slopes(mat, p)
+    if (nrow(sl)) {
+      sig_count <- sig_count + sum(is.finite(sl$p) & sl$p < 0.05)
+      trend_count <- trend_count + sum(is.finite(sl$p) & sl$p < 0.1 & sl$p >= 0.05)
+    }
+    et <- read_mat_eta(mat, p)
+    if (is.finite(et$sys)) any_eta_sys <- c(any_eta_sys, et$sys)
+    if (is.finite(et$col)) any_eta_col <- c(any_eta_col, et$col)
+  }
+  if (length(any_eta_sys)>0) max_eta_sys <- max(any_eta_sys, na.rm=TRUE)
+  if (length(any_eta_col)>0) max_eta_col <- max(any_eta_col, na.rm=TRUE)
+  decyzja <- if (sig_count > 0) "TAK" else "NIE"
+  param_summary_rows[[length(param_summary_rows)+1]] <- data.frame(
+    Param = toupper(p),
+    `#istotnych slope (p<0.05)` = sig_count,
+    `#trendów (0.05<=p<0.1)` = trend_count,
+    `max eta2 system` = if (is.finite(max_eta_sys)) sprintf("%.3f", max_eta_sys) else NA,
+    `max eta2 color` = if (is.finite(max_eta_col)) sprintf("%.3f", max_eta_col) else NA,
+    `Wavelength zależność` = decyzja,
+    check.names = FALSE
+  )
+}
+if (length(param_summary_rows)>0) {
+  param_summary_df <- do.call(rbind, param_summary_rows)
+  knitr::kable(param_summary_df, format = if (knitr::is_latex_output()) "latex" else "simple", align=c('l','r','r','r','r','c'))
+}
+```
+
+## Uczenie maszynowe — wyniki i interpretacja (rozdział zbiorczy)
+
+Wykresy ML mają opisy po angielsku; komentarze w tekście są po polsku. Modele: Lasso, Ridge, Random Forest. Zmienna „color” koduje długość fali; nie formułujemy zaleceń typu „zwiększ długość fali”.
+
+```{r ml-global, results='asis'}
+ml_dir <- file.path(outputs, "ml")
+if (dir.exists(ml_dir)) {
+  # Globalne (całość danych)
+  cat("\\subsection{Przegląd globalny}\n")
+  fi <- file.path(ml_dir, "feature_importance_rf.png")
+  sh <- file.path(ml_dir, "shap_importance_rf.png")
+  if (file.exists(fi) || file.exists(sh)) {
+    latex_fig_row2(c(fi, sh), "ML — ważności i SHAP (globalnie)")
+  }
+  perf <- file.path(ml_dir, "performance.csv")
+  if (file.exists(perf)) {
+    dfp <- suppressMessages(readr::read_csv(perf, show_col_types = FALSE))
+    knitr::kable(dfp, format = if (knitr::is_latex_output()) "latex" else "simple")
+  }
+
+  # Per parametr
+  cat("\\subsection{Wyniki per parametr}\n")
+  for (p in params) {
+    P <- toupper(p)
+    d <- file.path(ml_dir, "by_param", P)
+    if (dir.exists(d)) {
+      fi <- file.path(d, "feature_importance_rf.png")
+      sh <- file.path(d, "shap_importance_rf.png")
+      if (file.exists(fi) || file.exists(sh)) {
+        latex_fig_row2(c(fi, sh), sprintf("ML — %s: ważności i SHAP", P))
+      }
+      perf <- file.path(d, "performance.csv")
+      if (file.exists(perf)) {
+        dfp <- suppressMessages(readr::read_csv(perf, show_col_types = FALSE))
+        knitr::kable(dfp, format = if (knitr::is_latex_output()) "latex" else "simple")
+      }
+    }
+  }
+
+  # Per materiał/proces (tylko jeśli dostępne)
+  cat("\\subsection{Wyniki per materiał/proces}\n")
+  for (mat in all_slugs) {
+    d <- file.path(ml_dir, "by_material", mat)
+    if (dir.exists(d)) {
+      fi <- file.path(d, "feature_importance_rf.png")
+      sh <- file.path(d, "shap_importance_rf.png")
+      if (file.exists(fi) || file.exists(sh)) {
+        latex_fig_row2(c(fi, sh), sprintf("ML — %s: ważności i SHAP", latex_escape(mat)))
+      }
+      perf <- file.path(d, "performance.csv")
+      if (file.exists(perf)) {
+        dfp <- suppressMessages(readr::read_csv(perf, show_col_types = FALSE))
+        knitr::kable(dfp, format = if (knitr::is_latex_output()) "latex" else "simple")
+      }
+    }
+  }
+} else {
+  cat("(Brak wyników uczenia maszynowego; rozdział pominięto.)")
+}
+```
+
+\newpage
+## Uczenie maszynowe — wyniki walidacji zaawansowanej (CV)
+
+W tej sekcji przedstawiono wyniki rozszerzonej walidacji krzyżowej (dobór alpha dla GLMNET oraz strojenie mtry / min.node.size dla Random Forest). Sekcję wydzielono w celu odrębnej prezentacji wyników walidacyjnych.
+
+```{r ml-advanced, results='asis'}
+adv_dir <- file.path(outputs, "ml", "advanced")
+if (dir.exists(adv_dir)) {
+  # Wspólny podgląd dwóch głównych wykresów (RF i GLMNET) obok siebie
+  rf_imp_png <- file.path(adv_dir, "importance_rf_cv.png")
+  glm_imp_png <- file.path(adv_dir, "importance_glmnet_cv.png")
+  if (file.exists(rf_imp_png) || file.exists(glm_imp_png)) {
+    latex_fig_row2(c(rf_imp_png, glm_imp_png), "Walidacja zaawansowana: RF vs GLMNET (ważności)")
+  }
+  cat("\\subsection{Metryki foldów (CV)}\n")
+  cv_file <- file.path(adv_dir, "cv_metrics.csv")
+  if (file.exists(cv_file)) {
+    cv <- suppressMessages(readr::read_csv(cv_file, show_col_types = FALSE))
+    knitr::kable(cv, format = if (knitr::is_latex_output()) "latex" else "simple")
+  }
+  cat("\\subsection{Średnie ważności (RF — osobno)}\n")
+  if (file.exists(rf_imp_png)) latex_fig(rf_imp_png, "RF importance (mean±sd) — walidacja CV")
+  cat("\\subsection{Średnie ważności (GLMNET — osobno)}\n")
+  if (file.exists(glm_imp_png)) latex_fig(glm_imp_png, "GLMNET mean |beta| — walidacja CV")
+  # Opcjonalnie: tabelaryczne zestawienia agregatów
+  rf_imp_csv <- file.path(adv_dir, "importance_rf_cv.csv")
+  if (file.exists(rf_imp_csv)) {
+    cat("\\subsection{Tabela: RF (agregowana ważność – wartości numeryczne)}\n")
+    rf_tab <- suppressMessages(readr::read_csv(rf_imp_csv, show_col_types = FALSE))
+    knitr::kable(rf_tab, format = if (knitr::is_latex_output()) "latex" else "simple")
+  }
+  glm_imp_csv <- file.path(adv_dir, "importance_glmnet_cv.csv")
+  if (file.exists(glm_imp_csv)) {
+    cat("\\subsection{Tabela: GLMNET (średnie |beta| – wartości numeryczne)}\n")
+    glm_tab <- suppressMessages(readr::read_csv(glm_imp_csv, show_col_types = FALSE))
+    knitr::kable(glm_tab, format = if (knitr::is_latex_output()) "latex" else "simple")
+  }
+} else {
+  cat("(Brak rozszerzonych wyników uczenia maszynowego.)")
+}
+```
+
+## Uczenie maszynowe — opis podejścia i interpretacji
+
+W tej części przedstawiono zakres analiz uczenia maszynowego oraz sposób interpretacji uzyskanych wyników.
+
+1. Zgromadzono dane obejmujące identyfikator systemu, kategorię color (powiązaną z długością fali), parametr chropowatości oraz wartość błędu (|diff| %).
+2. Celem analizy było określenie, które czynniki (system, kolor, parametr) w największym stopniu wpływają na wielkość błędu. W tym celu zastosowano trzy rodzaje modeli:
+  - Lasso / Ridge (GLMNET): analizowane są współczynniki; większa bezwzględna wartość |beta| oznacza większą rolę danej cechy w przewidywaniu błędu.
+  - Random Forest: zespół drzew decyzyjnych; analizowany jest spadek jakości predykcji po permutacji pojedynczej cechy, co stanowi miarę jej znaczenia.
+  - SHAP (dla lasu): przedstawia, w jakim stopniu każda cecha przeciętnie przesuwa przewidywanie w górę lub w dół względem średniego wyniku.
+3. Walidacja: w celu oceny stabilności wyników dane dzielone są na części (foldy), modele uczone są na części zbioru i oceniane na pozostałej części. W wariancie „walidacja zaawansowana” procedura jest wielokrotnie powtarzana wraz z doborem parametrów modeli.
+4. Interpretacja wykresów:
+  - Wykres ważności RF / GLMNET: większa wysokość słupka oznacza większy wpływ.
+  - Wykres SHAP: przedstawia względne znaczenie (średni absolutny wkład) cech.
+5. Ujęcie długości fali: w tej części nie jest ona wprowadzana w formie liczbowej; stosowana jest kategoria „color”, aby uniknąć nadinterpretacji kierunkowej. Zależność numeryczna oceniana jest osobno w części regresyjnej, natomiast w ML kategoria color reprezentuje grupę pomiarową.
+6. Ostrożność w interpretacji: wysoka ważność nie oznacza automatycznie, że zmiana cechy prowadzi do „poprawy” wyniku; oznacza natomiast, że cecha jest wykorzystywana przez model do odróżniania przypadków o różnych błędach.
+
+Wniosek ogólny: modele porządkują czynniki wpływające na błąd, a dodatkowa walidacja pozwala ocenić stabilność tego uporządkowania.
+
+## Załączniki: tabele i opisy metod (szczegóły)
+1. Efekty główne
+  - Średnie |diff| [%] i 95% CI dla systemów i kolorów; ANOVA testuje wpływ obu czynników, eta² opisuje udział wariancji tłumaczony przez czynnik.
+
+2. Zależność od długości fali
+  - Korelacje globalne (Pearson/Spearman) między |diff| [%] i wavelength.
+  - Regresje liniowe |diff| [%] ~ wavelength osobno dla każdego systemu; raportowane są slope, SE, p oraz 95% CI.
+
+3. Odległość technik
+  - Macierz średnich różnic |diff|% między układami; mapa ciepła do oceny podobieństw/różnic.
+
+4. Definicje i wzory
+  - |diff| [%] = 100 · |O − S| / S; 95% CI; p‑value; eta².

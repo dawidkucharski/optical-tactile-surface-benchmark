@@ -1,0 +1,39 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compile LaTeX manuscript",
+			"type": "shell",
+			"command": "cd \"paper\" && rm -f manuscript.aux manuscript.bbl manuscript.blg manuscript.log manuscript.out manuscript.pdf && pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex && bibtex manuscript && pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex && pdflatex -interaction=nonstopmode -halt-on-error manuscript.tex",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Compile LaTeX supplement",
+			"type": "shell",
+			"command": "cd \"paper\" && python3 generate_supplement.py && rm -f supplement.aux supplement.log supplement.out supplement.pdf supplement.toc && pdflatex -interaction=nonstopmode -halt-on-error supplement.tex && pdflatex -interaction=nonstopmode -halt-on-error supplement.tex",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Build manuscript (BibTeX)",
+			"type": "shell",
+			"command": "cd paper && pdflatex -interaction=nonstopmode manuscript.tex && bibtex manuscript && pdflatex -interaction=nonstopmode manuscript.tex && pdflatex -interaction=nonstopmode manuscript.tex",
+			"isBackground": false
+		},
+		{
+			"label": "Rebuild manuscript (BibTeX first)",
+			"type": "shell",
+			"command": "cd paper && bibtex manuscript && pdflatex -interaction=nonstopmode manuscript.tex && pdflatex -interaction=nonstopmode manuscript.tex",
+			"isBackground": false
+		},
+		{
+			"label": "Compile manuscript (BibTeX cycle)",
+			"type": "shell",
+			"command": "cd paper && pdflatex -interaction=nonstopmode manuscript.tex && bibtex manuscript && pdflatex -interaction=nonstopmode manuscript.tex && pdflatex -interaction=nonstopmode manuscript.tex",
+			"isBackground": false
+		}
+	]
+}

@@ -1,0 +1,41 @@
+# Local operating-system files
+.DS_Store
+Thumbs.db
+
+# Local environments and sessions
+.venv/
+.Rhistory
+.RData
+.Rproj.user/
+__pycache__/
+*.py[cod]
+~$*
+
+# Raw surface files excluded from the public GitHub reproducibility package
+*.sur
+*.SUR
+
+# LaTeX/RMarkdown build intermediates
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.lof
+*.lot
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.xwm
+*.knit.md
+
+# Keep generated manuscript/supplement PDFs, plots, CSVs, and TeX tables trackable
+!paper/manuscript.pdf
+!paper/supplement.pdf
+!plots/**/*.pdf
+!outputs/**/*.csv
+!outputs/**/*.txt
+!paper/tables/**/*.tex
