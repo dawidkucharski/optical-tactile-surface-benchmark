@@ -40,5 +40,3 @@ __pycache__/
 !outputs/**/*.txt
 !paper/tables/**/*.tex
 
-# Local Zenodo upload bundles generated from release tags
-zenodo_upload_*.zip

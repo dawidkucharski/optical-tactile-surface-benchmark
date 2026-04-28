@@ -1,6 +1,7 @@
 {
   "title": "Retrospective Benchmark of Optical Surface Roughness Workflows Against an Internal Tactile Baseline Across Multiple Materials and Processes",
   "upload_type": "dataset",
+  "version": "1.0.1",
   "description": "Reproducibility package for a retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple engineering materials and surface-generation processes. The public package contains scripts, configuration files, manuscript and supplement sources, derived CSV outputs, generated tables, and generated figures. Raw .sur surface files are excluded from the public repository and are available from the authors on reasonable request, subject to data-transfer constraints.",
   "creators": [
     {"name": "Kucharski, Dawid", "affiliation": "Poznan University of Technology, Poland"},
