@@ -11,10 +11,10 @@ https://github.com/dawidkucharski/optical-tactile-surface-benchmark
 DOI-ready release tag:
 
 ```text
-v1.0.1
+v1.0.2
 ```
 
-Zenodo DOI: pending until the GitHub-Zenodo integration archives release `v1.0.1`.
+Zenodo DOI: pending until the GitHub-Zenodo integration archives release `v1.0.2`.
 
 ## Inputs
 

@@ -73,13 +73,13 @@ git push origin v1.0.0
 
 Then create a GitHub Release from tag `v1.0.0` and use `RELEASE_NOTES_v1.0.0.md` as the release description.
 
-For Zenodo DOI archiving, enable this repository in Zenodo's GitHub integration before publishing the release. The DOI-ready release is `v1.0.1` and uses `RELEASE_NOTES_v1.0.1.md`.
+For Zenodo DOI archiving, enable this repository in Zenodo's GitHub integration before publishing the release. The DOI-trigger release is `v1.0.2` and uses `RELEASE_NOTES_v1.0.2.md`.
 
 ```sh
-git tag -a v1.0.1 -m "Zenodo metadata release"
-git push origin v1.0.1
+git tag -a v1.0.2 -m "Zenodo DOI trigger release"
+git push origin v1.0.2
 ```
 
-Create a GitHub Release from tag `v1.0.1`; Zenodo should archive that release and mint the DOI.
+Create a GitHub Release from tag `v1.0.2`; Zenodo should archive that release and mint the DOI.
 
 After the repository is public, verify that the manuscript URL opens correctly. For stronger journal reproducibility, connect the GitHub repository to Zenodo and reserve a DOI for the submitted version.
