@@ -14,7 +14,11 @@ DOI-ready release tag:
 v1.0.2
 ```
 
-Zenodo DOI: pending until the GitHub-Zenodo integration archives release `v1.0.2`.
+Zenodo DOI:
+
+```text
+https://doi.org/10.5281/zenodo.19844491
+```
 
 ## Inputs
 

@@ -17,6 +17,11 @@ Adres repozytorium GitHub:
 https://github.com/dawidkucharski/optical-tactile-surface-benchmark
 ```
 
+Archiwalne wydanie Zenodo / DOI:
+```text
+https://doi.org/10.5281/zenodo.19844491
+```
+
 Minimalna ścieżka odtworzeniowa dla aktualnych tabel i figur manuskryptu:
 ```zsh
 Rscript make_results_decision_tables.R

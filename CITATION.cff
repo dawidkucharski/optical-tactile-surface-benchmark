@@ -4,6 +4,7 @@ title: "Retrospective Benchmark of Optical Surface Roughness Workflows Against a
 version: "1.0.2"
 date-released: "2026-04-28"
 type: dataset
+doi: "10.5281/zenodo.19844491"
 repository-code: "https://github.com/dawidkucharski/optical-tactile-surface-benchmark"
 url: "https://github.com/dawidkucharski/optical-tactile-surface-benchmark/releases/tag/v1.0.2"
 abstract: "Reproducibility package for a retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple engineering materials and surface-generation processes. The public package contains scripts, configuration files, manuscript and supplement sources, derived CSV outputs, generated tables, and generated figures. Raw .sur surface files are excluded from the public repository and are available from the authors on reasonable request, subject to data-transfer constraints."

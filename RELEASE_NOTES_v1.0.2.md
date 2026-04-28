@@ -14,6 +14,10 @@ This release is intended to trigger Zenodo archiving after the repository became
 
 The release remains the public reproducibility package for the retrospective optical-vs-tactile surface roughness benchmark. It includes scripts, configuration files, manuscript and supplement sources, generated CSV outputs, tables, and figures. Raw `.sur` / `.SUR` surface files remain excluded from the public repository and archive.
 
-## Expected Zenodo Outcome
+## Zenodo DOI
 
-Zenodo should archive this GitHub Release and mint a DOI. Once the DOI appears, add it to the manuscript Data Availability statement, `CITATION.cff`, and `paper/reproducibility_manifest.md`.
+Zenodo archived this GitHub Release and minted DOI:
+
+```text
+10.5281/zenodo.19844491
+```
