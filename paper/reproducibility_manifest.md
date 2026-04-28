@@ -8,6 +8,14 @@ Public repository:
 https://github.com/dawidkucharski/optical-tactile-surface-benchmark
 ```
 
+DOI-ready release tag:
+
+```text
+v1.0.1
+```
+
+Zenodo DOI: pending until the GitHub-Zenodo integration archives release `v1.0.1`.
+
 ## Inputs
 
 - Tactile exports: `tactile/` (`.sur` files excluded from public GitHub release if present)
@@ -70,4 +78,4 @@ Expected output: `paper/supplement.pdf`.
 
 ## Submission Package Recommendation
 
-For journal submission, deposit the project in a public GitHub repository using the `.gitignore` rules in the project root. The repository should include `config/params.yaml`, R/Python scripts, manuscript and supplement sources, generated CSV files, manuscript table `.tex` files, generated figure PDFs, and this manifest. Raw `.sur` surface files should be excluded from GitHub; if reviewers require them, provide them through controlled author request or a journal-approved restricted data channel. After the repository is public, replace the placeholder URL above and in the manuscript Data Availability statement with the final GitHub URL. A Zenodo DOI for the submitted GitHub release is recommended for journal submission.
+For journal submission, deposit the project in a public GitHub repository using the `.gitignore` rules in the project root. The repository should include `config/params.yaml`, R/Python scripts, manuscript and supplement sources, generated CSV files, manuscript table `.tex` files, generated figure PDFs, and this manifest. Raw `.sur` surface files should be excluded from GitHub; if reviewers require them, provide them through controlled author request or a journal-approved restricted data channel. After Zenodo archives the DOI-ready release, add the minted DOI to the manuscript Data Availability statement and cite the versioned repository snapshot.

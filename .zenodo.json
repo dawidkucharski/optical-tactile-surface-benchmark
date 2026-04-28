@@ -1,0 +1,32 @@
+{
+  "title": "Retrospective Benchmark of Optical Surface Roughness Workflows Against an Internal Tactile Baseline Across Multiple Materials and Processes",
+  "upload_type": "dataset",
+  "description": "Reproducibility package for a retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple engineering materials and surface-generation processes. The public package contains scripts, configuration files, manuscript and supplement sources, derived CSV outputs, generated tables, and generated figures. Raw .sur surface files are excluded from the public repository and are available from the authors on reasonable request, subject to data-transfer constraints.",
+  "creators": [
+    {"name": "Kucharski, Dawid", "affiliation": "Poznan University of Technology, Poland"},
+    {"name": "Nieslony, Piotr", "affiliation": "Opole University of Technology, Poland"},
+    {"name": "Krolczyk, Jolanta", "affiliation": "Opole University of Technology, Poland"},
+    {"name": "Krolczyk, Grzegorz", "affiliation": "Opole University of Technology, Poland"},
+    {"name": "Nicinska, Katarzyna", "affiliation": "Central Office of Measures, Poland"},
+    {"name": "Wojciechowska, Natalia", "affiliation": "Central Office of Measures, Poland"},
+    {"name": "Slusarski, Lukasz", "affiliation": "Central Office of Measures, Poland"},
+    {"name": "Wieczorowski, Michal", "affiliation": "Poznan University of Technology, Poland"},
+    {"name": "Gapinski, Bartosz", "affiliation": "Poznan University of Technology, Poland"}
+  ],
+  "keywords": [
+    "surface metrology",
+    "surface roughness",
+    "optical measurement",
+    "tactile profilometry",
+    "reproducibility",
+    "benchmarking"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/dawidkucharski/optical-tactile-surface-benchmark",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Raw .sur/.SUR surface files are intentionally excluded from the public GitHub-Zenodo release. Derived CSV outputs, generated manuscript tables, generated figures, and rebuild scripts are included."
+}

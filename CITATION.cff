@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this reproducibility package, please cite it using the metadata below."
+title: "Retrospective Benchmark of Optical Surface Roughness Workflows Against an Internal Tactile Baseline Across Multiple Materials and Processes"
+version: "1.0.1"
+date-released: "2026-04-28"
+type: dataset
+repository-code: "https://github.com/dawidkucharski/optical-tactile-surface-benchmark"
+url: "https://github.com/dawidkucharski/optical-tactile-surface-benchmark/releases/tag/v1.0.1"
+abstract: "Reproducibility package for a retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple engineering materials and surface-generation processes. The public package contains scripts, configuration files, manuscript and supplement sources, derived CSV outputs, generated tables, and generated figures. Raw .sur surface files are excluded from the public repository and are available from the authors on reasonable request, subject to data-transfer constraints."
+keywords:
+  - surface metrology
+  - surface roughness
+  - optical measurement
+  - tactile profilometry
+  - reproducibility
+  - benchmarking
+authors:
+  - family-names: Kucharski
+    given-names: Dawid
+    email: dawid.kucharski@put.poznan.pl
+    affiliation: Poznan University of Technology, Poland
+  - family-names: Nieslony
+    given-names: Piotr
+    affiliation: Opole University of Technology, Poland
+  - family-names: Krolczyk
+    given-names: Jolanta
+    affiliation: Opole University of Technology, Poland
+  - family-names: Krolczyk
+    given-names: Grzegorz
+    affiliation: Opole University of Technology, Poland
+  - family-names: Nicinska
+    given-names: Katarzyna
+    affiliation: Central Office of Measures, Poland
+  - family-names: Wojciechowska
+    given-names: Natalia
+    affiliation: Central Office of Measures, Poland
+  - family-names: Slusarski
+    given-names: Lukasz
+    affiliation: Central Office of Measures, Poland
+  - family-names: Wieczorowski
+    given-names: Michal
+    affiliation: Poznan University of Technology, Poland
+  - family-names: Gapinski
+    given-names: Bartosz
+    affiliation: Poznan University of Technology, Poland
