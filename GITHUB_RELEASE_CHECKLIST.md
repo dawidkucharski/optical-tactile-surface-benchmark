@@ -62,4 +62,15 @@ git remote add origin https://github.com/dawidkucharski/optical-tactile-surface-
 git push -u origin main
 ```
 
+## Versioned Release
+
+After pushing `main`, create and push the submitted-version tag:
+
+```sh
+git tag -a v1.0.0 -m "Submission reproducibility package"
+git push origin v1.0.0
+```
+
+Then create a GitHub Release from tag `v1.0.0` and use `RELEASE_NOTES_v1.0.0.md` as the release description.
+
 After the repository is public, verify that the manuscript URL opens correctly. For stronger journal reproducibility, connect the GitHub repository to Zenodo and reserve a DOI for the submitted version.
