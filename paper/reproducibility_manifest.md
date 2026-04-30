@@ -11,13 +11,13 @@ https://github.com/dawidkucharski/optical-tactile-surface-benchmark
 DOI-ready release tag:
 
 ```text
-v1.0.3
+v1.0.4
 ```
 
 Zenodo DOI:
 
 ```text
-https://doi.org/10.5281/zenodo.19844491
+https://doi.org/10.5281/zenodo.19844490
 ```
 
 ## Inputs

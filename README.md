@@ -12,7 +12,7 @@
 ## Manuskrypt Q1/high-impact
 Dedykowany pakiet manuskryptu znajduje się w `paper/`. Najważniejszy plik kontrolny to `paper/reproducibility_manifest.md`, który opisuje wejścia, komendy odtworzeniowe oraz pliki przeznaczone do archiwizacji przy zgłoszeniu do czasopisma. Planowany publiczny pakiet GitHub obejmuje cały projekt potrzebny do reprodukcji tabel, figur i wniosków manuskryptu, z wyłączeniem surowych plików powierzchni `.sur` / `.SUR`.
 
-Aktualna wersja pakietu manuskryptu: `v1.0.3`.
+Aktualna wersja pakietu manuskryptu: `v1.0.4`.
 
 Adres repozytorium GitHub:
 ```text
@@ -21,7 +21,7 @@ https://github.com/dawidkucharski/optical-tactile-surface-benchmark
 
 Archiwalne wydanie Zenodo / DOI:
 ```text
-https://doi.org/10.5281/zenodo.19844491
+https://doi.org/10.5281/zenodo.19844490
 ```
 
 Minimalna ścieżka odtworzeniowa dla aktualnych tabel i figur manuskryptu:

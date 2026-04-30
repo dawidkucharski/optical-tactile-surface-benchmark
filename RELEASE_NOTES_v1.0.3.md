@@ -31,8 +31,8 @@ The release remains a public reproducibility package for the retrospective optic
 
 ## Zenodo DOI
 
-This version is intended to be archived by Zenodo under the existing concept DOI:
+This version was archived by Zenodo under version DOI `10.5281/zenodo.19911951` and concept DOI:
 
 ```text
-10.5281/zenodo.19844491
+10.5281/zenodo.19844490
 ```
