@@ -11,7 +11,7 @@ https://github.com/dawidkucharski/optical-tactile-surface-benchmark
 DOI-ready release tag:
 
 ```text
-v1.0.2
+v1.0.3
 ```
 
 Zenodo DOI:
@@ -28,6 +28,8 @@ https://doi.org/10.5281/zenodo.19844491
 - Existing derived analysis products: `outputs/`
 
 Raw measurement exports are required for a complete recalculation from original instrument files. The public GitHub package will exclude `.sur` raw surface files, but will include derived CSV outputs, generated manuscript tables, figures, and the scripts used to rebuild the reported manuscript-facing summaries.
+
+The archive does not consistently retain a full metrological metadata table for every measurement. In particular, detailed machining parameters, complete optical instrument settings, common profile-filtering settings, raw profile processing chains, optical repeat measurements for every system-illumination pair, and a combined tactile-optical uncertainty budget are not uniformly available. These omissions are part of the scientific boundary of the study and are why the manuscript reports a retrospective workflow benchmark rather than a formal equivalence, repeatability, or traceability validation.
 
 ## Main Recalculation Commands
 
@@ -47,10 +49,16 @@ The decision-summary generator writes:
 - `outputs/results_fixed_workflow_group_medians.csv`
 - `outputs/results_fixed_workflow_sensitivity.csv`
 - `outputs/results_best_discrepancy_heatmap_by_process_param.csv`
+- `outputs/results_rsm_diagnostic_by_stratum.csv`
+- `outputs/results_rsm_unit_scale_sensitivity.csv`
+- `outputs/results_bootstrap_ci_aggregate_medians.csv`
 - `paper/tables/results_decision_by_param.tex`
 - `paper/tables/results_decision_by_process.tex`
 - `paper/tables/results_decision_by_material.tex`
 - `paper/tables/results_fixed_workflow_sensitivity.tex`
+- `paper/tables/results_rsm_diagnostic.tex`
+- `paper/tables/results_rsm_unit_scale_sensitivity.tex`
+- `paper/tables/results_bootstrap_ci_aggregate_medians.tex`
 - `plots/global_best_discrepancy_heatmap.pdf`
 
 ## Manuscript Build
@@ -79,6 +87,20 @@ pdflatex -interaction=nonstopmode supplement.tex
 ```
 
 Expected output: `paper/supplement.pdf`.
+
+## Computational Environment Snapshot
+
+The manuscript-facing release includes a lightweight environment snapshot in:
+
+- `paper/reproducibility_session_info.txt`
+
+Regenerate it from the project root with:
+
+```sh
+Rscript -e 'pkgs <- c("readxl", "readr", "dplyr", "stringr", "ggplot2", "glmnet", "ranger", "fastshap", "tidyr", "rmarkdown", "jsonlite"); ip <- installed.packages(); keep <- pkgs[pkgs %in% rownames(ip)]; versions <- data.frame(package = keep, version = ip[keep, "Version"], row.names = NULL); writeLines(c(capture.output(sessionInfo()), "", "Project package versions:", capture.output(print(versions, row.names = FALSE))), "paper/reproducibility_session_info.txt")'
+```
+
+The main manuscript decision tables and figures use R packages including `readxl`, `readr`, `dplyr`, `stringr`, and `ggplot2`. The optional ML influence workflow additionally uses `glmnet`, `ranger`, `fastshap`, and `tidyr`. The manuscript supplement-generation Python scripts in `paper/` use the Python standard library only.
 
 ## Submission Package Recommendation
 

@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: "If you use this reproducibility package, please cite it using the metadata below."
-title: "Retrospective Benchmark of Optical Surface Roughness Workflows Against an Internal Tactile Baseline Across Multiple Materials and Processes"
-version: "1.0.2"
-date-released: "2026-04-28"
+title: "Retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple materials and processes"
+version: "1.0.3"
+date-released: "2026-04-30"
 type: dataset
 doi: "10.5281/zenodo.19844491"
 repository-code: "https://github.com/dawidkucharski/optical-tactile-surface-benchmark"
-url: "https://github.com/dawidkucharski/optical-tactile-surface-benchmark/releases/tag/v1.0.2"
-abstract: "Reproducibility package for a retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple engineering materials and surface-generation processes. The public package contains scripts, configuration files, manuscript and supplement sources, derived CSV outputs, generated tables, and generated figures. Raw .sur surface files are excluded from the public repository and are available from the authors on reasonable request, subject to data-transfer constraints."
+url: "https://github.com/dawidkucharski/optical-tactile-surface-benchmark/releases/tag/v1.0.3"
+abstract: "Reproducibility package for a retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple engineering materials and surface-generation processes. The public package contains scripts, configuration files, manuscript and supplement sources, derived CSV outputs, generated tables, generated figures, Rsm diagnostic and unit-scale sensitivity outputs, bootstrap stability summaries, and an R environment snapshot. Raw .sur surface files are excluded from the public repository and are available from the authors on reasonable request, subject to data-transfer constraints."
 keywords:
   - surface metrology
   - surface roughness

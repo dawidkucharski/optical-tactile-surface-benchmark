@@ -118,6 +118,65 @@ mode_chr <- function(x) {
   names(tbl)[1]
 }
 
+bootstrap_median_ci <- function(values, n_boot = 2000L, conf = 0.95) {
+  values <- values[is.finite(values)]
+  n <- length(values)
+  if (n == 0) {
+    return(tibble(
+      n = 0L,
+      median = NA_real_,
+      ci_low = NA_real_,
+      ci_high = NA_real_,
+      n_boot = n_boot,
+      conf_level = conf
+    ))
+  }
+  if (n == 1) {
+    return(tibble(
+      n = 1L,
+      median = values[1],
+      ci_low = values[1],
+      ci_high = values[1],
+      n_boot = n_boot,
+      conf_level = conf
+    ))
+  }
+
+  boot_medians <- replicate(n_boot, median(sample(values, size = n, replace = TRUE), na.rm = TRUE))
+  alpha <- (1 - conf) / 2
+  tibble(
+    n = n,
+    median = median(values, na.rm = TRUE),
+    ci_low = quantile(boot_medians, alpha, na.rm = TRUE, names = FALSE),
+    ci_high = quantile(boot_medians, 1 - alpha, na.rm = TRUE, names = FALSE),
+    n_boot = n_boot,
+    conf_level = conf
+  )
+}
+
+summarise_bootstrap_ci <- function(df, scope, group_col, label_fun, order_values = NULL) {
+  group_col <- rlang::ensym(group_col)
+  out <- df %>%
+    group_by(!!group_col) %>%
+    summarise(
+      bootstrap_median_ci(best_median_abs_diff_pct),
+      .groups = "drop"
+    ) %>%
+    rename(group = !!group_col) %>%
+    mutate(
+      scope = scope,
+      group_label = vapply(group, label_fun, character(1)),
+      .before = 1
+    )
+
+  if (!is.null(order_values)) {
+    out <- out %>% arrange(match(group, order_values), group)
+  } else {
+    out <- out %>% arrange(median, group)
+  }
+  out
+}
+
 # -------------------------
 # 1) Decision matrix from *_optics_vs_tactile.csv
 # -------------------------
@@ -337,6 +396,197 @@ write_csv(
   file.path(out_dir, "results_decision_rsk_screening_groups.csv")
 )
 
+set.seed(21920)
+bootstrap_ci <- bind_rows(
+  summarise_bootstrap_ci(
+    decision_primary,
+    scope = "Parameter",
+    group_col = param,
+    label_fun = param_tex,
+    order_values = primary_params
+  ),
+  summarise_bootstrap_ci(
+    decision_primary,
+    scope = "Process",
+    group_col = process,
+    label_fun = process_label_tex,
+    order_values = by_process$process
+  ),
+  summarise_bootstrap_ci(
+    decision_primary,
+    scope = "Material",
+    group_col = material,
+    label_fun = material_label_tex,
+    order_values = by_material$material
+  )
+)
+
+write_csv(bootstrap_ci, file.path(out_dir, "results_bootstrap_ci_aggregate_medians.csv"))
+
+rsm_decision <- decision %>%
+  filter(param == "rsm")
+
+rsm_config <- config_medians %>%
+  filter(param == "rsm")
+
+rsm_system_diag <- rsm_config %>%
+  mutate(system_abs_diff_pct = median_abs_diff_pct) %>%
+  group_by(view = "Optical system", stratum = system) %>%
+  summarise(
+    n = n(),
+    good_n = sum(system_abs_diff_pct <= 10, na.rm = TRUE),
+    mid_n = sum(system_abs_diff_pct > 10 & system_abs_diff_pct <= 30, na.rm = TRUE),
+    poor_n = sum(system_abs_diff_pct > 30, na.rm = TRUE),
+    median_abs_diff_pct = median(system_abs_diff_pct, na.rm = TRUE),
+    q25_abs_diff_pct = quantile(system_abs_diff_pct, 0.25, na.rm = TRUE),
+    q75_abs_diff_pct = quantile(system_abs_diff_pct, 0.75, na.rm = TRUE),
+    modal_workflow = "all colours",
+    .groups = "drop"
+  )
+
+rsm_material_diag <- rsm_decision %>%
+  group_by(view = "Material", stratum = material) %>%
+  summarise(
+    n = n(),
+    median_abs_diff_pct = median(best_median_abs_diff_pct, na.rm = TRUE),
+    q25_abs_diff_pct = quantile(best_median_abs_diff_pct, 0.25, na.rm = TRUE),
+    q75_abs_diff_pct = quantile(best_median_abs_diff_pct, 0.75, na.rm = TRUE),
+    good_n = sum(best_median_abs_diff_pct <= 10, na.rm = TRUE),
+    mid_n = sum(best_median_abs_diff_pct > 10 & best_median_abs_diff_pct <= 30, na.rm = TRUE),
+    poor_n = sum(best_median_abs_diff_pct > 30, na.rm = TRUE),
+    best_system_mode = mode_chr(best_system),
+    best_color_mode = mode_chr(best_color),
+    .groups = "drop"
+  ) %>%
+  mutate(modal_workflow = paste(best_system_mode, best_color_mode, sep = ", ")) %>%
+  select(-best_system_mode, -best_color_mode)
+
+rsm_process_diag <- rsm_decision %>%
+  group_by(view = "Process", stratum = process) %>%
+  summarise(
+    n = n(),
+    median_abs_diff_pct = median(best_median_abs_diff_pct, na.rm = TRUE),
+    q25_abs_diff_pct = quantile(best_median_abs_diff_pct, 0.25, na.rm = TRUE),
+    q75_abs_diff_pct = quantile(best_median_abs_diff_pct, 0.75, na.rm = TRUE),
+    good_n = sum(best_median_abs_diff_pct <= 10, na.rm = TRUE),
+    mid_n = sum(best_median_abs_diff_pct > 10 & best_median_abs_diff_pct <= 30, na.rm = TRUE),
+    poor_n = sum(best_median_abs_diff_pct > 30, na.rm = TRUE),
+    best_system_mode = mode_chr(best_system),
+    best_color_mode = mode_chr(best_color),
+    .groups = "drop"
+  ) %>%
+  mutate(modal_workflow = paste(best_system_mode, best_color_mode, sep = ", ")) %>%
+  select(-best_system_mode, -best_color_mode)
+
+rsm_diagnostic <- bind_rows(rsm_system_diag, rsm_material_diag, rsm_process_diag) %>%
+  mutate(
+    good_pct = 100 * good_n / n,
+    mid_pct = 100 * mid_n / n,
+    poor_pct = 100 * poor_n / n,
+    view_order = match(view, c("Optical system", "Material", "Process")),
+    stratum_order = case_when(
+      view == "Optical system" ~ match(stratum, c("conf", "FV", "fusion", "int")),
+      view == "Material" ~ match(stratum, c("14301", "al7075", "c45", "ellor", "mo58a", "ti6al4v")),
+      view == "Process" ~ match(stratum, c("mr", "mf", "tr", "tf", "b", "wedm_r", "wedm_f", "gri", "gla", "hon")),
+      TRUE ~ NA_integer_
+    )
+  ) %>%
+  arrange(view_order, stratum_order, stratum) %>%
+  select(-view_order, -stratum_order)
+
+write_csv(rsm_diagnostic, file.path(out_dir, "results_rsm_diagnostic_by_stratum.csv"))
+
+summarise_rsm_scale_file <- function(path) {
+  bn <- basename(path)
+  m <- str_match(bn, "^([a-z0-9]+)_abs_([^_]+)_(.+)_optics_vs_tactile\\.csv$")
+  if (is.na(m[1,2]) || m[1,2] != "rsm") return(tibble())
+
+  df <- suppressMessages(readr::read_csv(path, show_col_types = FALSE))
+  need_cols <- c("system", "color", "optics_value", "tactile_reference", "diff_percent_abs")
+  if (!all(need_cols %in% names(df))) return(tibble())
+
+  df %>%
+    transmute(
+      material = m[1,3],
+      process = m[1,4],
+      system = as.character(system),
+      color = as.character(color),
+      original_abs_diff_pct = as.numeric(diff_percent_abs),
+      scaled_abs_diff_pct = 100 * abs(((as.numeric(optics_value) * 1000) - as.numeric(tactile_reference)) / as.numeric(tactile_reference)),
+      exported_tactile_to_optical_ratio = ifelse(as.numeric(optics_value) == 0, NA_real_, as.numeric(tactile_reference) / as.numeric(optics_value)),
+      scaled_tactile_to_optical_ratio = ifelse(as.numeric(optics_value) == 0, NA_real_, as.numeric(tactile_reference) / (as.numeric(optics_value) * 1000))
+    )
+}
+
+summarise_rsm_scale <- function(scope, assumption, df, diff_col, ratio_col) {
+  values <- df[[diff_col]]
+  ratio_values <- df[[ratio_col]]
+  tibble(
+    scope = scope,
+    scale_assumption = assumption,
+    n = sum(is.finite(values)),
+    median_abs_diff_pct = median(values, na.rm = TRUE),
+    q25_abs_diff_pct = quantile(values, 0.25, na.rm = TRUE),
+    q75_abs_diff_pct = quantile(values, 0.75, na.rm = TRUE),
+    good_n = sum(values <= 10, na.rm = TRUE),
+    mid_n = sum(values > 10 & values <= 30, na.rm = TRUE),
+    poor_n = sum(values > 30, na.rm = TRUE),
+    ratio_median = median(ratio_values, na.rm = TRUE)
+  )
+}
+
+rsm_scale_entries <- bind_rows(lapply(opt_files, summarise_rsm_scale_file))
+
+rsm_scale_best_exported <- rsm_scale_entries %>%
+  group_by(material, process) %>%
+  arrange(original_abs_diff_pct, .by_group = TRUE) %>%
+  slice(1) %>%
+  ungroup()
+
+rsm_scale_best_scaled <- rsm_scale_entries %>%
+  group_by(material, process) %>%
+  arrange(scaled_abs_diff_pct, .by_group = TRUE) %>%
+  slice(1) %>%
+  ungroup()
+
+rsm_scale_sensitivity <- bind_rows(
+  summarise_rsm_scale(
+    "All retained system-colour entries",
+    "Exported optical value",
+    rsm_scale_entries,
+    "original_abs_diff_pct",
+    "exported_tactile_to_optical_ratio"
+  ),
+  summarise_rsm_scale(
+    "All retained system-colour entries",
+    "Optical value multiplied by 1000",
+    rsm_scale_entries,
+    "scaled_abs_diff_pct",
+    "scaled_tactile_to_optical_ratio"
+  ),
+  summarise_rsm_scale(
+    "Best workflow per material-process group",
+    "Exported optical value",
+    rsm_scale_best_exported,
+    "original_abs_diff_pct",
+    "exported_tactile_to_optical_ratio"
+  ),
+  summarise_rsm_scale(
+    "Best workflow per material-process group",
+    "Optical value multiplied by 1000",
+    rsm_scale_best_scaled,
+    "scaled_abs_diff_pct",
+    "scaled_tactile_to_optical_ratio"
+  )
+) %>%
+  mutate(
+    good_pct = 100 * good_n / n,
+    mid_pct = 100 * mid_n / n,
+    poor_pct = 100 * poor_n / n
+  )
+
+write_csv(rsm_scale_sensitivity, file.path(out_dir, "results_rsm_unit_scale_sensitivity.csv"))
+
 by_process_param <- decision_primary %>%
   group_by(process, param) %>%
   summarise(
@@ -491,6 +741,156 @@ write_table_fixed_workflows <- function(df, path, primary_group_count) {
   writeLines(lines, path)
 }
 
+write_table_rsm_diagnostic <- function(df, path) {
+  table_row_end <- "\\\\"
+  lines <- c(
+    "% Auto-generated by make_results_decision_tables.R",
+    "\\begin{table}[H]",
+    "\\centering",
+    "\\small",
+    "\\caption{Diagnostic segmentation of $R_{sm}$ optical--tactile discrepancy by optical system, material, and process}",
+    "\\label{tab:rsm_diagnostic}",
+    "\\setlength\\tabcolsep{4pt}",
+    "\\resizebox{\\linewidth}{!}{%",
+    "\\begin{tabular}{llcccccc}",
+    "\\toprule",
+    paste0("View & Stratum & $N$ & Median $|\\mathrm{diff}|$ [\\%] & Q1--Q3 & $\\leq 10\\%$ & >30\\% & Modal workflow ", table_row_end),
+    "\\midrule"
+  )
+
+  last_view <- NA_character_
+  for (i in seq_len(nrow(df))) {
+    r <- df[i,]
+    if (!is.na(last_view) && r$view != last_view) {
+      lines <- c(lines, "\\addlinespace")
+    }
+    last_view <- r$view
+
+    stratum <- if (r$view == "Material") {
+      material_label_tex(r$stratum)
+    } else if (r$view == "Process") {
+      process_label_tex(r$stratum)
+    } else {
+      to_tex(r$stratum)
+    }
+    med <- sprintf("%.1f", r$median_abs_diff_pct)
+    iqr <- sprintf("%.1f--%.1f", r$q25_abs_diff_pct, r$q75_abs_diff_pct)
+    good <- sprintf("%d (%.0f\\%%)", r$good_n, r$good_pct)
+    poor <- sprintf("%d (%.0f\\%%)", r$poor_n, r$poor_pct)
+    workflow <- to_tex(r$modal_workflow)
+    lines <- c(lines, sprintf("%s & %s & %d & %s & %s & %s & %s & %s %s",
+                              to_tex(r$view), stratum, r$n, med, iqr, good, poor, workflow, table_row_end))
+  }
+
+  lines <- c(
+    lines,
+    "\\bottomrule",
+    "\\end{tabular}",
+    "}",
+    "\\vspace{0.5ex}",
+    "\\begin{minipage}{\\linewidth}",
+    "\\footnotesize\\textit{Note:} Optical-system rows summarise all retained $R_{sm}$ system--colour entries. Material and process rows summarise the retrospective best-achievable $R_{sm}$ discrepancy per material--process group. The modal workflow is the most frequently selected best system+colour within the corresponding material or process stratum; for optical-system rows, all retained illumination colours are pooled.",
+    "\\end{minipage}",
+    "\\end{table}"
+  )
+  writeLines(lines, path)
+}
+
+write_table_rsm_scale_sensitivity <- function(df, path) {
+  table_row_end <- "\\\\"
+  lines <- c(
+    "% Auto-generated by make_results_decision_tables.R",
+    "\\begin{table}[H]",
+    "\\centering",
+    "\\small",
+    "\\caption{Sensitivity of $R_{sm}$ discrepancy to retained optical unit scale}",
+    "\\label{tab:rsm_scale_sensitivity}",
+    "\\setlength\\tabcolsep{4pt}",
+    "\\resizebox{\\linewidth}{!}{%",
+    "\\begin{tabular}{llcccccc}",
+    "\\toprule",
+    paste0("Comparison set & Scale assumption & $N$ & Median $|\\mathrm{diff}|$ [\\%] & Q1--Q3 & $\\leq 10\\%$ & >30\\% & Median tactile/optical ratio ", table_row_end),
+    "\\midrule"
+  )
+
+  last_scope <- NA_character_
+  for (i in seq_len(nrow(df))) {
+    r <- df[i,]
+    if (!is.na(last_scope) && r$scope != last_scope) {
+      lines <- c(lines, "\\addlinespace")
+    }
+    last_scope <- r$scope
+
+    med <- sprintf("%.1f", r$median_abs_diff_pct)
+    iqr <- sprintf("%.1f--%.1f", r$q25_abs_diff_pct, r$q75_abs_diff_pct)
+    good <- sprintf("%d (%.0f\\%%)", r$good_n, r$good_pct)
+    poor <- sprintf("%d (%.0f\\%%)", r$poor_n, r$poor_pct)
+    ratio <- sprintf("%.1f", r$ratio_median)
+    lines <- c(lines, sprintf("%s & %s & %d & %s & %s & %s & %s & %s %s",
+                              to_tex(r$scope), to_tex(r$scale_assumption), r$n, med, iqr, good, poor, ratio, table_row_end))
+  }
+
+  lines <- c(
+    lines,
+    "\\bottomrule",
+    "\\end{tabular}",
+    "}",
+    "\\vspace{0.5ex}",
+    "\\begin{minipage}{\\linewidth}",
+    "\\footnotesize\\textit{Note:} The x1000 rows are a sensitivity check that treats retained optical $R_{sm}$ values as if they were exported in millimetres and converted to micrometres before comparison. They are not used as corrected primary endpoints because complete original unit metadata and raw processing chains are not retained consistently across the archive.",
+    "\\end{minipage}",
+    "\\end{table}"
+  )
+  writeLines(lines, path)
+}
+
+write_table_bootstrap_ci <- function(df, path) {
+  table_row_end <- "\\\\"
+  lines <- c(
+    "% Auto-generated by make_results_decision_tables.R",
+    "\\begin{table}[H]",
+    "\\centering",
+    "\\small",
+    "\\caption{Bootstrap percentile intervals for aggregate median best-achievable discrepancy}",
+    "\\label{tab:supp_bootstrap_ci}",
+    "\\setlength\\tabcolsep{4pt}",
+    "\\resizebox{\\linewidth}{!}{%",
+    "\\begin{tabular}{llccccc}",
+    "\\toprule",
+    paste0("Summary level & Group & $N$ & Median $|\\mathrm{diff}|$ [\\%] & 95\\% bootstrap CI [\\%] & Resamples & Confidence ", table_row_end),
+    "\\midrule"
+  )
+
+  last_scope <- NA_character_
+  for (i in seq_len(nrow(df))) {
+    r <- df[i,]
+    if (!is.na(last_scope) && r$scope != last_scope) {
+      lines <- c(lines, "\\addlinespace")
+    }
+    last_scope <- r$scope
+
+    median_text <- sprintf("%.1f", r$median)
+    ci_text <- sprintf("%.1f--%.1f", r$ci_low, r$ci_high)
+    conf_text <- sprintf("%.0f\\%%", 100 * r$conf_level)
+    lines <- c(lines, sprintf("%s & %s & %d & %s & %s & %d & %s %s",
+                              to_tex(r$scope), r$group_label, r$n, median_text, ci_text,
+                              r$n_boot, conf_text, table_row_end))
+  }
+
+  lines <- c(
+    lines,
+    "\\bottomrule",
+    "\\end{tabular}",
+    "}",
+    "\\vspace{0.5ex}",
+    "\\begin{minipage}{\\linewidth}",
+    "\\footnotesize\\textit{Note:} Intervals are non-parametric percentile bootstrap summaries of the median best-achievable $|\\mathrm{diff}|(\\%)$ within each aggregate level. Resampling was performed across archive-defined parameter--surface groups for the corresponding parameter, process, or material. These intervals describe sampling stability of the retrospective summaries and are not formal prospective validation intervals.",
+    "\\end{minipage}",
+    "\\end{table}"
+  )
+  writeLines(lines, path)
+}
+
 write_global_heatmap <- function(df, path, process_order) {
   df <- df %>%
     mutate(
@@ -548,6 +948,21 @@ write_table_fixed_workflows(
   primary_group_count = primary_group_count
 )
 
+write_table_rsm_diagnostic(
+  rsm_diagnostic,
+  file.path(tex_dir, "results_rsm_diagnostic.tex")
+)
+
+write_table_rsm_scale_sensitivity(
+  rsm_scale_sensitivity,
+  file.path(tex_dir, "results_rsm_unit_scale_sensitivity.tex")
+)
+
+write_table_bootstrap_ci(
+  bootstrap_ci,
+  file.path(tex_dir, "results_bootstrap_ci_aggregate_medians.tex")
+)
+
 write_global_heatmap(
   by_process_param,
   file.path(plots_dir, "global_best_discrepancy_heatmap.pdf"),
@@ -559,10 +974,16 @@ cat("- ", file.path(out_dir, "results_decision_best_optical_by_group.csv"), "\n"
 cat("- ", file.path(out_dir, "results_config_medians_by_group.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_decision_summary_by_param.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_decision_rsk_screening_groups.csv"), "\n", sep = "")
+cat("- ", file.path(out_dir, "results_bootstrap_ci_aggregate_medians.csv"), "\n", sep = "")
+cat("- ", file.path(out_dir, "results_rsm_diagnostic_by_stratum.csv"), "\n", sep = "")
+cat("- ", file.path(out_dir, "results_rsm_unit_scale_sensitivity.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_fixed_workflow_sensitivity.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_best_discrepancy_heatmap_by_process_param.csv"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_decision_by_param.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_decision_by_process.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_decision_by_material.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_fixed_workflow_sensitivity.tex"), "\n", sep = "")
+cat("- ", file.path(tex_dir, "results_rsm_diagnostic.tex"), "\n", sep = "")
+cat("- ", file.path(tex_dir, "results_rsm_unit_scale_sensitivity.tex"), "\n", sep = "")
+cat("- ", file.path(tex_dir, "results_bootstrap_ci_aggregate_medians.tex"), "\n", sep = "")
 cat("- ", file.path(plots_dir, "global_best_discrepancy_heatmap.pdf"), "\n", sep = "")

@@ -12,6 +12,8 @@
 ## Manuskrypt Q1/high-impact
 Dedykowany pakiet manuskryptu znajduje się w `paper/`. Najważniejszy plik kontrolny to `paper/reproducibility_manifest.md`, który opisuje wejścia, komendy odtworzeniowe oraz pliki przeznaczone do archiwizacji przy zgłoszeniu do czasopisma. Planowany publiczny pakiet GitHub obejmuje cały projekt potrzebny do reprodukcji tabel, figur i wniosków manuskryptu, z wyłączeniem surowych plików powierzchni `.sur` / `.SUR`.
 
+Aktualna wersja pakietu manuskryptu: `v1.0.3`.
+
 Adres repozytorium GitHub:
 ```text
 https://github.com/dawidkucharski/optical-tactile-surface-benchmark
@@ -31,8 +33,11 @@ cd paper && python3 generate_supplement.py
 
 Nowe artefakty manuskryptu obejmują:
 - `paper/tables/results_fixed_workflow_sensitivity.tex` – analiza czułości względem wyboru jednej stałej konfiguracji system+barwa.
+- `paper/tables/results_rsm_diagnostic.tex` – diagnostyczna segmentacja rozbieżności `Rsm` według systemu optycznego, materiału i procesu.
+- `paper/tables/results_rsm_unit_scale_sensitivity.tex` – czułość `Rsm` na zachowaną skalę jednostek eksportu optycznego.
+- `paper/tables/results_bootstrap_ci_aggregate_medians.tex` – przedziały bootstrapowe dla zagregowanych median najlepszych osiągalnych rozbieżności.
 - `plots/global_best_discrepancy_heatmap.pdf` – mapa procesu i parametru dla najlepszej osiągalnej rozbieżności optyczno-dotykowej.
-- `outputs/results_fixed_workflow_sensitivity.csv` oraz `outputs/results_best_discrepancy_heatmap_by_process_param.csv` – dane źródłowe do tabeli i figury.
+- `outputs/results_fixed_workflow_sensitivity.csv`, `outputs/results_best_discrepancy_heatmap_by_process_param.csv`, `outputs/results_rsm_diagnostic_by_stratum.csv`, `outputs/results_rsm_unit_scale_sensitivity.csv` oraz `outputs/results_bootstrap_ci_aggregate_medians.csv` – dane źródłowe do tabel i figur.
 
 Przy publikacji na GitHub użyj `GITHUB_RELEASE_CHECKLIST.md`. Plik `.gitignore` wyklucza `.sur` / `.SUR`, środowiska lokalne i pliki tymczasowe LaTeX, ale pozwala śledzić wygenerowane PDF-y manuskryptu/suplementu, wykresy, CSV-y oraz tabele TeX.
 

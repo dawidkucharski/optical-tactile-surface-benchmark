@@ -7,7 +7,8 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 
-\title{Supplementary Materials}
+\title{Supplementary materials for\\
+Retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple materials and processes}
 \author{}
 \date{\today}
 
@@ -15,7 +16,7 @@
 \maketitle
 
 \noindent
-Supplement to the manuscript \emph{Retrospective Benchmark of Optical Surface Roughness Workflows Against an Internal Tactile Baseline Across Multiple Materials and Processes}.
+Supplement to the manuscript \emph{Retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple materials and processes}.
 
 % Use standard supplementary numbering (Table S1, Figure S1, ...)
 \renewcommand{\thetable}{S\arabic{table}}
@@ -63,9 +64,20 @@ Table~S4 summarises the internal repeatability of the tactile baseline used in t
 
 \medskip
 \noindent
+Table~S5 reports non-parametric percentile bootstrap intervals for the aggregate median best-achievable discrepancy summaries. The intervals describe stability of the retrospective median summaries across archive-defined parameter--surface groups and should not be read as prospective validation intervals for future optical use.
+
+\medskip
+\noindent
 \textbf{Figures.} The supplementary figures are representative examples of (i) distributions of $|\mathrm{diff}|(\%)$ across systems, (ii) optical--tactile discrepancy summaries, (iii) illumination-band trend plots with fitted screening lines, and (iv) technical-distance heatmaps between systems. They illustrate archive-level workflow behaviour and should not be read as validation figures for metrological equivalence.
 
 \input{supplement_tables.tex}
+
+\clearpage
+\section{Bootstrap stability of aggregate medians}
+\noindent
+The table below complements the main manuscript decision summaries by adding percentile bootstrap intervals around the aggregate median best-achievable discrepancies by parameter, process, and material. Resampling was performed within each aggregate stratum across archive-defined parameter--surface groups.
+
+\input{tables/results_bootstrap_ci_aggregate_medians.tex}
 
 \clearpage
 \section{Representative supplementary figures}

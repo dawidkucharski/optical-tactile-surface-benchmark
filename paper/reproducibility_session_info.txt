@@ -1,0 +1,33 @@
+R version 4.4.2 (2024-10-31)
+Platform: x86_64-apple-darwin20
+Running under: macOS Sequoia 15.7.5
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Warsaw
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_4.4.2 tools_4.4.2   
+
+Project package versions:
+   package version
+    readxl   1.4.5
+     readr   2.1.5
+     dplyr   1.1.4
+   stringr   1.5.1
+   ggplot2   3.5.1
+    glmnet  4.1-10
+    ranger  0.17.0
+  fastshap   0.1.1
+     tidyr   1.3.1
+ rmarkdown    2.29
+  jsonlite   1.9.0
