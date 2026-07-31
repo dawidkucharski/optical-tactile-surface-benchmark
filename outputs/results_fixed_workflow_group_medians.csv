@@ -1,4 +1,4 @@
-param,material,process,system,color,n,median_abs_diff_pct,mean_abs_diff_pct,q25_abs_diff_pct,q75_abs_diff_pct,best_median_abs_diff_pct,excess_over_best_pct,fixed_category
+param,material,process,system,color,n,median_abs_diff_pct,mean_abs_diff_pct,q25_abs_diff_pct,q75_abs_diff_pct,best_median_abs_diff_pct,excess_over_lowest_pct,fixed_category
 ra,14301,b,FV,blue,1,344.293315015186,344.293315015186,344.293315015186,344.293315015186,11.140832750516,333.15248226467,>100\%
 ra,14301,b,FV,green,1,125.835406540607,125.835406540607,125.835406540607,125.835406540607,11.140832750516,114.694573790091,>100\%
 ra,14301,b,FV,red,1,158.782107216207,158.782107216207,158.782107216207,158.782107216207,11.140832750516,147.641274465691,>100\%

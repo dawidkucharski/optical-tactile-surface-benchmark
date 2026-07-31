@@ -2,13 +2,13 @@
 \begin{table}[H]
 \centering
 \small
-\caption{Decision summary aggregated by material across all processes and strictly positive parameters}
+\caption{Decision-oriented discrepancy summary aggregated by material across all processes and strictly positive parameters}
 \label{tab:decision_by_material}
 \setlength\tabcolsep{4pt}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
-Material & $N$ & Median best $|\mathrm{diff}|$ [\%] & Q1--Q3 & $\leq 10\%$ & 10--30\% & >30\% & Most frequent best (system, colour) \\
+Material & $N$ & Lowest median $|\mathrm{diff}|$ [\%] & Q1--Q3 & $\leq 10\%$ & 10--30\% & >30\% & Most frequent lowest (system, colour) \\
 \midrule
 Graphite (ELLOR) & 63 & 4.6 & 0.9--19.8 & 42 (67\%) & 6 (10\%) & 15 (24\%) & int, green \\
 C45 steel & 70 & 7.3 & 1.2--54.6 & 40 (57\%) & 6 (9\%) & 24 (34\%) & int, red \\
@@ -21,6 +21,6 @@ Ti6Al4V & 70 & 11.7 & 4.4--51.6 & 32 (46\%) & 15 (21\%) & 23 (33\%) & int, red \
 }
 \vspace{0.5ex}
 \begin{minipage}{\linewidth}
-\footnotesize\textit{Note:} $N$ is the number of contributing strictly positive parameter--material--process groups. For each group, the optical configuration (system+illumination colour) that minimises the median $|\mathrm{diff}|(\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\leq 10\%$, 10--30\%, >30\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\%) means 7 groups, i.e. 15\% of $N$. Most frequent best denotes the modal selected (system, colour) across groups. Archive identifiers in the first column are expanded for readability.
+\footnotesize\textit{Note:} $N$ is the number of contributing strictly positive parameter--material--process groups. For each group, the optical configuration (system+illumination colour) that minimises the median $|\mathrm{diff}|(\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\leq 10\%$, 10--30\%, >30\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\%) means 7 groups, i.e. 15\% of $N$. Most frequent lowest denotes the modal selected (system, colour) across groups. Archive identifiers in the first column are expanded for readability.
 \end{minipage}
 \end{table}

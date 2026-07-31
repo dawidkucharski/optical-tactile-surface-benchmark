@@ -1,0 +1,50 @@
+\documentclass[10pt]{letter}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=21mm]{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{lmodern}
+
+\setlength{\parskip}{4pt}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=black,
+  linkcolor=black
+}
+
+\address{%
+Dawid Kucharski\\
+Poznan University of Technology\\
+Poznan, Poland\\
+\href{mailto:dawid.kucharski@put.poznan.pl}{dawid.kucharski@put.poznan.pl}}
+
+\signature{Dawid Kucharski\\on behalf of all authors}
+
+\begin{document}
+
+\begin{letter}{Editor-in-Chief\\
+\textit{Measurement}\\
+Elsevier}
+
+\opening{Dear Editor,}
+
+Please consider our manuscript entitled \emph{``Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes''} for publication as a research article in \textit{Measurement}.
+
+The manuscript addresses a practical metrology problem: optical surface-texture instruments are increasingly used in manufacturing and quality-control workflows, but discrepancy relative to tactile profile measurements can depend strongly on material, process, roughness parameter, instrument family, and illumination condition. We present a reproducible retrospective benchmark that maps optical-workflow validation priorities against an internal tactile baseline, identifies where prospective validation is most promising, and indicates where tactile confirmation remains preferable. The manuscript is intentionally framed as workflow triage and prospective-validation prioritisation; it does not claim formal optical--tactile equivalence, metrological interchangeability, or universal optical substitution.
+
+The study analyses six engineering materials, multiple machining and finishing routes, four optical workflow families, and eight profile roughness parameters. It reports decision-oriented summaries for 472 parameter--surface groups, tactile repeatability descriptors based on 20 tactile repeats per group, fixed-workflow sensitivity, a leave-one-surface workflow-transfer check, bootstrap stability intervals, and diagnostic treatment of the harmonisation-sensitive $R_{sm}$ spacing parameter. The results show that amplitude-type parameters can enter a lower-discrepancy regime under selected workflows, while held-out workflow transfer quantifies material--process dependence; the held-out analysis has a median discrepancy of 32.8\%, with 52\% of groups still above 30\% discrepancy. Retained exported-value $R_{sm}$ is treated as a diagnostic endpoint rather than as a practical optical-substitution recommendation.
+
+We believe the manuscript fits \textit{Measurement} because it focuses on measurement comparability, surface-metrology workflow selection, reference-data interpretation, and reproducible benchmarking. The public reproducibility package includes analysis scripts, derived CSV outputs, generated tables and figures, and manuscript/supplement sources through GitHub and Zenodo under concept DOI \href{https://doi.org/10.5281/zenodo.19844490}{10.5281/zenodo.19844490}. The derived outputs required to reproduce the reported tables and figures are included; raw \texttt{.sur} instrument exports are available from the authors on reasonable request, subject to file-size and transfer constraints.
+
+We confirm that this manuscript is original, has not been published previously, and is not under consideration elsewhere. All authors have approved the submitted version and agree with submission to \textit{Measurement}. The authors declare no conflict of interest. The work was supported by the Polish Ministry of Science under the programme ``Polish Metrology II'' (Polska Metrologia II), project no. PM-II/SP/0090/2024/02.
+
+Thank you for considering our submission. We would be grateful for the opportunity to have the manuscript reviewed for \textit{Measurement}.
+
+\closing{Sincerely,}
+
+\end{letter}
+
+\end{document}

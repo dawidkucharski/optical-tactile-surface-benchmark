@@ -2,13 +2,13 @@
 \begin{table}[H]
 \centering
 \small
-\caption{Decision-oriented summary of optical--tactile agreement by strictly positive roughness parameter (best system+colour chosen per material--process group)}
+\caption{Decision-oriented summary of optical--tactile discrepancy by strictly positive roughness parameter (lowest-discrepancy system+colour chosen per material--process group)}
 \label{tab:decision_by_param}
 \setlength\tabcolsep{4pt}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
-Parameter & $N$ & Median best $|\mathrm{diff}|$ [\%] & Q1--Q3 & $\leq 10\%$ & 10--30\% & >30\% & Most frequent best (system, colour) \\
+Parameter & $N$ & Lowest median $|\mathrm{diff}|$ [\%] & Q1--Q3 & $\leq 10\%$ & 10--30\% & >30\% & Most frequent lowest (system, colour) \\
 \midrule
 $R_a$ & 59 & 9.8 & 2.6--21.8 & 30 (51\%) & 16 (27\%) & 13 (22\%) & int, red \\
 $R_q$ & 59 & 7.4 & 2.4--22.5 & 35 (59\%) & 12 (20\%) & 12 (20\%) & int, red \\
@@ -22,6 +22,6 @@ $R_{z1max}$ & 59 & 5.7 & 2.0--12.3 & 41 (69\%) & 10 (17\%) & 8 (14\%) & int, red
 }
 \vspace{0.5ex}
 \begin{minipage}{\linewidth}
-\footnotesize\textit{Note:} $N$ is the number of available material--process groups for the seven strictly positive parameters. For each group, the optical configuration (system+illumination colour) that minimises the median $|\mathrm{diff}|(\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\leq 10\%$, 10--30\%, >30\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\%) means 7 groups, i.e. 15\% of $N$. Most frequent best denotes the modal selected (system, colour) across groups. Percentage-based $R_{sk}$ rankings are excluded from the manuscript decision tables because normalisation becomes unstable near zero; archive-level screening rows are retained separately in the exported outputs.
+\footnotesize\textit{Note:} $N$ is the number of available material--process groups for the seven strictly positive parameters. For each group, the optical configuration (system+illumination colour) that minimises the median $|\mathrm{diff}|(\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\leq 10\%$, 10--30\%, >30\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\%) means 7 groups, i.e. 15\% of $N$. Most frequent lowest denotes the modal selected (system, colour) across groups. Percentage-based $R_{sk}$ rankings are excluded from the manuscript decision tables because normalisation becomes unstable near zero; archive-level screening rows are retained separately in the exported outputs.
 \end{minipage}
 \end{table}

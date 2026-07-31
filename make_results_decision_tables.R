@@ -281,7 +281,7 @@ if (nrow(decision_primary) == 0) {
 }
 
 # -------------------------
-# 1b) Fixed-configuration sensitivity against retrospective best-achievable selection
+# 1b) Fixed-configuration sensitivity against retrospective lowest-discrepancy selection
 # -------------------------
 primary_group_count <- nrow(decision_primary)
 
@@ -293,7 +293,7 @@ config_primary <- config_medians %>%
     by = c("param", "material", "process")
   ) %>%
   mutate(
-    excess_over_best_pct = median_abs_diff_pct - best_median_abs_diff_pct,
+    excess_over_lowest_pct = median_abs_diff_pct - best_median_abs_diff_pct,
     fixed_category = cat_label(median_abs_diff_pct)
   )
 
@@ -308,8 +308,8 @@ fixed_config_summary <- config_primary %>%
     good_n = sum(median_abs_diff_pct <= 10, na.rm = TRUE),
     mid_n = sum(median_abs_diff_pct > 10 & median_abs_diff_pct <= 30, na.rm = TRUE),
     poor_n = sum(median_abs_diff_pct > 30, na.rm = TRUE),
-    median_excess_over_best = median(excess_over_best_pct, na.rm = TRUE),
-    q75_excess_over_best = quantile(excess_over_best_pct, 0.75, na.rm = TRUE),
+    median_excess_over_lowest = median(excess_over_lowest_pct, na.rm = TRUE),
+    q75_excess_over_lowest = quantile(excess_over_lowest_pct, 0.75, na.rm = TRUE),
     .groups = "drop"
   ) %>%
   mutate(
@@ -322,6 +322,149 @@ fixed_config_summary <- config_primary %>%
 
 write_csv(config_primary, file.path(out_dir, "results_fixed_workflow_group_medians.csv"))
 write_csv(fixed_config_summary, file.path(out_dir, "results_fixed_workflow_sensitivity.csv"))
+
+# -------------------------
+# 1c) Leave-one-surface workflow-transfer check
+# -------------------------
+workflow_transfer_by_group <- bind_rows(lapply(seq_len(nrow(decision_primary)), function(i) {
+  g <- decision_primary[i, ]
+  train <- config_primary %>%
+    filter(
+      param == g$param,
+      !(material == g$material & process == g$process)
+    )
+  heldout <- config_primary %>%
+    filter(param == g$param, material == g$material, process == g$process)
+
+  if (nrow(train) == 0 || nrow(heldout) == 0) return(tibble())
+
+  train_rank <- train %>%
+    group_by(system, color) %>%
+    summarise(
+      training_n_groups = n(),
+      training_median_abs_diff_pct = median(median_abs_diff_pct, na.rm = TRUE),
+      training_q25_abs_diff_pct = quantile(median_abs_diff_pct, 0.25, na.rm = TRUE),
+      training_q75_abs_diff_pct = quantile(median_abs_diff_pct, 0.75, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    arrange(training_median_abs_diff_pct, desc(training_n_groups), system, color)
+
+  selected <- train_rank %>%
+    semi_join(heldout %>% select(system, color), by = c("system", "color")) %>%
+    slice_head(n = 1)
+
+  if (nrow(selected) == 0) return(tibble())
+
+  selected %>%
+    left_join(
+      heldout %>%
+        select(
+          system, color,
+          heldout_n = n,
+          heldout_median_abs_diff_pct = median_abs_diff_pct,
+          heldout_mean_abs_diff_pct = mean_abs_diff_pct,
+          heldout_q25_abs_diff_pct = q25_abs_diff_pct,
+          heldout_q75_abs_diff_pct = q75_abs_diff_pct,
+          retrospective_lowest_abs_diff_pct = best_median_abs_diff_pct
+        ),
+      by = c("system", "color")
+    ) %>%
+    transmute(
+      param = g$param,
+      material = g$material,
+      process = g$process,
+      selected_system = system,
+      selected_color = color,
+      training_n_groups,
+      training_median_abs_diff_pct,
+      training_q25_abs_diff_pct,
+      training_q75_abs_diff_pct,
+      heldout_n,
+      heldout_median_abs_diff_pct,
+      heldout_mean_abs_diff_pct,
+      heldout_q25_abs_diff_pct,
+      heldout_q75_abs_diff_pct,
+      retrospective_lowest_abs_diff_pct,
+      excess_over_retrospective_lowest_pct = heldout_median_abs_diff_pct - retrospective_lowest_abs_diff_pct,
+      heldout_category = cat_label(heldout_median_abs_diff_pct)
+    )
+}))
+
+workflow_transfer_summary_by_param <- bind_rows(
+  workflow_transfer_by_group %>%
+    summarise(
+      param = "all",
+      n_groups = n(),
+      median_holdout = median(heldout_median_abs_diff_pct, na.rm = TRUE),
+      q25_holdout = quantile(heldout_median_abs_diff_pct, 0.25, na.rm = TRUE),
+      q75_holdout = quantile(heldout_median_abs_diff_pct, 0.75, na.rm = TRUE),
+      good_n = sum(heldout_median_abs_diff_pct <= 10, na.rm = TRUE),
+      mid_n = sum(heldout_median_abs_diff_pct > 10 & heldout_median_abs_diff_pct <= 30, na.rm = TRUE),
+      poor_n = sum(heldout_median_abs_diff_pct > 30, na.rm = TRUE),
+      median_excess_over_lowest = median(excess_over_retrospective_lowest_pct, na.rm = TRUE),
+      selected_system_mode = mode_chr(selected_system),
+      selected_color_mode = mode_chr(selected_color),
+      .groups = "drop"
+    ),
+  workflow_transfer_by_group %>%
+    group_by(param) %>%
+    summarise(
+      n_groups = n(),
+      median_holdout = median(heldout_median_abs_diff_pct, na.rm = TRUE),
+      q25_holdout = quantile(heldout_median_abs_diff_pct, 0.25, na.rm = TRUE),
+      q75_holdout = quantile(heldout_median_abs_diff_pct, 0.75, na.rm = TRUE),
+      good_n = sum(heldout_median_abs_diff_pct <= 10, na.rm = TRUE),
+      mid_n = sum(heldout_median_abs_diff_pct > 10 & heldout_median_abs_diff_pct <= 30, na.rm = TRUE),
+      poor_n = sum(heldout_median_abs_diff_pct > 30, na.rm = TRUE),
+      median_excess_over_lowest = median(excess_over_retrospective_lowest_pct, na.rm = TRUE),
+      selected_system_mode = mode_chr(selected_system),
+      selected_color_mode = mode_chr(selected_color),
+      .groups = "drop"
+    )
+) %>%
+  mutate(
+    good_pct = 100 * good_n / n_groups,
+    mid_pct = 100 * mid_n / n_groups,
+    poor_pct = 100 * poor_n / n_groups
+  )
+
+write_csv(workflow_transfer_by_group, file.path(out_dir, "results_workflow_transfer_by_group.csv"))
+write_csv(workflow_transfer_summary_by_param, file.path(out_dir, "results_workflow_transfer_summary_by_param.csv"))
+
+best_complete_fixed <- fixed_config_summary %>%
+  filter(n_groups == primary_group_count) %>%
+  slice_min(median_fixed, n = 1, with_ties = FALSE)
+if (nrow(best_complete_fixed) == 0) {
+  best_complete_fixed <- fixed_config_summary %>%
+    slice_min(median_fixed, n = 1, with_ties = FALSE)
+}
+transfer_all <- workflow_transfer_summary_by_param %>%
+  filter(param == "all") %>%
+  slice_head(n = 1)
+
+selection_penalty_overview <- tibble(
+  analysis_view = c(
+    "Retrospective lowest-discrepancy selection",
+    "Lowest-median complete-coverage fixed workflow",
+    "Leave-one-surface workflow transfer"
+  ),
+  median_abs_diff_pct = c(
+    median(decision_primary$best_median_abs_diff_pct, na.rm = TRUE),
+    best_complete_fixed$median_fixed,
+    transfer_all$median_holdout
+  ),
+  high_discrepancy_pct = c(
+    100 * sum(decision_primary$best_median_abs_diff_pct > 30, na.rm = TRUE) / nrow(decision_primary),
+    best_complete_fixed$poor_pct,
+    transfer_all$poor_pct
+  ),
+  workflow_or_selection = c(
+    "selected within parameter--surface group",
+    paste(best_complete_fixed$system, best_complete_fixed$color, sep = ", "),
+    paste(transfer_all$selected_system_mode, transfer_all$selected_color_mode, sep = ", ")
+  )
+)
+write_csv(selection_penalty_overview, file.path(out_dir, "results_workflow_selection_penalty_overview.csv"))
 
 # -------------------------
 # 2) Summary tables (param / process / material)
@@ -565,14 +708,14 @@ rsm_scale_sensitivity <- bind_rows(
     "scaled_tactile_to_optical_ratio"
   ),
   summarise_rsm_scale(
-    "Best workflow per material-process group",
+    "Lowest-discrepancy workflow per material-process group",
     "Exported optical value",
     rsm_scale_best_exported,
     "original_abs_diff_pct",
     "exported_tactile_to_optical_ratio"
   ),
   summarise_rsm_scale(
-    "Best workflow per material-process group",
+    "Lowest-discrepancy workflow per material-process group",
     "Optical value multiplied by 1000",
     rsm_scale_best_scaled,
     "scaled_abs_diff_pct",
@@ -613,13 +756,13 @@ write_table_by_param <- function(df, path) {
     "\\begin{table}[H]",
     "\\centering",
     "\\small",
-    "\\caption{Decision-oriented summary of optical--tactile agreement by strictly positive roughness parameter (best system+colour chosen per material--process group)}",
+    "\\caption{Decision-oriented summary of optical--tactile discrepancy by strictly positive roughness parameter (lowest-discrepancy system+colour chosen per material--process group)}",
     "\\label{tab:decision_by_param}",
     "\\setlength\\tabcolsep{4pt}",
     "\\resizebox{\\linewidth}{!}{%",
     "\\begin{tabular}{lccccccc}",
     "\\toprule",
-    "Parameter & $N$ & Median best $|\\mathrm{diff}|$ [\\%] & Q1--Q3 & $\\leq 10\\%$ & 10--30\\% & >30\\% & Most frequent best (system, colour) \\\\",
+    "Parameter & $N$ & Lowest median $|\\mathrm{diff}|$ [\\%] & Q1--Q3 & $\\leq 10\\%$ & 10--30\\% & >30\\% & Most frequent lowest (system, colour) \\\\",
     "\\midrule"
   )
 
@@ -645,7 +788,7 @@ write_table_by_param <- function(df, path) {
     "}",
     "\\vspace{0.5ex}",
     "\\begin{minipage}{\\linewidth}",
-    "\\footnotesize\\textit{Note:} $N$ is the number of available material--process groups for the seven strictly positive parameters. For each group, the optical configuration (system+illumination colour) that minimises the median $|\\mathrm{diff}|(\\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\\leq 10\\%$, 10--30\\%, >30\\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\\%) means 7 groups, i.e. 15\\% of $N$. Most frequent best denotes the modal selected (system, colour) across groups. Percentage-based $R_{sk}$ rankings are excluded from the manuscript decision tables because normalisation becomes unstable near zero; archive-level screening rows are retained separately in the exported outputs.",
+    "\\footnotesize\\textit{Note:} $N$ is the number of available material--process groups for the seven strictly positive parameters. For each group, the optical configuration (system+illumination colour) that minimises the median $|\\mathrm{diff}|(\\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\\leq 10\\%$, 10--30\\%, >30\\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\\%) means 7 groups, i.e. 15\\% of $N$. Most frequent lowest denotes the modal selected (system, colour) across groups. Percentage-based $R_{sk}$ rankings are excluded from the manuscript decision tables because normalisation becomes unstable near zero; archive-level screening rows are retained separately in the exported outputs.",
     "\\end{minipage}",
     "\\end{table}"
   )
@@ -664,7 +807,7 @@ write_table_generic <- function(df, path, caption, label, first_col_name, label_
     "\\resizebox{\\linewidth}{!}{%",
     "\\begin{tabular}{lccccccc}",
     "\\toprule",
-    paste0(first_col_name, " & $N$ & Median best $|\\mathrm{diff}|$ [\\%] & Q1--Q3 & $\\leq 10\\%$ & 10--30\\% & >30\\% & Most frequent best (system, colour) \\\\") ,
+    paste0(first_col_name, " & $N$ & Lowest median $|\\mathrm{diff}|$ [\\%] & Q1--Q3 & $\\leq 10\\%$ & 10--30\\% & >30\\% & Most frequent lowest (system, colour) \\\\") ,
     "\\midrule"
   )
 
@@ -687,7 +830,7 @@ write_table_generic <- function(df, path, caption, label, first_col_name, label_
     "}",
     "\\vspace{0.5ex}",
     "\\begin{minipage}{\\linewidth}",
-    "\\footnotesize\\textit{Note:} $N$ is the number of contributing strictly positive parameter--material--process groups. For each group, the optical configuration (system+illumination colour) that minimises the median $|\\mathrm{diff}|(\\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\\leq 10\\%$, 10--30\\%, >30\\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\\%) means 7 groups, i.e. 15\\% of $N$. Most frequent best denotes the modal selected (system, colour) across groups. Archive identifiers in the first column are expanded for readability.",
+    "\\footnotesize\\textit{Note:} $N$ is the number of contributing strictly positive parameter--material--process groups. For each group, the optical configuration (system+illumination colour) that minimises the median $|\\mathrm{diff}|(\\%)$ is selected. Q1--Q3 are quartiles of the selected medians. The band columns ($\\leq 10\\%$, 10--30\\%, >30\\%) count how many groups fall into each range; values are shown as count (percent of $N$), e.g. 7 (15\\%) means 7 groups, i.e. 15\\% of $N$. Most frequent lowest denotes the modal selected (system, colour) across groups. Archive identifiers in the first column are expanded for readability.",
     "\\end{minipage}",
     "\\end{table}"
   )
@@ -709,7 +852,7 @@ write_table_fixed_workflows <- function(df, path, primary_group_count) {
     "\\begin{tabular}{lccccccc}",
     "\\toprule",
     paste0("Fixed workflow & $N$ & Coverage & Median $|\\mathrm{diff}|$ [\\%] & ",
-           "Q1--Q3 & $\\leq 10\\%$ & >30\\% & Median excess vs. best [\\%] ",
+          "Q1--Q3 & $\\leq 10\\%$ & >30\\% & Median excess vs. lowest [\\%] ",
            table_row_end),
     "\\midrule"
   )
@@ -722,7 +865,7 @@ write_table_fixed_workflows <- function(df, path, primary_group_count) {
     iqr <- sprintf("%.1f--%.1f", r$q25_fixed, r$q75_fixed)
     good <- sprintf("%d (%.0f\\%%)", r$good_n, r$good_pct)
     poor <- sprintf("%d (%.0f\\%%)", r$poor_n, r$poor_pct)
-    excess <- sprintf("%.1f", r$median_excess_over_best)
+    excess <- sprintf("%.1f", r$median_excess_over_lowest)
     lines <- c(lines, sprintf("%s & %d & %s & %s & %s & %s & %s & %s %s",
             workflow, r$n_groups, coverage, med, iqr, good, poor, excess, table_row_end))
   }
@@ -734,7 +877,55 @@ write_table_fixed_workflows <- function(df, path, primary_group_count) {
     "}",
     "\\vspace{0.5ex}",
     "\\begin{minipage}{\\linewidth}",
-    sprintf("\\footnotesize\\textit{Note:} Fixed workflow means that one optical system+illumination pair is evaluated wherever it is available, without selecting a different best configuration for each parameter--surface group. Coverage is relative to the %d strictly positive parameter--surface groups used in the manuscript decision summaries. The table shows the eight lowest median fixed workflows; the complete fixed-workflow ranking and group-level medians are exported as CSV files. Excess vs. best is the median difference between the fixed-workflow median discrepancy and the retrospective best-achievable median discrepancy within the same group.", primary_group_count),
+    sprintf("\\footnotesize\\textit{Note:} Fixed workflow means that one optical system+illumination pair is evaluated wherever it is available, without selecting a different configuration for each parameter--surface group. Coverage is relative to the %d strictly positive parameter--surface groups used in the manuscript decision summaries. The table shows the eight lowest median fixed workflows; the complete fixed-workflow ranking and group-level medians are exported as CSV files. Excess vs. lowest is the median difference between the fixed-workflow median discrepancy and the retrospective lowest-discrepancy median within the same group.", primary_group_count),
+    "\\end{minipage}",
+    "\\end{table}"
+  )
+  writeLines(lines, path)
+}
+
+write_table_workflow_transfer <- function(df, path) {
+  table_row_end <- "\\\\"
+  df <- df %>%
+    mutate(order_id = ifelse(param == "all", 0L, match(param, primary_params))) %>%
+    arrange(order_id, param)
+
+  lines <- c(
+    "% Auto-generated by make_results_decision_tables.R",
+    "\\begin{table}[H]",
+    "\\centering",
+    "\\small",
+    "\\caption{Leave-one-surface workflow-transfer check for the strictly positive roughness parameters}",
+    "\\label{tab:workflow_transfer}",
+    "\\setlength\\tabcolsep{4pt}",
+    "\\resizebox{\\linewidth}{!}{%",
+    "\\begin{tabular}{lccccccc}",
+    "\\toprule",
+    paste0("Parameter & $N$ & Held-out median $|\\mathrm{diff}|$ [\\%] & Q1--Q3 & $\\leq 10\\%$ & >30\\% & Median excess vs. lowest [\\%] & Most frequent selected workflow ", table_row_end),
+    "\\midrule"
+  )
+
+  for (i in seq_len(nrow(df))) {
+    r <- df[i,]
+    param_label <- if (r$param == "all") "All" else param_tex(r$param)
+    med <- sprintf("%.1f", r$median_holdout)
+    iqr <- sprintf("%.1f--%.1f", r$q25_holdout, r$q75_holdout)
+    good <- sprintf("%d (%.0f\\%%)", r$good_n, r$good_pct)
+    poor <- sprintf("%d (%.0f\\%%)", r$poor_n, r$poor_pct)
+    excess <- sprintf("%.1f", r$median_excess_over_lowest)
+    workflow <- sprintf("%s, %s", to_tex(r$selected_system_mode), to_tex(r$selected_color_mode))
+    lines <- c(lines, sprintf("%s & %d & %s & %s & %s & %s & %s & %s %s",
+                              param_label, r$n_groups, med, iqr, good, poor, excess, workflow, table_row_end))
+  }
+
+  lines <- c(
+    lines,
+    "\\bottomrule",
+    "\\end{tabular}",
+    "}",
+    "\\vspace{0.5ex}",
+    "\\begin{minipage}{\\linewidth}",
+    "\\footnotesize\\textit{Note:} For each held-out material--process group, system+illumination workflows were ranked using all other material--process groups for the same parameter. The table evaluates the highest-ranked workflow that was available for the held-out group. The held-out group was not used to rank workflows. Excess vs. lowest is the median increase relative to the retrospective lowest-discrepancy result in the same held-out groups. This check estimates transfer of workflow selection across surfaces within the archive and is not a prospective validation interval.",
     "\\end{minipage}",
     "\\end{table}"
   )
@@ -789,7 +980,7 @@ write_table_rsm_diagnostic <- function(df, path) {
     "}",
     "\\vspace{0.5ex}",
     "\\begin{minipage}{\\linewidth}",
-    "\\footnotesize\\textit{Note:} Optical-system rows summarise all retained $R_{sm}$ system--colour entries. Material and process rows summarise the retrospective best-achievable $R_{sm}$ discrepancy per material--process group. The modal workflow is the most frequently selected best system+colour within the corresponding material or process stratum; for optical-system rows, all retained illumination colours are pooled.",
+    "\\footnotesize\\textit{Note:} Optical-system rows summarise all retained $R_{sm}$ system--colour entries. Material and process rows summarise the retrospective lowest-discrepancy $R_{sm}$ result per material--process group. The modal workflow is the most frequently selected lowest-discrepancy system+colour within the corresponding material or process stratum; for optical-system rows, all retained illumination colours are pooled.",
     "\\end{minipage}",
     "\\end{table}"
   )
@@ -851,7 +1042,7 @@ write_table_bootstrap_ci <- function(df, path) {
     "\\begin{table}[H]",
     "\\centering",
     "\\small",
-    "\\caption{Bootstrap percentile intervals for aggregate median best-achievable discrepancy}",
+    "\\caption{Bootstrap percentile intervals for aggregate retrospective lowest-discrepancy medians}",
     "\\label{tab:supp_bootstrap_ci}",
     "\\setlength\\tabcolsep{4pt}",
     "\\resizebox{\\linewidth}{!}{%",
@@ -884,7 +1075,7 @@ write_table_bootstrap_ci <- function(df, path) {
     "}",
     "\\vspace{0.5ex}",
     "\\begin{minipage}{\\linewidth}",
-    "\\footnotesize\\textit{Note:} Intervals are non-parametric percentile bootstrap summaries of the median best-achievable $|\\mathrm{diff}|(\\%)$ within each aggregate level. Resampling was performed across archive-defined parameter--surface groups for the corresponding parameter, process, or material. These intervals describe sampling stability of the retrospective summaries and are not formal prospective validation intervals.",
+    "\\footnotesize\\textit{Note:} Intervals are non-parametric percentile bootstrap summaries of retrospective lowest-discrepancy median $|\\mathrm{diff}|(\\%)$ within each aggregate level. Resampling was performed across archive-defined parameter--surface groups for the corresponding parameter, process, or material. These intervals describe sampling stability of the retrospective summaries and are not formal prospective validation intervals.",
     "\\end{minipage}",
     "\\end{table}"
   )
@@ -904,12 +1095,12 @@ write_global_heatmap <- function(df, path, process_order) {
     scale_fill_gradientn(
       colours = c("#2c7bb6", "#ffffbf", "#d7191c"),
       limits = c(0, 100),
-      name = "Median best\n|diff| (%)"
+      name = "Lowest median\n|diff| (%)"
     ) +
     labs(
       x = "Roughness parameter",
       y = "Surface-generation process",
-      title = "Best-achievable optical--tactile discrepancy by process and parameter"
+      title = "Retrospective lowest-discrepancy optical--tactile result by process and parameter"
     ) +
     theme_minimal(base_size = 10) +
     theme(
@@ -922,12 +1113,40 @@ write_global_heatmap <- function(df, path, process_order) {
   ggsave(path, plot = p, width = 9.2, height = 5.6, units = "in")
 }
 
+write_selection_penalty_plot <- function(df, path) {
+  df <- df %>%
+    mutate(
+      analysis_view = factor(.data$analysis_view, levels = rev(.data$analysis_view)),
+      label = sprintf("%.1f%% median; %.0f%% >30%%", .data$median_abs_diff_pct, .data$high_discrepancy_pct)
+    )
+
+  p <- ggplot(df, aes(x = .data$analysis_view, y = .data$median_abs_diff_pct)) +
+    geom_col(fill = "#4d7ea8", width = 0.62) +
+    geom_text(aes(label = .data$label), hjust = -0.04, size = 3.3) +
+    coord_flip(clip = "off") +
+    scale_y_continuous(limits = c(0, max(df$median_abs_diff_pct, na.rm = TRUE) * 1.35), expand = expansion(mult = c(0, 0))) +
+    labs(
+      x = NULL,
+      y = "Median |diff| (%)",
+      title = "Workflow-selection penalty across strictly positive parameters"
+    ) +
+    theme_minimal(base_size = 10) +
+    theme(
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(face = "bold", size = 11),
+      plot.margin = margin(5.5, 48, 5.5, 5.5)
+    )
+
+  ggsave(path, plot = p, width = 8.4, height = 3.0, units = "in")
+}
+
 write_table_by_param(by_param, file.path(tex_dir, "results_decision_by_param.tex"))
 
 write_table_generic(
   by_process,
   file.path(tex_dir, "results_decision_by_process.tex"),
-  caption = "Decision summary aggregated by surface-generation process across all materials and strictly positive parameters",
+  caption = "Decision-oriented discrepancy summary aggregated by surface-generation process across all materials and strictly positive parameters",
   label = "tab:decision_by_process",
   first_col_name = "Process",
   label_formatter = process_label_tex
@@ -936,7 +1155,7 @@ write_table_generic(
 write_table_generic(
   by_material,
   file.path(tex_dir, "results_decision_by_material.tex"),
-  caption = "Decision summary aggregated by material across all processes and strictly positive parameters",
+  caption = "Decision-oriented discrepancy summary aggregated by material across all processes and strictly positive parameters",
   label = "tab:decision_by_material",
   first_col_name = "Material",
   label_formatter = material_label_tex
@@ -946,6 +1165,11 @@ write_table_fixed_workflows(
   fixed_config_summary,
   file.path(tex_dir, "results_fixed_workflow_sensitivity.tex"),
   primary_group_count = primary_group_count
+)
+
+write_table_workflow_transfer(
+  workflow_transfer_summary_by_param,
+  file.path(tex_dir, "results_workflow_transfer_summary.tex")
 )
 
 write_table_rsm_diagnostic(
@@ -969,6 +1193,11 @@ write_global_heatmap(
   process_order = by_process$process
 )
 
+write_selection_penalty_plot(
+  selection_penalty_overview,
+  file.path(plots_dir, "workflow_selection_penalty_overview.pdf")
+)
+
 cat("Wrote:\n")
 cat("- ", file.path(out_dir, "results_decision_best_optical_by_group.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_config_medians_by_group.csv"), "\n", sep = "")
@@ -978,12 +1207,17 @@ cat("- ", file.path(out_dir, "results_bootstrap_ci_aggregate_medians.csv"), "\n"
 cat("- ", file.path(out_dir, "results_rsm_diagnostic_by_stratum.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_rsm_unit_scale_sensitivity.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_fixed_workflow_sensitivity.csv"), "\n", sep = "")
+cat("- ", file.path(out_dir, "results_workflow_transfer_by_group.csv"), "\n", sep = "")
+cat("- ", file.path(out_dir, "results_workflow_transfer_summary_by_param.csv"), "\n", sep = "")
+cat("- ", file.path(out_dir, "results_workflow_selection_penalty_overview.csv"), "\n", sep = "")
 cat("- ", file.path(out_dir, "results_best_discrepancy_heatmap_by_process_param.csv"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_decision_by_param.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_decision_by_process.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_decision_by_material.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_fixed_workflow_sensitivity.tex"), "\n", sep = "")
+cat("- ", file.path(tex_dir, "results_workflow_transfer_summary.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_rsm_diagnostic.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_rsm_unit_scale_sensitivity.tex"), "\n", sep = "")
 cat("- ", file.path(tex_dir, "results_bootstrap_ci_aggregate_medians.tex"), "\n", sep = "")
 cat("- ", file.path(plots_dir, "global_best_discrepancy_heatmap.pdf"), "\n", sep = "")
+cat("- ", file.path(plots_dir, "workflow_selection_penalty_overview.pdf"), "\n", sep = "")

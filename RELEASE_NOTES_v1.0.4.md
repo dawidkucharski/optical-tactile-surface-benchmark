@@ -17,7 +17,7 @@ The scientific content is the Q1 manuscript evidence package introduced in `v1.0
 
 - `Rsm` diagnostic segmentation by optical system, material, and process.
 - `Rsm` unit-scale sensitivity for retained optical spacing exports.
-- Bootstrap percentile intervals for aggregate median best-achievable discrepancy summaries.
+- Bootstrap percentile intervals for aggregate retrospective lowest-discrepancy median summaries.
 - ISO/GPS profile-vs-areal scope anchoring.
 - Fixed-workflow sensitivity interpretation.
 - R environment snapshot for reproducibility review.

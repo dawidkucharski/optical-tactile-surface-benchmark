@@ -8,7 +8,7 @@
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
-Fixed workflow & $N$ & Coverage & Median $|\mathrm{diff}|$ [\%] & Q1--Q3 & $\leq 10\%$ & >30\% & Median excess vs. best [\%] \\
+Fixed workflow & $N$ & Coverage & Median $|\mathrm{diff}|$ [\%] & Q1--Q3 & $\leq 10\%$ & >30\% & Median excess vs. lowest [\%] \\
 \midrule
 int, green & 413 & 100\% & 24.8 & 11.1--66.9 & 93 (23\%) & 198 (48\%) & 7.2 \\
 int, white & 406 & 98\% & 25.0 & 10.8--66.7 & 92 (23\%) & 189 (47\%) & 8.0 \\
@@ -23,6 +23,6 @@ FV, red & 413 & 100\% & 47.2 & 19.0--99.7 & 69 (17\%) & 265 (64\%) & 17.5 \\
 }
 \vspace{0.5ex}
 \begin{minipage}{\linewidth}
-\footnotesize\textit{Note:} Fixed workflow means that one optical system+illumination pair is evaluated wherever it is available, without selecting a different best configuration for each parameter--surface group. Coverage is relative to the 413 strictly positive parameter--surface groups used in the manuscript decision summaries. The table shows the eight lowest median fixed workflows; the complete fixed-workflow ranking and group-level medians are exported as CSV files. Excess vs. best is the median difference between the fixed-workflow median discrepancy and the retrospective best-achievable median discrepancy within the same group.
+\footnotesize\textit{Note:} Fixed workflow means that one optical system+illumination pair is evaluated wherever it is available, without selecting a different configuration for each parameter--surface group. Coverage is relative to the 413 strictly positive parameter--surface groups used in the manuscript decision summaries. The table shows the eight lowest median fixed workflows; the complete fixed-workflow ranking and group-level medians are exported as CSV files. Excess vs. lowest is the median difference between the fixed-workflow median discrepancy and the retrospective lowest-discrepancy median within the same group.
 \end{minipage}
 \end{table}

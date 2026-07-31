@@ -8,7 +8,7 @@
 \usepackage{longtable}
 
 \title{Supplementary materials for\\
-Retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple materials and processes}
+Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes}
 \author{}
 \date{\today}
 
@@ -16,7 +16,7 @@ Retrospective benchmark of optical surface roughness workflows against an intern
 \maketitle
 
 \noindent
-Supplement to the manuscript \emph{Retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple materials and processes}.
+Supplement to the manuscript \emph{Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes}.
 
 % Use standard supplementary numbering (Table S1, Figure S1, ...)
 \renewcommand{\thetable}{S\arabic{table}}
@@ -30,6 +30,10 @@ This document provides supplementary tables and representative figures for the m
 \medskip
 \noindent
 Its purpose is to provide compact numerical summaries across the archived conditions and a small set of additional figures illustrating the principal output types beyond those shown in the main text.
+
+\medskip
+\noindent
+The main manuscript contains the decision-oriented benchmark tables, fixed-workflow sensitivity analysis, $R_{sm}$ diagnostic and unit-scale sensitivity analyses, and leave-one-surface workflow-transfer check. The supplement extends those results with the archive-level ANOVA screens, wavelength regressions, descriptive summaries, tactile repeatability summaries, bootstrap stability intervals, and representative figures. Group-level CSV outputs for the main-manuscript decision, fixed-workflow, and workflow-transfer analyses are included in the public reproducibility package.
 
 \medskip
 \noindent
@@ -56,15 +60,15 @@ Because a large number of ANOVA models and regressions are reported across many 
 
 \medskip
 \noindent
-Table~S3 provides descriptive statistics of $|\mathrm{diff}|(\%)$ by system (sample size $n$, mean, standard deviation, and standard error) for each parameter and material--process group. These summaries are descriptive only and, in many groups, are based on only a few available optical conditions per system. Where percentage-based summaries for $R_{sk}$ appear in archive-derived tables, they are retained for completeness only and should not be interpreted on the same footing as the strictly positive parameters.
+Table~S3 provides descriptive statistics of $|\mathrm{diff}|(\%)$ by system (sample size $n$, mean, standard deviation, and $s/\sqrt{n}$ descriptor) for each parameter and material--process group. These summaries are descriptive only and, in many groups, are based on only a few available optical conditions per system. Where percentage-based summaries for $R_{sk}$ appear in archive-derived tables, they are retained for completeness only and should not be interpreted on the same footing as the strictly positive parameters.
 
 \medskip
 \noindent
-Table~S4 summarises the internal repeatability of the tactile baseline used in the manuscript subset. For strictly positive parameters it reports the distribution of the relative standard error of the tactile mean, $100\,u_S/|S|$, across parameter--surface groups; for $R_{sk}$ it reports $u_S$ in native units because the tactile reference can approach zero.
+Table~S4 summarises the internal repeatability of the tactile baseline used in the manuscript subset. For strictly positive parameters it reports the distribution of the relative Type A standard uncertainty of the tactile mean, $100\,u_S/|S|$, across parameter--surface groups; for $R_{sk}$ it reports $u_S$ in native units because the tactile reference can approach zero.
 
 \medskip
 \noindent
-Table~S5 reports non-parametric percentile bootstrap intervals for the aggregate median best-achievable discrepancy summaries. The intervals describe stability of the retrospective median summaries across archive-defined parameter--surface groups and should not be read as prospective validation intervals for future optical use.
+Table~S5 reports non-parametric percentile bootstrap intervals for the aggregate retrospective lowest-discrepancy median summaries. The intervals describe stability of the retrospective median summaries across archive-defined parameter--surface groups and should not be read as prospective validation intervals for future optical use.
 
 \medskip
 \noindent
@@ -75,7 +79,7 @@ Table~S5 reports non-parametric percentile bootstrap intervals for the aggregate
 \clearpage
 \section{Bootstrap stability of aggregate medians}
 \noindent
-The table below complements the main manuscript decision summaries by adding percentile bootstrap intervals around the aggregate median best-achievable discrepancies by parameter, process, and material. Resampling was performed within each aggregate stratum across archive-defined parameter--surface groups.
+The table below complements the main manuscript decision summaries by adding percentile bootstrap intervals around the aggregate retrospective lowest-discrepancy medians by parameter, process, and material. Resampling was performed within each aggregate stratum across archive-defined parameter--surface groups.
 
 \input{tables/results_bootstrap_ci_aggregate_medians.tex}
 

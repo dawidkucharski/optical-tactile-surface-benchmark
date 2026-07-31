@@ -508,14 +508,14 @@ def _write_tables_tex(outputs_dir: Path, out_path: Path) -> None:
         lines.append("\\small\\setlength\\LTleft{0pt}\\setlength\\LTright{0pt}\n")
         lines.append("\\begin{longtable}{lp{0.28\\linewidth}lrrrr}\n")
         lines.append(
-            "\\caption{Per-system descriptive statistics for $|\\mathrm{diff}|(\\%)$ within each parameter and material/process group.}\\label{tab:supp-system-stats}\\\\\n"
+            "\\caption{Per-system descriptive statistics for $|\\mathrm{diff}|(\\%)$ within each parameter and material/process group. The final column reports the $s/\\sqrt{n}$ descriptor of the grouped discrepancy values.}\\label{tab:supp-system-stats}\\\\\n"
         )
         lines.append("\\toprule\n")
-        lines.append("Parameter & Material/process & System & $n$ & Mean & SD & SE\\\\\n")
+        lines.append("Parameter & Material/process & System & $n$ & Mean & SD & $s/\\sqrt{n}$\\\\\n")
         lines.append("\\midrule\n")
         lines.append("\\endfirsthead\n")
         lines.append("\\toprule\n")
-        lines.append("Parameter & Material/process & System & $n$ & Mean & SD & SE\\\\\n")
+        lines.append("Parameter & Material/process & System & $n$ & Mean & SD & $s/\\sqrt{n}$\\\\\n")
         lines.append("\\midrule\n")
         lines.append("\\endhead\n")
         lines.append("\\midrule\n")
@@ -574,7 +574,7 @@ def _write_tables_tex(outputs_dir: Path, out_path: Path) -> None:
         lines.append("\\small\\setlength\\LTleft{0pt}\\setlength\\LTright{0pt}\n")
         lines.append("\\begin{longtable}{lrrl}\n")
         lines.append(
-            "\\caption{Internal repeatability summary of the tactile reference across the eight-parameter manuscript subset. Each row aggregates one archived tactile descriptor per parameter--surface group from the corresponding optics-vs-tactile export. For strictly positive parameters, the reported summary is the relative standard error of the tactile mean, $100\\,u_S/|S|$, in percent; for $R_{sk}$, the reported summary is $u_S$ in native parameter units because relative normalisation becomes unstable near zero.}\\label{tab:supp-tactile-repeatability}\\\\\n"
+            "\\caption{Internal repeatability summary of the tactile reference across the eight-parameter manuscript subset. Each row aggregates one archived tactile descriptor per parameter--surface group from the corresponding optics-vs-tactile export. For strictly positive parameters, the reported summary is the relative Type A standard uncertainty of the tactile mean, $100\\,u_S/|S|$, in percent; for $R_{sk}$, the reported summary is $u_S$ in native parameter units because relative normalisation becomes unstable near zero.}\\label{tab:supp-tactile-repeatability}\\\\\n"
         )
         lines.append("\\toprule\n")
         lines.append("Parameter & Groups & $n_S$ & Median [Q1, Q3]\\\\\n")

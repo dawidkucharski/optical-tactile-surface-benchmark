@@ -1,0 +1,100 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{lmodern}
+\usepackage{enumitem}
+
+\setlength{\parskip}{6pt}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=black
+}
+
+\begin{document}
+
+\title{Response to Reviewers \\ Manuscript MST-137207}
+\author{}
+\date{July 2026}
+\maketitle
+
+\noindent Dear Editor,
+
+We thank the reviewers for their careful reading and constructive comments, which have substantially improved the manuscript. We address each point below. Major additions include:
+
+\begin{itemize}
+    \item A structured literature comparison table (Table~1) with industrial-parameter justification.
+    \item Justification for the profile-parameter focus and explicit research-gap statement (Section~1).
+    \item Expanded Discussion with twelve new subsections addressing all reviewer concerns (Section~4).
+    \item A worst-case illustration balancing the best-case example (Section~3.3).
+    \item $R_{sk}$ treatment: percentage-based $R_{sk}$ screening summaries are retained in the supplementary CSV output \texttt{results\_decision\_rsk\_screening\_groups.csv} as secondary descriptors, excluded from the main decision tables due to near-zero tactile denominator instability.
+    \item Prospective validation requirements (Section~4.10).
+    \item Data dictionary and independent-verification pathway (Section~4.9).
+\end{itemize}
+
+\section*{Response to Reviewer 1}
+
+\subsection*{R1-1: Research gap not clearly explained}
+We have restructured the Introduction to make the research gap explicit. The new text (lines~74--88) states: ``Most previous work compared one or two instruments on a narrow material--parameter range, typically reporting best-case comparability rather than quantifying the effect of fixing or transferring the workflow.'' The three-view design is now presented as filling this specific gap: the benchmark separates local selection, fixed-configuration sensitivity, and held-out transfer in a single, reproducible framework. The structured literature comparison table (Table~1, lines~106--124) provides evidence for this gap statement.
+
+\subsection*{R1-2: Profile vs.\ areal parameter choice}
+We have added a three-point justification in the Introduction (lines~70--80): (i) profile-based acceptance criteria remain dominant in the source industrial sectors and the tactile reference is inherently a profile instrument; (ii) areal maps were not archived consistently, precluding harmonised areal-to-areal comparison; (iii) profile parameters offer a common, standardised comparison language across the workflows. We also acknowledge that areal parameters provide richer spatial information and note that the optical profile parameters studied here were extracted from areal measurements by instrument software---making the extraction procedure part of the workflow-level discrepancy.
+
+\subsection*{R1-3: Structured literature summary}
+We have added Table~1 (lines~106--124), a structured comparison of selected optical--tactile studies organised by methods, materials, parameters, key findings, and study design. This table includes the suggested reference (Marichamy et al., 2025, Measurement 240, 115531) and positions the present study explicitly against the prior literature. The narrative introduction has been shortened to avoid redundancy with the table.
+
+\subsection*{R1-4: Industrial importance of $R_a$, $R_{sm}$, $R_{z1max}$}
+A new paragraph in the Introduction (lines~82--88) describes the distinct industrial functions of the eight profile parameters: $R_a$ for general quality control; $R_z$ and $R_{z1max}$ for sealing, contact stiffness, and coating adhesion; $R_{sm}$ for tribological and appearance-related specifications; $R_{sk}$ for bearing and lubrication behaviour; $R_t$ and $R_v$ for fatigue and crack-initiation contexts. The parameter set is described as spanning the main functional categories: amplitude, spacing, and shape.
+
+\subsection*{R1-5: Unit/scaling verification for other parameters}
+A new Discussion subsection (Section~4.2) explicitly addresses this. The retained optical and tactile amplitude-parameter outputs were examined for systematic order-of-magnitude offsets. All amplitude parameters shared micrometre units in the instrument exports, with median optical/tactile ratios between 0.82 and 1.24---consistent with instrument-level response differences, not unit-convention mismatches. The $R_{sm}$ anomaly is specific to the spacing-parameter class. We recommend that future studies document the export unit for every spacing parameter explicitly.
+
+\subsection*{R1-6: Impact of missing optical measurement settings}
+A new Discussion subsection (Section~4.3) addresses this directly. We acknowledge that the missing metadata (objective magnification, NA, lateral sampling, form removal, filter cut-off, profile-extraction rules) means that the reported discrepancies confound genuine instrument differences with operator- and software-specific processing choices. The benchmark therefore characterises real-world exported-workflow behaviour, not isolated instrument physics. A prospective study controlling these settings would be needed to separate the instrument and processing-chain contributions. Table~1 (retained metadata) already makes this limitation transparent.
+
+\subsection*{R1-7: Lack of optical repeats and ranking reliability}
+Section~4.3 also addresses this. We acknowledge that most system--illumination entries represent a single exported optical result per specimen, which limits per-group ranking reliability. Two mitigations are present: (i) the fixed-workflow and transfer analyses aggregate across many independent groups, and (ii) bootstrap intervals on aggregate medians reflect group-level resampling uncertainty. We recommend a targeted repeatability study with 5--10 optical repeats on representative surfaces as part of prospective validation.
+
+\subsection*{R1-8: Justification of discrepancy bands}
+A new Discussion subsection (Section~4.1) provides the rationale. The 10\% band approximates the level at which optical--tactile discrepancy approaches typical production profilometer repeatability. The 30\% band was selected because discrepancies above this level render tactile confirmation or a revised optical protocol the more defensible route regardless of the application. The 10--30\% band identifies cases requiring material--process-specific checking. We reiterate that these are screening heuristics, not tolerance limits, and that acceptability depends on the application tolerance and combined uncertainty budget.
+
+\subsection*{R1-9: Practical meaning of $R_{sm}$ unit scaling}
+Section~4.2 also addresses this. The practical meaning is that exported $R_{sm}$ should be harmonised for unit convention before any comparison. The post hoc x1000 analysis is a diagnostic illustration, not a corrected endpoint. The manuscript recommends that future studies document spacing-parameter export units explicitly and harmonise them before workflow comparison.
+
+\subsection*{R1-10: Transfer analysis detail by parameter, material, and process}
+A new Discussion subsection (Section~4.5) provides this detail. Amplitude parameters with the lowest retrospective discrepancies show the largest transfer penalty ($R_t$, $R_v$, $R_z$, $R_{z1max}$ retrospective medians 4.8--6.6\%, held-out 18--39\%). $R_a$ and $R_q$ show more moderate transfer. MO58A brass shows intermediate transferability; graphite shows the best transferability; Al7075 shows the poorest. WEDM and glass bead blasting transfer best across parameters; rough turning and rough milling transfer worst.
+
+\subsection*{R1-11: System selection tradeoff guidance}
+A new Discussion subsection (Section~4.6) provides practical guidance. When a practitioner must select one system for multiple parameters, the fixed-workflow summaries in Table~5 provide the relevant baseline. If the application prioritises a specific parameter, Table~2 identifies the most frequently low-discrepancy configurations. Three strategies are offered: (a) accept the higher fixed-workflow discrepancy, (b) validate separate workflows for different parameter families, or (c) restrict the material--process range to strata where the chosen system performs well. The technical distance maps help identify substitutable systems.
+
+\subsection*{R1-12: Evidence for $R_{sm}$ interpretation}
+Section~4.7 presents three lines of indirect evidence: (i) the x1000 sensitivity analysis reduces the median discrepancy from 99.9\% to 17.3\%, consistent with a dominant unit-convention effect; (ii) all four optical-system families show uniformly high $R_{sm}$ discrepancy, which is difficult to explain by instrument-specific physics alone; (iii) amplitude parameters on the same specimens do not show comparable order-of-magnitude discrepancies. We also specify a four-point prospective testing protocol for future raw-profile validation.
+
+\subsection*{R1-13: Best and worst material--process combinations}
+Section~4.4 identifies these explicitly. Best: graphite and MO58A brass across amplitude parameters; honing, glass bead blasting, and WEDM among processes. Worst: Ti6Al4V and 14301 stainless steel; rough face turning and rough milling. Physical attributions are provided (reflectance, surface anisotropy, tool-mark geometry, speckle behaviour). A new worst-case illustration (Section~3.3) for 14301 stainless steel after rough face turning balances the best-case Ti6Al4V finish-milling example.
+
+\subsection*{R1-14: Relation to ISO requirements}
+Section~4.8 discusses this. ISO~21920-2/3 define parameters and operators but not discrepancy limits. Whether a given discrepancy is acceptable depends on the ratio of measurement uncertainty to specification tolerance. We illustrate with a worked example: a 24.8\% discrepancy may be acceptable for $R_a = 0.4\,\mu$m ($\approx 0.1\,\mu$m) but problematic for $R_a = 6\,\mu$m ($\approx 1.5\,\mu$m). Laboratories are encouraged to combine benchmark screening with their own gauge capability studies.
+
+\subsection*{R1-15: Data dictionary and independent verification}
+Section~4.9 describes the data dictionary in the repository \texttt{README.md} and the end-to-end scripted analysis workflow. Because raw \texttt{.sur} files are excluded for size reasons, the verification pathway without raw files is: derived CSV inputs $\rightarrow$ version-controlled scripts $\rightarrow$ reproducible outputs. The repository is archived with a fixed DOI. Full replication including raw profiles requires the original \texttt{.sur} files, available from the corresponding author.
+
+\subsection*{R1-16: Prospective validation study requirements}
+Section~4.10 provides a six-element specification: (1) sample design (5--10 specimens per stratum, independent production batches); (2) measurement protocol (documented stylus geometry, contact force, evaluation length; documented optical objective, NA, field of view; common filter chain at raw-profile level); (3) repeatability and reproducibility (5--10 repeats per instrument, between-operator/between-day on a subset); (4) combined uncertainty budget; (5) pre-defined acceptance criteria ($E_n$ score or MPE); (6) blinded or pre-registered design to avoid the selection penalty quantified in this benchmark.
+
+\section*{Response to Reviewer 2}
+
+\subsection*{R2-1: Treatment of $R_{sk}$}
+We agree that the cursory treatment of $R_{sk}$ was a weakness. The manuscript now excludes $R_{sk}$ from the main decision tables due to near-zero tactile denominator instability (Methods, Section~2.4; Discussion, Section~4.8). The per-group percentage-based $R_{sk}$ screening summaries are retained in the supplementary CSV output \texttt{results\_decision\_rsk\_screening\_groups.csv} for archive completeness, as secondary descriptors only. We note that percentage-based $R_{sk}$ discrepancy remains sensitive to tactile $R_{sk}$ uncertainty and is recommended as a supplementary screening descriptor, not a primary selection criterion.
+
+\subsection*{R2-2: Physical attribution for poor-performance materials}
+Section~4.4 now provides qualitative physical attributions. For Ti6Al4V: relatively high visible-range reflectance, sensitivity to surface oxidation/contamination, and directionally textured milled topography. For 14301 stainless steel: process-dependent effects, with rough face-turning and rough milling producing highly irregular reflective surfaces with deep tool marks that challenge height-reconstruction range and speckle handling. We acknowledge that these attributions are qualitative and that a quantitative correlation with measured reflectance spectra or profilometric surface slopes would require dedicated optical-characterisation measurements outside the archived dataset.
+
+\subsection*{R2-3: Balanced best/worst case presentation}
+We appreciate this important suggestion. We have added a worst-case illustration in Section~3.3 for 14301 stainless steel after rough face turning, where all optical workflows underestimate $R_a$ by 42--60\% and no configuration enters the $\leq10\%$ band. This balances the best-case Ti6Al4V finish-milling example in Section~3.2. The Discussion (Section~4.4) also explicitly compares best and worst materials and processes, and we note that the full per-group data for both extremes are available in the supplementary CSV outputs.
+
+\end{document}

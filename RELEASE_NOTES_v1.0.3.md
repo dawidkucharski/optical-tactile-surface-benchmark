@@ -10,8 +10,8 @@ This release updates the manuscript-facing reproducibility package after the Q1-
 - Added ISO/GPS profile-vs-areal scope anchoring in the manuscript and bibliography.
 - Added dedicated `Rsm` diagnostic segmentation by optical system, material, and process.
 - Added `Rsm` unit-scale sensitivity for retained optical spacing exports.
-- Added non-parametric bootstrap percentile intervals for aggregate median best-achievable discrepancy summaries.
-- Added a fixed-workflow sensitivity interpretation that separates retrospective best-achievable screening from preselected optical workflow use.
+- Added non-parametric bootstrap percentile intervals for aggregate retrospective lowest-discrepancy median summaries.
+- Added a fixed-workflow sensitivity interpretation that separates retrospective lowest-discrepancy screening from preselected optical workflow use.
 - Added a lightweight R environment snapshot for reproducibility review.
 
 ## Included generated outputs

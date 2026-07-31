@@ -1,0 +1,4 @@
+analysis_view,median_abs_diff_pct,high_discrepancy_pct,workflow_or_selection
+Retrospective lowest-discrepancy selection,8.29135373430735,29.782082324455207,selected within parameter--surface group
+Lowest-median complete-coverage fixed workflow,24.8214011781049,47.94188861985472,"int, green"
+Leave-one-surface workflow transfer,32.7983290095981,51.81598062953995,"int, green"

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this reproducibility package, please cite it using the metadata below."
-title: "Retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple materials and processes"
+title: "Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes"
 version: "1.0.4"
 date-released: "2026-04-30"
 type: dataset

@@ -48,6 +48,9 @@ The decision-summary generator writes:
 - `outputs/results_config_medians_by_group.csv`
 - `outputs/results_fixed_workflow_group_medians.csv`
 - `outputs/results_fixed_workflow_sensitivity.csv`
+- `outputs/results_workflow_transfer_by_group.csv`
+- `outputs/results_workflow_transfer_summary_by_param.csv`
+- `outputs/results_workflow_selection_penalty_overview.csv`
 - `outputs/results_best_discrepancy_heatmap_by_process_param.csv`
 - `outputs/results_rsm_diagnostic_by_stratum.csv`
 - `outputs/results_rsm_unit_scale_sensitivity.csv`
@@ -56,10 +59,12 @@ The decision-summary generator writes:
 - `paper/tables/results_decision_by_process.tex`
 - `paper/tables/results_decision_by_material.tex`
 - `paper/tables/results_fixed_workflow_sensitivity.tex`
+- `paper/tables/results_workflow_transfer_summary.tex`
 - `paper/tables/results_rsm_diagnostic.tex`
 - `paper/tables/results_rsm_unit_scale_sensitivity.tex`
 - `paper/tables/results_bootstrap_ci_aggregate_medians.tex`
 - `plots/global_best_discrepancy_heatmap.pdf`
+- `plots/workflow_selection_penalty_overview.pdf`
 
 ## Manuscript Build
 

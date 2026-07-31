@@ -1,5 +1,5 @@
 {
-  "title": "Retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple materials and processes",
+  "title": "Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes",
   "upload_type": "dataset",
   "version": "1.0.4",
   "description": "Reproducibility package for a retrospective benchmark of optical surface roughness workflows against an internal tactile baseline across multiple engineering materials and surface-generation processes. The public package contains scripts, configuration files, manuscript and supplement sources, derived CSV outputs, generated tables, generated figures, Rsm diagnostic and unit-scale sensitivity outputs, bootstrap stability summaries, and an R environment snapshot. Raw .sur surface files are excluded from the public repository and are available from the authors on reasonable request, subject to data-transfer constraints.",

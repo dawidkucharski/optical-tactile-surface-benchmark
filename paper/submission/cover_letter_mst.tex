@@ -1,0 +1,56 @@
+\documentclass[10pt]{letter}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=21mm]{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{lmodern}
+
+\setlength{\parskip}{4pt}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=black,
+  linkcolor=black
+}
+
+\address{%
+Dawid Kucharski\\
+Poznan University of Technology\\
+Poznan, Poland\\
+\href{mailto:dawid.kucharski@put.poznan.pl}{dawid.kucharski@put.poznan.pl}}
+
+\signature{Dawid Kucharski\\on behalf of all authors}
+
+\begin{document}
+
+\begin{letter}{Editor-in-Chief\\
+\textit{Measurement Science and Technology}\\
+IOP Publishing}
+
+\opening{Dear Editor,}
+
+Please consider our manuscript entitled \emph{``Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes''} for publication as a research article in \textit{Measurement Science and Technology}.
+
+\textbf{Advance in measurement science.}
+The manuscript presents a structured, reproducible benchmarking methodology that separates three operational questions often conflated in optical--tactile surface-texture comparison studies: whether a low-discrepancy optical candidate exists locally, whether one configuration can be fixed before measurement across a broad surface range, and whether workflow choices transfer to unseen material--process classes. The novel contribution is the three-view design itself---local lowest-discrepancy selection, fixed-configuration sensitivity analysis, and leave-one-surface workflow-transfer check---which jointly quantifies the optimisation effect and the selection penalty that most single-condition comparisons obscure. To our knowledge, this combination has not previously been reported at this breadth (six engineering materials, four optical families, eight profile parameters, 59 material--process groups per parameter).
+
+\textbf{Measurement context and uncertainty.}
+The study analyses 472 parameter--surface groups drawn from an archived multi-instrument dataset. Optical outputs are compared against an internal tactile baseline using 20 repeated stylus-profiler measurements per group; the baseline is characterised by within-group repeatability standard deviations and Type~A standard uncertainties following VIM and GUM usage. The comparison space is defined by matched exported parameter labels under ISO profile-texture terminology (ISO\,21920-2). Discrepancy quantification based on absolute percentage deviation includes retrospective lowest-discrepancy summaries, fixed-workflow medians, and held-out transfer medians, with bootstrap percentile intervals for the retrospective statistics. The harmonisation-sensitive spacing parameter $R_{sm}$ receives separate diagnostic treatment owing to its exposure to lateral sampling, unit conventions, and filtering settings.
+
+\textbf{Relevance to \textit{MST} readership.}
+The work falls within the journal's precision-measurements and metrology section, engaging dimensional metrology, surface-texture measurement, optical measurement techniques, signal processing, and measurement uncertainty. Rather than proposing a new instrument or sensor, the manuscript advances understanding of how existing optical workflows compare with a tactile reference when the workflow is fixed, transferred, or retrospectively optimised---a practical measurement-science question with immediate relevance to industrial metrology, quality-control planning, and prospective validation design.
+
+\textbf{Reproducibility.}
+The public reproducibility package includes analysis scripts, derived CSV outputs, generated tables and figures, and manuscript and supplement sources, archived at Zenodo (DOI~\href{https://doi.org/10.5281/zenodo.19844490}{10.5281/zenodo.19844490}) and GitHub (\href{https://github.com/dawidkucharski/optical-tactile-surface-benchmark}{optical-tactile-surface-benchmark}). Derived outputs required to reproduce the reported tables and figures are included; raw \texttt{.sur} instrument-export files are available from the corresponding author on reasonable request, subject to file-size and transfer constraints.
+
+We confirm that this manuscript is original, has not been published previously, and is not under consideration elsewhere. All authors have approved the submitted version. The authors declare no conflict of interest. The work was supported by the Polish Ministry of Science under the programme ``Polish Metrology~II'' (Polska Metrologia~II), project no.~PM-II/SP/0090/2024/02.
+
+Thank you for considering our submission.
+
+\closing{Sincerely,}
+
+\end{letter}
+
+\end{document}
