@@ -1,0 +1,59 @@
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=21mm]{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{lmodern}
+\usepackage{enumitem}
+
+\setlength{\parskip}{4pt}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=black,
+  linkcolor=black
+}
+
+\begin{document}
+
+\title{Response to Referee~2 \\
+Manuscript MST-137207 \\
+{\normalsize ``Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes''}}
+
+\date{31 July 2026}
+\maketitle
+
+\section*{Dear Editor,}
+
+We thank Referee~2 for the careful reading of the manuscript and for the constructive, detailed comments. We have addressed every point raised. The main changes are:
+
+\begin{itemize}
+    \item \textbf{Results:} added an explicit best/worst material--process identification, including optical constants for Ti6Al4V ($n \approx 3.4$, $k \approx 4.2$) and 14301 stainless steel ($n \approx 2.5$, $k \approx 3.5$); added a detailed worst-case illustration (rough-face-turned Ti6Al4V) in the main text, balancing the earlier focus on best-case groups.
+    \item \textbf{Discussion:} added alternative $R_{sk}$ normalisation proposals ($\Delta_{sk}$ and rank-correlation-based consistency index); expanded the physical attribution of poor-performance cases.
+\end{itemize}
+
+All changes are marked in the revised manuscript and supplement. We respond to each comment in detail below.
+
+\begin{enumerate}[leftmargin=*, label=\textbf{Comment \arabic*.}, ref=\arabic*]
+
+\item \textbf{The treatment of $R_{sk}$ appears somewhat cursory. It is recommended to supplement an alternative normalization method, such as absolute difference or a special consistency index tailored for skewness.}
+
+\textbf{Response:} We have added a paragraph in the Discussion (lines~354--356) proposing two alternative $R_{sk}$ metrics: (i)~the absolute difference $\Delta_{sk} = O_{sk} - S_{sk}$, possibly normalised by the tactile within-group standard deviation $s_S$, and (ii)~a rank-correlation-based consistency index immune to near-zero baselines. The present archive retains percentage-based $R_{sk}$ summaries as secondary descriptors in supplementary outputs; the proposed alternatives are put forward for future sign-sensitive parameter studies.
+
+\item \textbf{Lack of physical attribution for `poor-performance' cases. A qualitative correlation with the optical constants (refractive index/extinction coefficient) or surface anisotropy would significantly enhance the physical depth.}
+
+\textbf{Response:} We have added optical-constant values for Ti6Al4V ($n \approx 3.4$, $k \approx 4.2$ at visible wavelengths) and 14301 stainless steel ($n \approx 2.5$, $k \approx 3.5$ at 633~nm) in the best/worst identification paragraph (Section~3.1, lines~250--256). We discuss how higher absorption in Ti6Al4V reduces SNR in confocal and interferometric measurements, and how high reflectance and steep local slopes in rough-milled 14301 can cause data dropout. We note that definitive attribution would require co-registered optical-constant measurements and raw topography data, which are outside the present exported-value benchmark scope.
+
+\item \textbf{Insufficient integration between supplementary materials and the main text. It lacks a detailed case study in the main text for the worst-case conditions (the $>30\%$ group), analogous to the detailed presentation of the best-case scenario. A balanced presentation contrasting both best and worst cases would be more convincing.}
+
+\textbf{Response:} We have added a detailed worst-case illustration in the main text (Section~3.1, lines~252--260), using the rough-face-turned Ti6Al4V group (\texttt{ti6al4v\_tf}) as a representative example. The new paragraph walks through the same analytical structure applied to best-case groups: retrospective lowest-discrepancy behaviour (amplitude parameters in the 10--30\% band, $R_{sm}$ above 99.9\%), fixed-workflow performance (parameters move into the $>30\%$ band), and leave-one-surface transfer (placed among the 52\% of groups above 30\%). Technical-distance clustering is described (two optical-family clusters separated by $>20$~pp). The practical recommendation (tactile confirmation until prospective validation) is stated explicitly. The supplementary material provides full per-parameter tables for every group, allowing the reader to replicate this comparison for any group of interest.
+
+\end{enumerate}
+
+\vspace{4mm}
+\noindent Sincerely,\\
+The Authors
+
+\end{document}

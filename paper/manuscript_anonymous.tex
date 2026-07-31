@@ -50,20 +50,7 @@
 \setkeys{Gin}{width=0.99\textwidth}
 %---------------------------title-------------------
 	\title{Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes}
-\author[1]{Dawid Kucharski\thanks{Corresponding author: \href{mailto:dawid.kucharski@put.poznan.pl}{dawid.kucharski@put.poznan.pl}}}
-\author[2]{Piotr Nies\l ony}
-\author[3]{Jolanta Kr\'olczyk}
-\author[4]{Grzegorz Kr\'olczyk}
-\author[5]{Katarzyna Nici\'nska}
-\author[5]{Natalia Wojciechowska}
-\author[5]{{\L}ukasz {\'S}lusarski}
-\author[1]{Micha\l\ Wieczorowski}
-\author[1]{Bartosz Gapi\'nski}
-\affil[1]{Poznan University of Technology, Poznan, Poland}
-\affil[2]{Opole University of Technology, Opole, Poland}
-\affil[3]{Independent Researcher}
-\affil[4]{Polish Air Force University, D\k{e}blin, Poland}
-\affil[5]{Central Office of Measures, Warsaw, Poland}
+\author{}
 \vspace{-5mm}
 \date{\today\\\vspace{2mm}}
 \maketitle
@@ -249,7 +236,7 @@ Tables~\ref{tab:decision_by_process} and~\ref{tab:decision_by_material} aggregat
 
 The best-agreement and worst-agreement material--process strata can be identified directly from these tables. Finish wire-EDM C45 steel and ground C45 steel consistently showed the lowest retrospective amplitude-parameter discrepancies, with $R_t$, $R_v$, $R_z$, and $R_{z1max}$ medians below 5\% after workflow selection. Honed MO58A brass and glass-bead-blasted 14301 stainless steel also occupied favourable positions across most amplitude parameters. At the opposite end, rough face-turned Ti6Al4V and ELLOR graphite, together with rough-milled 14301 stainless steel, repeatedly occupied the highest-discrepancy cells. Ti6Al4V surfaces combine moderate reflectance with a directional, anisotropic milled or turned texture that interacts strongly with the optical footprint and illumination geometry; the material's optical constants ($n \approx 3.4$, $k \approx 4.2$ at visible wavelengths) indicate higher absorption than typical engineering steels, which can reduce the signal-to-noise ratio in confocal and interferometric measurements. Rough-milled 14301 stainless steel ($n \approx 2.5$, $k \approx 3.5$ at 633~nm) presents a different challenge: its high reflectance and the steep local slopes in the milled texture can exceed the acceptance angle of confocal objectives, causing data dropout and reconstruction artefacts that inflate the exported roughness values. ELLOR graphite presents low reflectance, high porosity, and subsurface scattering that challenge most optical profiling principles. 
 
-As a concrete worst-case illustration, the rough-face-turned Ti6Al4V group (\texttt{ti6al4v\_tf}) is examined in detail using the same analytical structure applied to the best-case groups throughout Section~3. Under retrospective lowest-discrepancy selection, all amplitude parameters for this group fall into the 10--30\% middle band, and $R_{sm}$ remains above 99.9\%. When the workflow is fixed to the lowest-median complete-coverage configuration (interferometry with green illumination), the discrepancy moves several amplitude parameters from the middle band into the $>$30\% band, consistent with the overall fixed-workflow median of 24.8\% (Table~\ref{tab:fixed_workflow_sensitivity}). Under leave-one-surface transfer, the held-out discrepancy for this group places it among the 52\% of parameter--surface groups that remain above 30\% (Table~\ref{tab:workflow_transfer}). The technical distance analysis for this group shows that the four optical families separate into two clusters differing by more than 20 percentage points in mean discrepancy, confirming that the choice of optical system---not just the material---is decisive even in unfavourable conditions. The practical consequence is that Ti6Al4V, 14301 stainless steel in rough-milled condition, and ELLOR graphite should remain with tactile measurement until a dedicated, a priori designed prospective validation study demonstrates workflow-specific agreement below the relevant application tolerance. The full per-parameter decision tables, effect-size decompositions, wavelength regressions, and technical distance maps for every material--process group are provided in the supplementary material, allowing the reader to conduct the same worst-case--best-case comparison for any group of interest.
+As a concrete worst-case illustration, the rough-face-turned Ti6Al4V group (\texttt{ti6al4v\_tf}) is examined in detail using the same analytical structure applied to the best-case groups throughout Section~3. Under retrospective lowest-discrepancy selection, all amplitude parameters for this group fall into the 10--30\% middle band, and $R_{sm}$ remains above 99.9\%. When the workflow is fixed to the lowest-median complete-coverage configuration (interferometry with green illumination), the discrepancy moves several amplitude parameters from the middle band into the $>$30\% band, consistent with the overall fixed-workflow median of 24.8\% (Table~\ref{tab:fixed_workflow_sensitivity}). Under leave-one-surface transfer, the held-out discrepancy for this group places it among the 52\% of parameter--surface groups that remain above 30\% (Table~\ref{tab:workflow_transfer}). The technical distance matrix for this group (Supplementary Figure for \texttt{ti6al4v\_tf}) shows that the four optical families separate into two clusters differing by more than 20 percentage points in mean discrepancy, confirming that the choice of optical system---not just the material---is decisive even in unfavourable conditions. The practical consequence is that Ti6Al4V, 14301 stainless steel in rough-milled condition, and ELLOR graphite should remain with tactile measurement until a dedicated, a priori designed prospective validation study demonstrates workflow-specific agreement below the relevant application tolerance. The full per-parameter decision tables, effect-size decompositions, wavelength regressions, and technical distance maps for every material--process group are provided in the supplementary material, allowing the reader to conduct the same worst-case--best-case comparison for any group of interest.
 
 The extreme-case identifications serve as screening flags for follow-up investigation rather than as statements about material--process suitability for optical measurement in general.
 
@@ -389,28 +376,8 @@ The following supporting information is available online at the journal website:
 	\item \textbf{Supplementary S1}: additional tables and figures extending the Results. The material includes (i) two-way ANOVA main effects and $\eta^2$ effect sizes for the factors system and colour (Supplementary Table~S1), (ii) system-wise slopes of $|\mathrm{diff}|(\%)$ versus illumination wavelength (Supplementary Table~S2), (iii) descriptive statistics by system (Supplementary Table~S3), (iv) parameter-wise internal tactile repeatability summaries (Supplementary Table~S4), and (v) bootstrap percentile intervals for aggregate retrospective lowest-discrepancy medians (Supplementary Table~S5), together with representative plots for selected material--process combinations. The supplementary tables are generated from the same archived output files as the manuscript tables, and the generation script is included in the public repository.
 \end{itemize}
 
-\section*{CRediT authorship contribution statement}
-
-The author-declared contribution shares are as follows: (DK), 41\%; (PN), 14\%; (JK), 8\%; (GK), 8\%; (KN), 7\%; (NW), 7\%; ({\L}{\'S}), 7\%; (MW), 4\%; and (BG), 4\%.
-
-\noindent\textbf{(DK):} Conceptualisation, Methodology, Software, Validation, Formal analysis, Investigation, Data curation, Visualization, Writing -- original draft, Writing -- review \& editing.
-\textbf{(PN):} Conceptualisation, Supervision, Project administration.
-\textbf{(JK):} Supervision, Resources.
-\textbf{(GK):} Supervision.
-\textbf{(KN):} Investigation, Validation.
-\textbf{(NW):} Investigation, Data curation.
-\textbf{({\L}{\'S}):} Validation, Formal analysis.
-\textbf{(MW):} Supervision.
-\textbf{(BG):} Supervision.
-
-\section*{Conflicts of interest}
-The authors declare no conflict of interest.
-
 \section*{Data availability}
-The R/Python analysis scripts, configuration files, manuscript and supplement sources, generated CSV outputs, generated tables, and generated figures supporting the findings are publicly archived at Zenodo (\href{https://doi.org/10.5281/zenodo.19844490}{10.5281/zenodo.19844490}) and GitHub (\href{https://github.com/dawidkucharski/optical-tactile-surface-benchmark}{optical-tactile-surface-benchmark}). Raw \texttt{.sur} surface files are excluded from the public package as original instrument exports with size and transfer constraints; the derived CSV outputs needed to reproduce the manuscript tables, fixed-workflow sensitivity analysis, workflow-transfer check, global heatmap, selection-penalty figure, and supplementary tables are included. The excluded raw \texttt{.sur} files are available from the corresponding author on reasonable request, subject to data-transfer constraints.
-
-\section*{Funding}
-This work was supported by the Polish Ministry of Science under the programme ``Polish Metrology~II'' (Polska Metrologia~II), project no.~PM-II/SP/0090/2024/02.
+The R/Python analysis scripts, configuration files, manuscript and supplement sources, generated CSV outputs, generated tables, and generated figures supporting the findings are provided as submission reproducibility materials. Public repository and archive identifiers are supplied separately for editorial handling and can be inserted in the final version according to journal anonymisation policy. Raw \texttt{.sur} surface files are excluded from the public package as original instrument exports with size and transfer constraints; the derived CSV outputs needed to reproduce the manuscript tables, fixed-workflow sensitivity analysis, workflow-transfer check, global heatmap, selection-penalty figure, and supplementary tables are included. The excluded raw \texttt{.sur} files are available from the authors on reasonable request, subject to data-transfer constraints.
 
 % References are supplied via BibTeX; set style as needed for the target journal.
 %\bibliographystyle{elsarticle-num}

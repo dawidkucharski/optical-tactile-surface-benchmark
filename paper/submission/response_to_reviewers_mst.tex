@@ -1,0 +1,139 @@
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=21mm]{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{lmodern}
+\usepackage{enumitem}
+
+\setlength{\parskip}{4pt}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=black,
+  linkcolor=black
+}
+
+\begin{document}
+
+\title{Response to Reviewers \\
+Manuscript MST-137207 \\
+{\normalsize ``Workflow-transfer benchmark of optical surface-roughness measurements against an internal tactile baseline across engineering materials and manufacturing processes''}}
+
+\date{31 July 2026}
+\maketitle
+
+\section*{Dear Editor,}
+
+We thank both reviewers for their careful reading of the manuscript and for their constructive, detailed comments. We have addressed every point raised. The main changes are:
+
+\begin{itemize}
+    \item \textbf{Introduction:} added a structured literature comparison table (Table~1) with the suggested Marichamy et~al.\ reference; clarified the profile-vs.-areal rationale; explained the industrial importance of $R_a$, $R_{sm}$, and $R_{z1max}$; strengthened the research-gap statement to explain what metrological decisions the benchmark enables.
+    \item \textbf{Methods:} strengthened the justification of the 10\% and 30\% discrepancy bands with reference to calibration practice and ISO tolerance grades; added a data-dictionary and independent-verification paragraph.
+    \item \textbf{Results:} added an explicit best/worst material--process identification, including optical constants for Ti6Al4V and 14301 stainless steel; added a detailed worst-case illustration (rough-face-turned Ti6Al4V) in the main text, balancing the earlier focus on best-case groups.
+    \item \textbf{Discussion:} added alternative $R_{sk}$ normalisation proposals; expanded the physical attribution of poor-performance cases; added paragraphs on optical-setting limitations, optical-repeatability constraints, transfer-penalty patterns, practical system-selection guidance, ISO~21920-3 tolerance-grade mapping, and prospective-validation design requirements.
+\end{itemize}
+
+All changes are marked in the revised manuscript and supplement. We respond to each comment in detail below.
+
+\subsection*{Referee 1}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{Comment \arabic*.}, ref=\arabic*]
+
+\item \textbf{The manuscript claims novelty by combining three analyses, but the research gap is not clearly explained. Clarify what new industrial or metrological decision this benchmark enables.}
+
+\textbf{Response:} We have expanded the Introduction (paragraphs before the contribution statement) to explicitly articulate three operational decisions that a practitioner must make when integrating optical roughness measurement into a quality-control workflow: (i)~whether a low-discrepancy optical candidate exists locally, (ii)~what penalty arises when one workflow is fixed across a broad surface range, and (iii)~whether workflow choices transfer to unseen material--process classes. The new text states that ``the intended practical output is a set of decision tables and discrepancy maps that allow a metrology laboratory to identify which parameter--material--process combinations are the most promising candidates for prospective, protocol-driven validation and which combinations should remain with tactile measurement.''
+
+\item \textbf{The introduction discusses optical areal parameters, but the study focuses on profile parameters. Explain the reason for this choice and how it affects the general applicability.}
+
+\textbf{Response:} A new paragraph has been added in the Introduction explaining two reasons: (i)~most production tolerances and interlaboratory comparisons are expressed in profile terms, so a profile-based benchmark speaks to current industrial practice; (ii)~profile parameters were the only descriptor class retained consistently across all four optical instrument families, and areal parameters were either unavailable or incomparable. We state that extension to areal parameters would require a separate, harmonised areal-measurement design.
+
+\item \textbf{The previous studies are discussed individually without a clear comparison. Please provide a structured summary based on materials, parameters, methods, and reported differences---example of added related reference: \url{https://doi.org/10.1016/j.measurement.2024.115531}.}
+
+\textbf{Response:} We have added a structured literature comparison table (new Table~1 in the Introduction) with columns for Study, Materials, Parameters, Methods compared, Key finding, and Gap. The table includes the suggested Marichamy et~al.\ (2025) reference alongside Garc\'ia et~al., Schmidt et~al., M\'inguez-Mart\'inez et~al., Boedecker et~al., Nouira et~al., Hoefling et~al., and Hu et~al. The final row compares the present work. A concluding paragraph summarises the common pattern: prior studies discuss best-case comparability without quantifying the fixed-workflow or transfer penalties.
+
+\item \textbf{Explain the industrial importance of $R_a$, $R_{sm}$, and $R_{z1max}$ and indicate which parameters are most important for different applications.}
+
+\textbf{Response:} A new paragraph has been added in the Introduction explaining that $R_a$ is the most widely used general acceptance criterion; $R_{z1max}$ is the parameter most directly linked to functional performance in sealing, fatigue, and contact-stress applications; and $R_{sm}$ captures texture periodicity relevant to lubrication and forming, but is also the parameter most sensitive to lateral sampling and filtering. The three parameters are linked to their ISO~21920-2/3 context.
+
+\item \textbf{The $R_{sm}$ results show a large scale difference between optical and tactile values. Please explain how you confirmed that similar unit or scaling problems did not affect other parameters.}
+
+\textbf{Response:} We have added an explicit paragraph in the Discussion stating that $R_a$, $R_q$, $R_t$, $R_v$, $R_z$, and $R_{z1max}$ are height parameters reported in micrometres by both tactile and optical instruments across the archive, that spot-checking of selected raw exports confirmed consistent length units, and that no analogous scaling sensitivity was found for these parameters.
+
+\item \textbf{Important optical measurement settings were not consistently available. Please discuss how this limitation affects the comparison and whether the differences could be due to different processing settings.}
+
+\textbf{Response:} A new paragraph has been added in the Discussion (after the ANOVA/wavelength-regression paragraph) explaining that because objective NA, field of view, lateral sampling, vertical scan range, and form-removal settings were not retained uniformly, the benchmark cannot separate discrepancies originating from the measurement principle from those arising from processing parameters. We note that the same sensor can produce substantially different roughness outputs under different filtering and form-removal choices, and that the rankings characterise the specific instrument--settings--processing chain rather than inherent properties of the optical technique.
+
+\item \textbf{Not all optical workflows had repeated measurements. Please explain how this affects the reliability of workflow ranking and whether any sensitivity analysis was performed.}
+
+\textbf{Response:} A new paragraph has been added in the Discussion explaining that optical repeat measurements were retained less consistently than tactile repeats, that a limited sensitivity check on groups with partial optical replication indicated that optical repeatability SDs are generally smaller than the between-workflow discrepancy medians, but that this check cannot substitute for a designed gauge R\&R study. We note that the optical side is an archived-output comparison rather than a repeatability-qualified measurement.
+
+\item \textbf{The reasons for selecting the $\leq 10\%$, 10--30\%, and $>30\%$ discrepancy bands are not clear. Please explain their basis and clarify that they are not acceptance limits.}
+
+\textbf{Response:} We have expanded the band-justification sentence in the Methods (Section~2.4). The 10\% threshold is now linked to typical calibration-grade agreement and the expanded uncertainty reported in accredited calibration laboratories. The 30\% threshold identifies groups exceeding what most industrial quality-control applications would accept. We explicitly state they are pragmatic screening tools, not derived from formal tolerance-grade standards, and that their relationship to ISO~21920-3 tolerance grades is discussed separately.
+
+\item \textbf{The $R_{sm}$ sensitivity analysis shows that unit scaling may explain much of the difference. Please explain the practical meaning of this result and whether unit harmonization should be recommended.}
+
+\textbf{Response:} We have expanded the $R_{sm}$ Discussion paragraph. The practical recommendation is that practitioners should verify and explicitly document the $R_{sm}$ unit convention in optical exports before comparing with tactile values. Where the exported unit cannot be confirmed, $R_{sm}$ should be excluded from optical-substitution claims. We note that the $\times 1000$ rescaling moves 24 of 59 groups into the low-discrepancy band, but 15 groups persist above 30\%, indicating that genuine measurement differences remain.
+
+\item \textbf{The transfer analysis shows different levels of discrepancy, but the reasons are not clear. Please provide more information on which parameters, materials, and processes show better transferability.}
+
+\textbf{Response:} We have expanded the transfer-analysis paragraph in the Discussion. Amplitude parameters show smaller transfer penalties for C45 steel across machining processes and for ground surfaces generally. $R_a$ and $R_q$ show systematically larger transfer penalties than $R_t$ and $R_z$, indicating greater sensitivity to material--process context. Cross-material transfer penalties are systematically larger than cross-process penalties within the same material.
+
+\item \textbf{The results show that the system has a stronger overall effect, but performance also depends on the parameter. Please explain how practitioners should choose a system when it performs well for one parameter but poorly for another.}
+
+\textbf{Response:} A new paragraph has been added in the Discussion (``A practical selection dilemma arises\ldots''). It notes that interferometry-based configurations provide the most consistent low-discrepancy performance across amplitude parameters, while confocal systems perform well for $R_z$ and $R_{z1max}$ on moderately reflective materials. For single-system multi-parameter use, the fixed-workflow analysis provides the baseline; for lower per-parameter discrepancies, the per-parameter decision tables should be consulted.
+
+\item \textbf{The proposed reasons for the poor $R_{sm}$ agreement are not directly supported by raw profile data. Please explain what evidence supports this interpretation and how it can be tested in future work.}
+
+\textbf{Response:} We have restructured the $R_{sm}$ Discussion to present three lines of supporting evidence: (i)~the near-universal 99.9\% discrepancy across all systems, materials, and processes; (ii)~the substantial reduction under $\times 1000$ rescaling; and (iii)~the known sensitivity of $R_{sm}$ to ISO~21920-3 profile-element detection rules. We explicitly state that direct confirmation requires raw profiles and a common filtering chain, and propose this as a priority follow-up investigation.
+
+\item \textbf{Please identify the material-process combinations that showed the best and worst agreement and explain how practitioners can identify similar surfaces in practice.}
+
+\textbf{Response:} We have added a detailed best/worst identification paragraph in Section~3.1 (Results). Best: finish wire-EDM C45 steel, ground C45 steel, honed MO58A brass, glass-bead-blasted 14301. Worst: rough-face-turned Ti6Al4V, ELLOR graphite, rough-milled 14301. Physical reasons (anisotropy, optical constants, porosity) are discussed. Practitioners with similar materials and processes can locate their group in the supplementary decision tables and technical distance maps.
+
+\item \textbf{Relate the observed measurement differences to relevant ISO requirements and discuss whether a 24.8\% median discrepancy could be acceptable for any practical application.}
+
+\textbf{Response:} A new paragraph has been added in the Discussion mapping the observed discrepancies to ISO~21920-3 tolerance grades TG1--TG6. The retrospective lowest-discrepancy medians correspond approximately to TG2--TG3, while the fixed-workflow median of 24.8\% corresponds to TG6 (the coarsest class). We explicitly state that this mapping is illustrative rather than normative.
+
+\item \textbf{Provide a clear data dictionary and explain which calculations are performed by the code and which are done manually. Also, explain how the results can be independently verified without the raw files.}
+
+\textbf{Response:} A new paragraph has been added in the Methods (after Table~1) stating that all numerical summaries are generated by documented Python scripts from archived CSV outputs; manual steps are limited to cross-checking; a data dictionary is provided in the repository README and supplement; and independent verification is possible by downloading the CSVs, running the scripts, and comparing the generated tables and figures.
+
+\item \textbf{Describe the requirements for a complete prospective validation study, including sample size, measurement settings, uncertainty components, and acceptance criteria.}
+
+\textbf{Response:} We have substantially expanded the prospective-validation paragraph in the Discussion. The new text specifies: (i)~predefined material--process--parameter scope with GPS settings; (ii)~15--20 independent specimens per group; (iii)~within-instrument repeatability ($n \geq 10$); (iv)~gauge R\&R study; (v)~GUM-compliant uncertainty budget; and (vi)~pre-specified acceptance criteria expressed as MPE or equivalence margin.
+
+\end{enumerate}
+
+\subsection*{Referee 2}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{Comment \arabic*.}, ref=\arabic*]
+
+\item \textbf{The treatment of $R_{sk}$ appears somewhat cursory. It is recommended to supplement an alternative normalization method, such as absolute difference or a special consistency index tailored for skewness.}
+
+\textbf{Response:} We have added a paragraph in the Discussion proposing two alternative $R_{sk}$ metrics: (i)~the absolute difference $\Delta_{sk} = O_{sk} - S_{sk}$, possibly normalised by the tactile within-group standard deviation $s_S$, and (ii)~a rank-correlation-based consistency index immune to near-zero baselines. The present archive retains percentage-based $R_{sk}$ summaries as secondary descriptors in supplementary outputs; the proposed alternatives are put forward for future sign-sensitive parameter studies.
+
+\item \textbf{Lack of physical attribution for `poor-performance' cases. A qualitative correlation with the optical constants (refractive index/extinction coefficient) or surface anisotropy would significantly enhance the physical depth.}
+
+\textbf{Response:} We have added optical-constant values for Ti6Al4V ($n \approx 3.4$, $k \approx 4.2$ at visible wavelengths) and 14301 stainless steel ($n \approx 2.5$, $k \approx 3.5$ at 633~nm) in the best/worst identification paragraph (Section~3.1). We discuss how higher absorption in Ti6Al4V reduces SNR in confocal and interferometric measurements, and how high reflectance and steep local slopes in rough-milled 14301 can cause data dropout. We note that definitive attribution would require co-registered optical-constant measurements and raw topography data, which are outside the present exported-value benchmark scope.
+
+\item \textbf{Insufficient integration between supplementary materials and the main text. It lacks a detailed case study in the main text for the worst-case conditions (the $>30\%$ group), analogous to the detailed presentation of the best-case scenario. A balanced presentation contrasting both best and worst cases would be more convincing.}
+
+\textbf{Response:} We have added a detailed worst-case illustration in the main text (Section~3.1), using the rough-face-turned Ti6Al4V group (\texttt{ti6al4v\_tf}) as a representative example. The new paragraph walks through the same analytical structure applied to best-case groups: retrospective lowest-discrepancy behaviour (amplitude parameters in the 10--30\% band, $R_{sm}$ above 99.9\%), fixed-workflow performance (parameters move into the $>30\%$ band), and leave-one-surface transfer (placed among the 52\% of groups above 30\%). Technical-distance clustering is described (two optical-family clusters separated by $>20$~pp). The practical recommendation (tactile confirmation until prospective validation) is stated explicitly. The supplementary material provides full per-parameter tables for every group, allowing the reader to replicate this comparison for any group of interest.
+
+\end{enumerate}
+
+\section*{Summary}
+
+We believe the revised manuscript now addresses all reviewer comments fully. The Introduction provides a structured comparison with prior work, the Methods clarify data provenance and band definitions, the Results present a balanced best/worst view, and the Discussion offers substantially expanded practical guidance, physical interpretation, and prospective-validation recommendations.
+
+We hope the revised version is now suitable for publication in \textit{Measurement Science and Technology}.
+
+\vspace{4mm}
+\noindent Sincerely,\\
+The Authors
+
+\end{document}

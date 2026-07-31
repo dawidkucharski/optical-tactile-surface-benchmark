@@ -1,199 +1,154 @@
-# Optical-Tactile Surface Benchmark
+# Raport (PDF via LaTeX) – Instrukcja
 
-Public reproducibility package for the manuscript-facing retrospective benchmark of optical surface-roughness workflows against an internal tactile baseline.
+## 1. Struktura
+- `korelacje_tactile_optics.R` – generuje wyniki parametryczne (porównania optics vs tactile) dla listy z `config/params.yaml`.
+- `make_results_decision_tables.R` – generuje tabele decyzyjne do manuskryptu, analizę czułości stałych konfiguracji optycznych oraz globalną mapę cieplną proces-parametr.
+- `ml_influence.R` – modele ML (Lasso/Ridge, Random Forest, SHAP) + advanced CV.
+- `summary_report.Rmd` – konsolidacja (Polski PDF, LaTeX, sekcje ML, advanced, proste wyjaśnienie).
+- `run_all.sh` – pełny pipeline (można sterować `NEED_PDF=0`).
+- `report_only.sh` – tylko render PDF (bez ponownego liczenia).
+- `Dockerfile` – reprodukowalny kontener (z LaTeX przez TinyTeX + pandoc).
 
-Repository:
+## Manuskrypt Q1/high-impact
+Dedykowany pakiet manuskryptu znajduje się w `paper/`. Najważniejszy plik kontrolny to `paper/reproducibility_manifest.md`, który opisuje wejścia, komendy odtworzeniowe oraz pliki przeznaczone do archiwizacji przy zgłoszeniu do czasopisma. Planowany publiczny pakiet GitHub obejmuje cały projekt potrzebny do reprodukcji tabel, figur i wniosków manuskryptu, z wyłączeniem surowych plików powierzchni `.sur` / `.SUR`.
 
+Aktualna wersja pakietu manuskryptu: `v1.0.4`.
+
+Adres repozytorium GitHub:
 ```text
 https://github.com/dawidkucharski/optical-tactile-surface-benchmark
 ```
 
-Current DOI-ready release: `v1.0.4`
-
-Zenodo DOI:
-
+Archiwalne wydanie Zenodo / DOI:
 ```text
 https://doi.org/10.5281/zenodo.19844490
 ```
 
-## Scope
-
-The repository contains the scripts, configuration files, manuscript sources, derived CSV outputs, generated tables, and generated figures needed to rebuild the evidence package for the submitted manuscript.
-
-Raw `.sur` / `.SUR` surface files are intentionally excluded from the public GitHub-Zenodo package. The public package includes derived outputs and rebuild scripts; raw surface files can be requested from the authors subject to data-transfer constraints.
-
-The study is framed as a retrospective workflow-level benchmark. It does not claim formal optical-tactile equivalence, metrological interchangeability, or universal optical substitution.
-
-## Project Structure
-
-- `korelacje_tactile_optics.R`: parameter-level optical-vs-tactile discrepancy calculations using `config/params.yaml`.
-- `make_results_decision_tables.R`: manuscript decision tables, fixed-workflow sensitivity outputs, workflow-transfer checks, `Rsm` diagnostics, bootstrap summaries, and the global process-parameter heatmap.
-- `ml_influence.R`: optional machine-learning influence analyses, including cross-validation outputs.
-- `paper/`: manuscript, supplement, bibliography, supplement generator, submission files, and reproducibility manifest.
-- `paper/tables/`: generated manuscript tables.
-- `plots/`: generated manuscript figures.
-- `outputs/`: derived CSV/text outputs supporting manuscript claims.
-- `config/params.yaml`: roughness-parameter and optics-column configuration.
-- `GITHUB_RELEASE_CHECKLIST.md`: publication and archive checklist for the public repository.
-
-Legacy project-report files are retained for provenance, but the manuscript reproducibility package is controlled by `paper/reproducibility_manifest.md`.
-
-## Manuscript Package
-
-The main reproducibility control file is:
-
-```text
-paper/reproducibility_manifest.md
-```
-
-It records the inputs, rebuild commands, expected generated files, environment snapshot, and public-release boundary. Use it as the authoritative guide for journal review and DOI archiving.
-
-Key manuscript-facing generated outputs include:
-
-- `paper/tables/results_fixed_workflow_sensitivity.tex`: sensitivity of conclusions to a single fixed optical workflow.
-- `paper/tables/results_workflow_transfer_summary.tex`: leave-one-surface workflow-transfer summary.
-- `paper/tables/results_rsm_diagnostic.tex`: diagnostic segmentation of `Rsm` discrepancies by optical system, material, and process.
-- `paper/tables/results_rsm_unit_scale_sensitivity.tex`: sensitivity of `Rsm` to the retained optical export unit scale.
-- `paper/tables/results_bootstrap_ci_aggregate_medians.tex`: bootstrap percentile intervals for aggregate retrospective lowest-discrepancy summaries.
-- `plots/global_best_discrepancy_heatmap.pdf`: process-parameter heatmap for retrospective lowest optical-tactile discrepancy.
-- `plots/workflow_selection_penalty_overview.pdf`: overview of workflow-selection penalty.
-- `outputs/results_fixed_workflow_sensitivity.csv`, `outputs/results_workflow_transfer_by_group.csv`, `outputs/results_workflow_transfer_summary_by_param.csv`, `outputs/results_best_discrepancy_heatmap_by_process_param.csv`, `outputs/results_rsm_diagnostic_by_stratum.csv`, `outputs/results_rsm_unit_scale_sensitivity.csv`, and `outputs/results_bootstrap_ci_aggregate_medians.csv`: source data for tables and figures.
-
-## Requirements
-
-- R and `Rscript`.
-- Python 3.
-- Pandoc for R Markdown / DOCX conversion workflows.
-- LaTeX / pdfLaTeX for manuscript and supplement builds.
-- Optional: Docker for containerised reproduction.
-
-On macOS with Homebrew, a minimal local setup can start with:
-
-```sh
-brew install pandoc
-/usr/local/bin/Rscript -e "install.packages('tinytex', repos='https://cloud.r-project.org'); tinytex::install_tinytex()"
-```
-
-Check Pandoc availability with:
-
-```sh
-which pandoc
-/usr/local/bin/Rscript -e "rmarkdown::pandoc_version()"
-```
-
-## Main Recalculation
-
-Run from the project root:
-
-```sh
-Rscript korelacje_tactile_optics.R
-Rscript make_results_decision_tables.R
-Rscript ml_influence.R
-python3 paper/summarize_results_for_manuscript.py
-```
-
-Minimal recalculation for the current manuscript tables and figures:
-
-```sh
+Minimalna ścieżka odtworzeniowa dla aktualnych tabel i figur manuskryptu:
+```zsh
 Rscript make_results_decision_tables.R
 python3 paper/summarize_results_for_manuscript.py
 cd paper && python3 generate_supplement.py
 ```
 
-## Manuscript Build
+Nowe artefakty manuskryptu obejmują:
+- `paper/tables/results_fixed_workflow_sensitivity.tex` – analiza czułości względem wyboru jednej stałej konfiguracji system+barwa.
+- `paper/tables/results_workflow_transfer_summary.tex` – test transferu wyboru konfiguracji do pominiętej klasy materiał-proces.
+- `paper/tables/results_rsm_diagnostic.tex` – diagnostyczna segmentacja rozbieżności `Rsm` według systemu optycznego, materiału i procesu.
+- `paper/tables/results_rsm_unit_scale_sensitivity.tex` – czułość `Rsm` na zachowaną skalę jednostek eksportu optycznego.
+- `paper/tables/results_bootstrap_ci_aggregate_medians.tex` – przedziały bootstrapowe dla zagregowanych retrospektywnych median najniższej rozbieżności.
+- `plots/global_best_discrepancy_heatmap.pdf` – mapa procesu i parametru dla retrospektywnej najniższej rozbieżności optyczno-dotykowej.
+- `outputs/results_fixed_workflow_sensitivity.csv`, `outputs/results_workflow_transfer_by_group.csv`, `outputs/results_workflow_transfer_summary_by_param.csv`, `outputs/results_best_discrepancy_heatmap_by_process_param.csv`, `outputs/results_rsm_diagnostic_by_stratum.csv`, `outputs/results_rsm_unit_scale_sensitivity.csv` oraz `outputs/results_bootstrap_ci_aggregate_medians.csv` – dane źródłowe do tabel i figur.
 
-Run from the project root:
+Przy publikacji na GitHub użyj `GITHUB_RELEASE_CHECKLIST.md`. Plik `.gitignore` wyklucza `.sur` / `.SUR`, środowiska lokalne i pliki tymczasowe LaTeX, ale pozwala śledzić wygenerowane PDF-y manuskryptu/suplementu, wykresy, CSV-y oraz tabele TeX.
 
-```sh
-cd paper
-pdflatex -interaction=nonstopmode manuscript.tex
-bibtex manuscript
-pdflatex -interaction=nonstopmode manuscript.tex
-pdflatex -interaction=nonstopmode manuscript.tex
+## 2. Wymagane narzędzia (lokalnie)
+- R + Rscript (działa: `/usr/local/bin/Rscript`).
+- Pandoc (konwersja RMarkdown -> LaTeX -> PDF).
+- LaTeX/XeLaTeX (instalujemy lekką dystrybucję TinyTeX).
+
+### Instalacja (macOS Homebrew)
+```zsh
+brew install pandoc
+/usr/local/bin/Rscript -e "install.packages('tinytex', repos='https://cloud.r-project.org'); tinytex::install_tinytex()"
+```
+Sprawdzenie:
+```zsh
+which pandoc
+/usr/local/bin/Rscript -e "rmarkdown::pandoc_version()"
 ```
 
-Expected output:
-
-```text
-paper/manuscript.pdf
-```
-
-## Supplement Build
-
-Run from the project root:
-
-```sh
-cd paper
-python3 generate_supplement.py
-pdflatex -interaction=nonstopmode supplement.tex
-pdflatex -interaction=nonstopmode supplement.tex
-```
-
-Expected output:
-
-```text
-paper/supplement.pdf
-```
-
-## Full Local Pipeline
-
-The legacy full-project pipeline can still be run from the project root:
-
-```sh
+## 3. Pełny pipeline z PDF
+```zsh
 ./run_all.sh
 ```
-
-To recompute outputs without rendering the legacy PDF report:
-
-```sh
+Jeśli chcesz tylko wyniki (bez PDF):
+```zsh
 NEED_PDF=0 ./run_all.sh
 ```
 
-Common Makefile targets:
-
-```sh
-make all
-make correlations ml
-make report-only
-make diagnose
+## 4. Tylko PDF (bez liczenia od nowa)
+```zsh
+./report_only.sh
 ```
+Fallback:
+- Jeśli brak pandoc i jest Docker: `./report_only.sh --docker`.
+- Jeśli brak obydwu: skrypt wyświetli instrukcję instalacji.
 
-## Docker
-
-Build and run the reproducibility container:
-
-```sh
+## 5. Docker (pełna reprodukcja)
+```zsh
 docker build -t nsmt-report:latest .
 docker run --rm -v "$PWD":/workspace nsmt-report:latest
 ```
+PDF: `summary_report.pdf` w katalogu projektu.
 
-## Parameter Configuration
-
-The roughness parameters and optical export columns are configured in `config/params.yaml`:
-
+## 6. Konfiguracja parametrów
+`config/params.yaml`:
 ```yaml
 params: [Rp, Rv, Rz, Ra, Rt, Rz1max, Rq, Rsk, Rku, Rsm]
 optics_cols: [130, 134, 138, 150, 146, 174, 154, 158, 162, 182]
-# tactile_params: [optional alternative labels]
+# tactile_params: [opcjonalne inne etykiety]
+```
+Zmiana listy parametrów = edycja tego pliku + ponowny `./run_all.sh`.
+
+## 7. ML Advanced
+Pliki w `outputs/ml/advanced/`: `cv_metrics.csv`, `importance_rf_cv.png`, `importance_glmnet_cv.png` + CSV ważności. Wszystkie osadzane w sekcji „Uczenie maszynowe — wyniki walidacji zaawansowanej (CV)”.
+
+## 8. Typowe problemy
+| Problem | Przyczyna | Rozwiązanie |
+|---------|-----------|-------------|
+| brak pandoc | nie zainstalowano | `brew install pandoc` lub Docker |
+| Unicode minus (−) w PDF | użyto pdflatex | Upewnij się, że w YAML jest `latex_engine: xelatex` |
+| Brak nowych parametrów w raporcie | pliki `outputs/<param>_...` nie powstały | Uruchom ponownie korelacje lub sprawdź indeks kolumn |
+| Brak sekcji ML advanced | Nie uruchomiono `ml_influence.R` | `Rscript ml_influence.R` |
+
+## 9. Tryb diagnostyczny
+Możesz sprawdzić czy pandoc dostępny:
+```zsh
+/usr/local/bin/Rscript -e "rmarkdown::pandoc_available()"
 ```
 
-After changing this file, rerun the relevant recalculation command.
+## Konwencja poleceń (ważne w tej współpracy)
 
-## Troubleshooting
+W ramach tego projektu ustalamy krótkie frazy sterujące:
 
-| Problem | Likely cause | Suggested action |
-|---------|--------------|------------------|
-| Pandoc is missing | Pandoc is not installed or not on `PATH` | Install Pandoc or use Docker |
-| LaTeX build fails | Missing TeX packages or stale intermediates | Run `make diagnose`; clean LaTeX intermediates and rebuild |
-| New parameters do not appear | Derived `outputs/<param>_...` files were not regenerated | Rerun the correlation and decision-table scripts |
-| ML advanced outputs are missing | `ml_influence.R` was not run | Run `Rscript ml_influence.R` |
+- "policz ponownie" – uruchamiamy pełny pipeline obliczeń w R:
+	1. `Rscript korelacje_tactile_optics.R` (wszystkie parametry z `config/params.yaml`)
+	2. `Rscript ml_influence.R` (ML + zaawansowana walidacja)
+	3. (opcjonalnie) render PDF jeśli wyraźnie dołożysz: "i wygeneruj raport".
 
-## Public Release
+- "wykonaj raport" – tylko renderowanie aktualnego `summary_report.Rmd` do PDF (bez ponownego liczenia danych) przy użyciu:
+	- `bash report_only.sh` lub `make report-only`.
 
-Before publishing or archiving, use:
+Jeżeli podasz jednocześnie: "policz ponownie i wykonaj raport" – najpierw liczymy cały pipeline, a potem render.
 
-```text
-GITHUB_RELEASE_CHECKLIST.md
+## Najczęstsze komendy
+
+Pełny restart + raport:
+```
+make all
+```
+Tylko ponowne liczenie (bez PDF):
+```
+make correlations ml
+```
+Tylko raport (bez liczenia):
+```
+make report-only
+```
+Diagnostyka środowiska:
+```
+make diagnose
 ```
 
-The `.gitignore` file excludes raw `.sur` / `.SUR` files, local environments, and LaTeX build intermediates while keeping generated manuscript PDFs, plots, CSV outputs, and TeX tables trackable.
+## Krótki FAQ
+**PDF nie działa?** Sprawdź `make diagnose` – brak pandoc to najczęstsza przyczyna. Zainstaluj `pandoc`, upewnij się, że jest w PATH.
+
+
+## 10. Rozszerzenia (opcjonalnie)
+- Kompresja PDF (ghostscript)
+- Eksport HTML fallback (bez LaTeX) – do dodania jeśli potrzebne
+- Grupowanie parametrów w raporcie (np. podstawowe vs momenty) – na życzenie
+
+---
+Jeśli chcesz dodać fallback HTML lub kompresję – napisz. Raport tą samą ścieżką LaTeX zachowuje wcześniejszą strukturę (tytuł, spis treści, listę figur, ML, advanced, proste wyjaśnienie).
